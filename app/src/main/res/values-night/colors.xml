@@ -12,5 +12,8 @@
     <color name="secondary_color">#00ADEF</color>
     <color name="accent_color">#532791</color>
 
+    <color name="primary_text_color">#FFFFFF</color>
+    <color name="secondary_text_color">#EBEBEB</color>
+
 
 </resources>

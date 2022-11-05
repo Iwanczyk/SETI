@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Studia/SETI/app/src/main/res/drawable/shape_button_rounded.xml" value="0.22870370370370371" />
+        <entry key="..\:/Studia/SETI/app/src/main/res/drawable/sing_up_shape_button_rounded.xml" value="0.22870370370370371" />
+        <entry key="..\:/Studia/SETI/app/src/main/res/layout/activity_intro.xml" value="0.4" />
         <entry key="..\:/Studia/SETI/app/src/main/res/layout/activity_splash.xml" value="0.2234375" />
       </map>
     </option>

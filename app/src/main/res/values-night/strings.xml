@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SETI</string>
     <string name="image_contentDescription">Picture of a clock</string>
     <string name="let_s_get_started_text">Let\'s get started!</string>
     <string name="intro_text_description">Manage your time better with SETI</string>

@@ -11,4 +11,6 @@
     <color name="primary_color">#F5EFEF</color>
     <color name="secondary_color">#0E84D0</color>
     <color name="accent_color">#532791</color>
+    <color name="primary_text_color">#040000</color>
+    <color name="secondary_text_color">#1C070A</color>
 </resources>

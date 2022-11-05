@@ -5,4 +5,8 @@
     <string name="intro_text_description">Manage your time better with SETI</string>
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
+    <string name="sign_up_description_text">Enter your name, email and password, to register with us</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>

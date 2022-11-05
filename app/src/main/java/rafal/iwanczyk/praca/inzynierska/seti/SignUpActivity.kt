@@ -1,17 +1,17 @@
 package rafal.iwanczyk.praca.inzynierska.seti
 
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
-import kotlinx.android.synthetic.main.activity_intro.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
 
-class IntroActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
+        setContentView(R.layout.activity_sign_up)
 
         //Showing activity in fullscreen mode
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -21,10 +21,20 @@ class IntroActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
 
-        btn_sign_up_intro.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-        }
-
-
+        setupActionBar()
     }
+
+
+    private fun setupActionBar(){
+        setSupportActionBar(toolbar_sign_up_activity)
+
+        val actionBar = supportActionBar
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_icon_24dp)
+        }
+    }
+
+
+
 }

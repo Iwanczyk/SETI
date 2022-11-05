@@ -14,7 +14,7 @@
     android:background="@drawable/intro_background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".IntroActivity">
+    tools:context=".activities.IntroActivity">
 
     <!--END-->
 

@@ -10,4 +10,8 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in_description_text">Enter your name and password, to log in</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="please_enter_your_name">Please enter your name</string>
+    <string name="please_enter_your_email">Please enter your email</string>
+    <string name="please_enter_your_phone">Please enter your phone</string>
 </resources>

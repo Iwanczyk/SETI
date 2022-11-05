@@ -1,4 +1,4 @@
-package rafal.iwanczyk.praca.inzynierska.seti
+package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.content.Intent
 import android.os.Build
@@ -7,8 +7,9 @@ import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_intro.*
+import rafal.iwanczyk.praca.inzynierska.seti.R
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)

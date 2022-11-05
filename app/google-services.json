@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "399060347385",
+    "project_id": "seti-73040",
+    "storage_bucket": "seti-73040.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399060347385:android:36b8b520d4b9efd975b528",
+        "android_client_info": {
+          "package_name": "rafal.iwanczyk.praca.inzynierska.seti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399060347385-bpgp1rpodgmfvq4ta6g9rbd8mvarkbs9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAAfTIy7qAWl0KB1O3tjGGS27nfXWz83w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399060347385-bpgp1rpodgmfvq4ta6g9rbd8mvarkbs9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

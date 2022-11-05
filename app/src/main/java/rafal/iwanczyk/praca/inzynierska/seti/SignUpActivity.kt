@@ -1,11 +1,10 @@
 package rafal.iwanczyk.praca.inzynierska.seti
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity() {
@@ -32,6 +31,9 @@ class SignUpActivity : AppCompatActivity() {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_back_icon_24dp)
+        }
+        toolbar_sign_up_activity?.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 

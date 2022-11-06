@@ -13,5 +13,12 @@
     <string name="please_wait">Please wait...</string>
     <string name="please_enter_your_name">Please enter your name</string>
     <string name="please_enter_your_email">Please enter your name</string>
-    <string name="please_enter_your_phone">Please enter your name</string>
+    <string name="please_enter_your_password">Please enter your password</string>
+    <string name="authentication_failed">Authentication failed</string>
+    <string name="registration_success">Registration completed!</string>
+    <string name="login">Login</string>
+    <string name="please_enter_your_login">Please enter your login</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="passwords_not_matching">Passwords are not matching!</string>
+    <string name="please_repeat_your_password">Please repeat your password</string>
 </resources>

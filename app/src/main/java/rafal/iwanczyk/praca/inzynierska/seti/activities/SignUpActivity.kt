@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
+import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
+import rafal.iwanczyk.praca.inzynierska.seti.models.User
 
 class SignUpActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,10 +48,41 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
-    private fun validateForm(name:String, email:String, password:String):Boolean{
+
+    private fun registerUser(){
+        val login: String = et_login?.text.toString().trim()
+        val email: String = et_email?.text.toString()
+        val password: String = et_password?.text.toString().trim()
+        val repeatedPassword: String = et_repeat_password?.text.toString().trim()
+
+        if(validateForm(login, email, password, repeatedPassword)){
+            showProgressDialog()
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val firebaseUser: FirebaseUser = task.result!!.user!!
+                        val registeredEmail = firebaseUser.email!!
+                        val user = User(firebaseUser.uid,login,registeredEmail)
+                        FirestoreClass().registerUser(this, user)
+                    } else {
+                        showErrorSnackBar(task.exception!!.message.toString())
+                        hideProgressDialog()
+                    }
+                }
+        }
+    }
+
+    private fun validateForm(login:String, email:String, password:String, repeatedPassword: String): Boolean{
+        return (validateEmptyForm(login, email, password, repeatedPassword)
+                && validatePasswords(password, repeatedPassword)
+                && checkIfLoginCanBeUsed(login))
+    }
+
+    private fun validateEmptyForm(login:String, email:String,
+                                  password:String, repeatedPassword: String): Boolean{
         return when {
-            TextUtils.isEmpty(name)->{
-                showErrorSnackBar(resources.getString(R.string.please_enter_your_name))
+            TextUtils.isEmpty(login)->{
+                showErrorSnackBar(resources.getString(R.string.please_enter_your_login))
                 false
             }
             TextUtils.isEmpty(email)->{
@@ -57,7 +90,11 @@ class SignUpActivity : BaseActivity() {
                 false
             }
             TextUtils.isEmpty(password)->{
-                showErrorSnackBar(resources.getString(R.string.please_enter_your_phone))
+                showErrorSnackBar(resources.getString(R.string.please_enter_your_password))
+                false
+            }
+            TextUtils.isEmpty(repeatedPassword)->{
+                showErrorSnackBar(resources.getString(R.string.please_repeat_your_password))
                 false
             }else -> {
                 true
@@ -65,13 +102,33 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
-    private fun registerUser(){
-        val name: String = et_name?.text.toString().trim()
-        val email: String = et_email?.text.toString()
-        val password: String = et_password?.text.toString().trim()
-
-        if(validateForm(name, email, password)){
-            showToast(this, "Data correct")
+    private fun validatePasswords(password: String, repeatedPassword: String): Boolean{
+        return if(password == repeatedPassword){
+            true
+        }else{
+            showErrorSnackBar(resources.getString(R.string.passwords_not_matching))
+            false
         }
+    }
+
+    private fun checkIfLoginCanBeUsed(login: String): Boolean{
+
+        println("CHECKIFLOGINCANBEUSED: ${FirestoreClass().validateIfLoginCanBeUsed(login)}")
+        /*
+        return if (FirestoreClass().validateIfLoginCanBeUsed(login)){
+            true
+        }else{
+            showErrorSnackBar("Login is already used")
+            false
+        }
+
+         */
+
+        return false
+    }
+
+    fun userRegisteredSuccess(){
+        showToast(this, resources.getString(R.string.registration_success))
+        hideProgressDialog()
     }
 }

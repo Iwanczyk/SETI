@@ -1,5 +1,6 @@
 package rafal.iwanczyk.praca.inzynierska.seti.activities
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_sign_in.et_password
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
+import rafal.iwanczyk.praca.inzynierska.seti.models.User
 
 class SignInActivity : BaseActivity() {
     private lateinit var auth: FirebaseAuth
@@ -88,5 +90,11 @@ class SignInActivity : BaseActivity() {
                 true
             }
         }
+    }
+
+    fun signInSuccess(user: User){
+        hideProgressDialog()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

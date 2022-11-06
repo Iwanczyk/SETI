@@ -127,4 +127,7 @@ class SignUpActivity : BaseActivity() {
         println("Register success!")
         hideProgressDialog()
     }
+
+    //TODO Add registering via Google or Facebook
+
 }

@@ -1,11 +1,13 @@
 package rafal.iwanczyk.praca.inzynierska.seti.firebase
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.tasks.await
+import rafal.iwanczyk.praca.inzynierska.seti.activities.SignInActivity
 import rafal.iwanczyk.praca.inzynierska.seti.activities.SignUpActivity
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
@@ -19,33 +21,20 @@ class FirestoreClass {
             .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
                 activity.userRegisteredSuccess()
+            }.addOnFailureListener {
+                Log.e("Registration", "Error while registering")
             }
     }
 
     fun getCurrentUserID(): String{
-        return FirebaseAuth.getInstance().currentUser!!.uid
+        var currentUser = FirebaseAuth.getInstance().currentUser
+        var currentUserID = ""
+
+        if (currentUser != null) {
+            currentUserID = currentUser.uid
+        }
+        return currentUserID
     }
-
-    /*
-    fun validateIfLoginCanBeUsed(login: String): Boolean{
-
-        var isLoginFree: Boolean = false
-
-        mFireStore.collection(Constants.USERS)
-            .whereEqualTo("login",login)
-            .get()
-            .addOnSuccessListener{
-             document ->
-                if(document.documents.isEmpty()) {
-                    isLoginFree = true
-                }
-            }.addOnFailureListener {
-                Log.e("LoginCheck", "Error while checking login")
-            }
-        return isLoginFree
-    }
-
-     */
 
     suspend fun validateIfLoginCanBeUsed(login: String): Boolean {
             return getDataFromFirestore(login).isEmpty()
@@ -54,6 +43,18 @@ class FirestoreClass {
     private suspend fun getDataFromFirestore(login: String): List<DocumentSnapshot>{
         val documents =  mFireStore.collection(Constants.USERS).whereEqualTo("login",login).get().await()
         return documents.documents
+    }
+
+    fun signInUser(activity: SignInActivity){
+        mFireStore.collection(Constants.USERS).document(getCurrentUserID())
+            .get()
+            .addOnSuccessListener {
+                document ->
+                val loggedInUser = document.toObject(User::class.java)!!
+                activity.signInSuccess(loggedInUser)
+            }.addOnFailureListener {
+                Log.e("LogIn", "Error while logging")
+            }
     }
 
 }

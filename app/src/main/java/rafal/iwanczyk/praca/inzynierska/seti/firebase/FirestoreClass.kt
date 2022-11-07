@@ -1,5 +1,6 @@
 package rafal.iwanczyk.praca.inzynierska.seti.firebase
 
+import android.app.Activity
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -7,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.tasks.await
+import rafal.iwanczyk.praca.inzynierska.seti.activities.MainActivity
 import rafal.iwanczyk.praca.inzynierska.seti.activities.SignInActivity
 import rafal.iwanczyk.praca.inzynierska.seti.activities.SignUpActivity
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
@@ -45,14 +47,32 @@ class FirestoreClass {
         return documents.documents
     }
 
-    fun signInUser(activity: SignInActivity){
+    fun signInUser(activity: Activity){
         mFireStore.collection(Constants.USERS).document(getCurrentUserID())
             .get()
             .addOnSuccessListener {
                 document ->
                 val loggedInUser = document.toObject(User::class.java)!!
-                activity.signInSuccess(loggedInUser)
+
+                when(activity){
+                    is SignInActivity -> {
+                        activity.signInSuccess(loggedInUser)
+                    }
+                    is MainActivity -> {
+                        activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                }
+
             }.addOnFailureListener {
+                e ->
+                when(activity){
+                    is SignInActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is MainActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e("LogIn", "Error while logging")
             }
     }

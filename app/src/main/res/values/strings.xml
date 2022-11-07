@@ -11,6 +11,7 @@
     <string name="password">Password</string>
     <string name="sign_in_description_text">Enter your name and password, to log in</string>
     <string name="please_wait">Please wait…</string>
+
     <string name="please_enter_your_name">Please enter your name</string>
     <string name="please_enter_your_email">Please enter your email</string>
     <string name="please_enter_your_password">Please enter your password</string>
@@ -21,4 +22,8 @@
     <string name="repeat_password">Repeat password</string>
     <string name="passwords_not_matching">Passwords are not matching!</string>
     <string name="please_repeat_your_password">Please repeat your password</string>
+
+    <string name="nav_my_profile">My Profile</string>
+    <string name="nav_my_settings">Settings</string>
+    <string name="nav_sign_out">Sign Out</string>
 </resources>

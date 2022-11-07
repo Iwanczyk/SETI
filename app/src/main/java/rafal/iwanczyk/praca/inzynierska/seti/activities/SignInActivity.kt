@@ -33,6 +33,8 @@ class SignInActivity : BaseActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
 
+        auth = FirebaseAuth.getInstance()
+
         setupActionBar()
 
         btn_sign_in.setOnClickListener {
@@ -64,11 +66,10 @@ class SignInActivity : BaseActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
+                        // User signed in
                         Log.d("SignIn", "signInWithEmail:success")
-                        //FirestoreClass().loadUserData(this)
+                        FirestoreClass().signInUser(this)
                     } else {
-                        // If sign in fails, display a message to the user.
                         Log.w("SignIn", "signInWithEmail:failure", task.exception)
                         showErrorSnackBar(resources.getString(R.string.authentication_failed))
                         hideProgressDialog()

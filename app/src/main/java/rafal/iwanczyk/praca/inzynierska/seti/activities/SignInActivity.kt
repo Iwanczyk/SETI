@@ -2,18 +2,15 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlinx.android.synthetic.main.activity_sign_in.et_email
 import kotlinx.android.synthetic.main.activity_sign_in.et_password
-import kotlinx.android.synthetic.main.activity_sign_up.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
@@ -68,7 +65,7 @@ class SignInActivity : BaseActivity() {
                     if (task.isSuccessful) {
                         // User signed in
                         Log.d("SignIn", "signInWithEmail:success")
-                        FirestoreClass().signInUser(this)
+                        FirestoreClass().loadUserData(this)
                     } else {
                         Log.w("SignIn", "signInWithEmail:failure", task.exception)
                         showErrorSnackBar(resources.getString(R.string.authentication_failed))

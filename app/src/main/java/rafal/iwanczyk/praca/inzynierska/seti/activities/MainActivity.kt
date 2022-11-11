@@ -1,16 +1,16 @@
 package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.app_bar_main.view.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
@@ -25,7 +25,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        FirestoreClass().signInUser(this)
+        FirestoreClass().loadUserData(this)
     }
 
     private fun setupActionBar(){
@@ -60,6 +60,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         when(item.itemId){
             R.id.nav_my_profile -> {
+                startActivity(Intent(this, MyProfileActivity::class.java))
                // startActivityForResult(Intent(this,
                //     MyProfileActivity::class.java),
                //     MY_PROFILE_REQUEST_CODE)
@@ -83,14 +84,33 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     fun updateNavigationUserDetails(user: User){
 
-        hideProgressDialog()
-
         Glide
             .with(this@MainActivity)
             .load(user.image)
             .fitCenter()
             .placeholder(R.drawable.ic_user_place_holder)
             .into(nav_user_image)
+
+        //Set up drawer background using Glide
+        Glide
+            .with(this@MainActivity)
+            .load(user.background)
+            .fitCenter()
+            //.placeholder(R.drawable.ic_user_place_holder)
+            .into(object :
+                CustomTarget<Drawable>() {
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    ly_nav_user_background.setBackgroundResource(R.drawable.nav_header_main_background)
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: com.bumptech.glide.request.transition.Transition<in Drawable>?
+                ) {
+                    ly_nav_user_background.background = resource
+                }
+
+            })
 
         tv_login.text = user.login
         tv_username.text = user.name

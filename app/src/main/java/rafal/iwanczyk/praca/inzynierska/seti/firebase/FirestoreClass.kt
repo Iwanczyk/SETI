@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import rafal.iwanczyk.praca.inzynierska.seti.activities.MainActivity
 import rafal.iwanczyk.praca.inzynierska.seti.activities.MyProfileActivity
@@ -94,4 +95,18 @@ class FirestoreClass {
                 Log.e(activity.javaClass.simpleName,"Error while updating data.", e)
                 }
             }
+
+    fun deleteUserAccount(user :User){
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser!!.delete()
+        FirebaseStorage.getInstance().getReferenceFromUrl(user.image).delete()
+        FirebaseStorage.getInstance().getReferenceFromUrl(user.background).delete()
+        FirebaseFirestore.getInstance().collection(Constants.USERS)
+            .document(getCurrentUserID())
+            .delete()
+            .addOnSuccessListener { task -> Log.i("Firestore deletion","Firestore document deleted") }
+            .addOnFailureListener { task -> Log.e("Firestore error","Firestore document NOT deleted") }
+    }
+
     }

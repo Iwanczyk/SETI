@@ -29,4 +29,8 @@
     <string name="update">UPDATE</string>
     <string name="delete_account">DELETE ACCOUNT</string>
     <string name="permission_denied">You have denied the permission for storage access</string>
+    <string name="login_already_used">Login is already used</string>
+    <string name="delete_account_confirmation">Are you sure you want delete your accound?</string>
+    <string name="yes">YES</string>
+    <string name="cancel">CANCEL</string>
 </resources>

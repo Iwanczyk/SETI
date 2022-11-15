@@ -33,7 +33,9 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun hideProgressDialog(){
-        mProgressDialog.hide()
+        if(this::mProgressDialog.isInitialized) {
+            mProgressDialog.hide()
+        }
     }
 
     fun showToast(context: Context, text: String){

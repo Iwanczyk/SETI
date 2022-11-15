@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_dialog_rounded"
+        app:cardCornerRadius="@dimen/dialog_delete_account_cornerRadius"
+        app:cardElevation="@dimen/dialog_delete_account_elevation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/dialog_delete_account_padding">
+
+            <TextView
+                android:id="@+id/tvDialogTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dialog_account_delete_title_padding"
+                android:text="@string/delete_account_confirmation"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/dialog_account_delete_title_text_size"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/account_delete_dialog_divider_height"
+                android:layout_marginTop="@dimen/account_delete_dialog_divider_marginTopBottom"
+                android:layout_marginBottom="@dimen/account_delete_dialog_divider_marginTopBottom"
+                android:background="@color/divider_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/delete_account_dialog_action_layout_height"
+                android:layout_marginTop="@dimen/delete_account_dialog_action_layout_marginTop"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_confirm_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:padding="@dimen/delete_account_dialog_action_button_padding"
+                    android:text="@string/yes"
+                    android:textColor="@color/secondary_color"
+                    android:textSize="@dimen/delete_account_dialog_action_button_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_cancel_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:padding="@dimen/delete_account_dialog_action_button_padding"
+                    android:text="@string/cancel"
+                    android:textColor="@color/secondary_text_color"
+                    android:textSize="@dimen/delete_account_dialog_action_button_text_size" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

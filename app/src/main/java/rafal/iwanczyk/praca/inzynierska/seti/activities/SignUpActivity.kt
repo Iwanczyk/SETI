@@ -55,7 +55,8 @@ class SignUpActivity : BaseActivity() {
         val password: String = et_password?.text.toString().trim()
         val repeatedPassword: String = et_repeat_password?.text.toString().trim()
 
-        lifecycleScope.launch {if(validateForm(login, email, password, repeatedPassword)){
+        lifecycleScope.launch {
+            if(validateForm(login, email, password, repeatedPassword)){
             showProgressDialog()
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
@@ -115,7 +116,7 @@ class SignUpActivity : BaseActivity() {
         return if (FirestoreClass().validateIfLoginCanBeUsed(login)){
             true
         }else{
-            showErrorSnackBar("Login is already used")
+            showErrorSnackBar(resources.getString(R.string.login_already_used))
             false
         }
 

@@ -2,6 +2,7 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,10 +12,13 @@ import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_my_profile.*
+import kotlinx.android.synthetic.main.dialog_delete_account.*
+import kotlinx.coroutines.launch
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
@@ -74,6 +78,10 @@ class MyProfileActivity : BaseActivity() {
                 showProgressDialog()
                 updateUserProfileData()
             }
+        }
+
+        btn_delete_account.setOnClickListener {
+            showDeleteAccountDialog()
         }
 
     }
@@ -188,28 +196,34 @@ class MyProfileActivity : BaseActivity() {
         val userHashMap = HashMap<String, Any>()
         var anyChangesMade = false
 
-        if(mSelectedImageAvatarURL.isNotEmpty() && mSelectedImageAvatarURL != mUserDetails.image){
-            userHashMap[Constants.IMAGE] = mSelectedImageAvatarURL
-            anyChangesMade = true
-        }
-        if(mSelectedImageBackgroundURL.isNotEmpty() && mSelectedImageBackgroundURL != mUserDetails.background){
-            userHashMap[Constants.BACKGROUND] = mSelectedImageBackgroundURL
-            anyChangesMade = true
-        }
-        if(my_profile_et_name.text.toString() != mUserDetails.name){
-            userHashMap[Constants.NAME] = my_profile_et_name.text.toString()
-            anyChangesMade = true
-        }
-        if(my_profile_et_login.text.toString() != mUserDetails.login){ //TODO ADD VERIFICATION IF LOGIN CAN BE USED
-            userHashMap[Constants.LOGIN] = my_profile_et_login.text.toString()
-            anyChangesMade = true
-        }
+        lifecycleScope.launch{
+            if(mSelectedImageAvatarURL.isNotEmpty() && mSelectedImageAvatarURL != mUserDetails.image){
+                userHashMap[Constants.IMAGE] = mSelectedImageAvatarURL
+                anyChangesMade = true
+            }
+            if(mSelectedImageBackgroundURL.isNotEmpty() && mSelectedImageBackgroundURL != mUserDetails.background){
+                userHashMap[Constants.BACKGROUND] = mSelectedImageBackgroundURL
+                anyChangesMade = true
+            }
+            if(my_profile_et_name.text.toString() != mUserDetails.name){
+                userHashMap[Constants.NAME] = my_profile_et_name.text.toString()
+                anyChangesMade = true
+            }
+            if(my_profile_et_login.text.toString() != mUserDetails.login){
+                if(FirestoreClass().validateIfLoginCanBeUsed(my_profile_et_login.text.toString())){
+                    userHashMap[Constants.LOGIN] = my_profile_et_login.text.toString()
+                    anyChangesMade = true
+                }else{
+                    showErrorSnackBar(resources.getString(R.string.login_already_used))
+                }
+            }
 
-        if(anyChangesMade) {
-            FirestoreClass().updateUserProfileData(this, userHashMap)
-        }
+            if(anyChangesMade) {
+                FirestoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
+            }
 
-        hideProgressDialog()
+            hideProgressDialog()
+        }
     }
 
     fun profileUpdateSuccess(){
@@ -255,5 +269,27 @@ class MyProfileActivity : BaseActivity() {
             .into(my_profile_iv_user_background_image)
 
         hideProgressDialog()
+    }
+
+    private fun showDeleteAccountDialog(){
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_delete_account)
+
+        dialog.tv_cancel_delete.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.tv_confirm_delete.setOnClickListener {
+            showProgressDialog()
+            FirestoreClass().deleteUserAccount(mUserDetails)
+            hideProgressDialog()
+            val intent = Intent(this, IntroActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }
+
+        dialog.show()
     }
 }

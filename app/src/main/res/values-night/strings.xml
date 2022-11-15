@@ -26,4 +26,5 @@
     <string name="nav_sign_out">Sign out</string>
     <string name="update">UPDATE</string>
     <string name="delete_account">DELETE ACCOUNT</string>
+    <string name="permission_denied">You have denied the permission for storage access</string>
 </resources>

@@ -71,7 +71,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     Intent(this, MyProfileActivity::class.java), MY_PROFILE_REQUEST_CODE)
             }
             R.id.nav_settings -> {
-                //startActivity(Intent(this, SettingsActivity::class.java))
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
             R.id.nav_sign_out -> {
                 FirebaseAuth.getInstance().signOut()

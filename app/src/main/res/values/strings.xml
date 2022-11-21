@@ -43,4 +43,9 @@
     <string name="reset_your_password">Reset your password</string>
     <string name="enter_email_address">Enter email address</string>
     <string name="send">SEND</string>
+
+    <string-array name="Languages">
+        <item>English</item>
+        <item>Polish</item>
+    </string-array>
 </resources>

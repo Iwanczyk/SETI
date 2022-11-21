@@ -13,6 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SETI">
         <activity
+            android:name=".activities.SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SETI.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.MyProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait"

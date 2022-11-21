@@ -16,6 +16,7 @@ object Constants {
     const val LOGIN: String = "login"
     const val IMAGE: String = "image"
     const val BACKGROUND: String = "background"
+    const val EMAIL: String = "email"
 
 
 

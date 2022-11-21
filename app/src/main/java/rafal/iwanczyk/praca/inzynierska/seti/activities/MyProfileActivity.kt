@@ -8,15 +8,20 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.webkit.MimeTypeMap
+import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_my_profile.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.dialog_delete_account.*
 import kotlinx.coroutines.launch
 import rafal.iwanczyk.praca.inzynierska.seti.R
@@ -34,6 +39,7 @@ class MyProfileActivity : BaseActivity() {
     private var mSelectedImageAvatarURL: String = ""
     private var mSelectedImageBackgroundURI: Uri? = null
     private var mSelectedImageBackgroundURL: String = ""
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +88,43 @@ class MyProfileActivity : BaseActivity() {
 
         btn_delete_account.setOnClickListener {
             showDeleteAccountDialog()
+        }
+
+        sw_my_profile_edit_email.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                my_profile_et_email.visibility = View.VISIBLE
+                my_profile_et_current_password.visibility = View.VISIBLE
+                tv_my_profile_edit_sensitive_data.visibility = View.VISIBLE
+            }else{
+                my_profile_et_email.visibility = View.GONE
+                my_profile_et_email.setText(mUserDetails.email)
+                my_profile_et_current_password.setText("")
+                    if(!sw_my_profile_edit_password.isChecked){
+                        tv_my_profile_edit_sensitive_data.visibility = View.GONE
+                        my_profile_et_current_password.visibility = View.GONE
+                    }
+            }
+        }
+
+        sw_my_profile_edit_password.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                my_profile_et_current_password.visibility = View.VISIBLE
+                my_profile_et_new_password.visibility = View.VISIBLE
+                my_profile_et_repeat_new_password.visibility = View.VISIBLE
+                tv_my_profile_edit_sensitive_data.visibility = View.VISIBLE
+            }else{
+                my_profile_et_new_password.visibility = View.GONE
+                my_profile_et_repeat_new_password.visibility = View.GONE
+
+                my_profile_et_current_password.setText("")
+                my_profile_et_new_password.setText("")
+                my_profile_et_repeat_new_password.setText("")
+
+                    if(!sw_my_profile_edit_email.isChecked){
+                        tv_my_profile_edit_sensitive_data.visibility = View.GONE
+                        my_profile_et_current_password.visibility = View.GONE
+                    }
+            }
         }
 
     }
@@ -195,8 +238,11 @@ class MyProfileActivity : BaseActivity() {
     private fun updateUserProfileData(){
         val userHashMap = HashMap<String, Any>()
         var anyChangesMade = false
+        auth = FirebaseAuth.getInstance()
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
 
         lifecycleScope.launch{
+            //Edit basic data
             if(mSelectedImageAvatarURL.isNotEmpty() && mSelectedImageAvatarURL != mUserDetails.image){
                 userHashMap[Constants.IMAGE] = mSelectedImageAvatarURL
                 anyChangesMade = true
@@ -218,11 +264,88 @@ class MyProfileActivity : BaseActivity() {
                 }
             }
 
+            //Edit email and password
+            if(sw_my_profile_edit_email.isChecked
+                && validatePasswordField(my_profile_et_current_password.text.toString())
+                && my_profile_et_email.text.toString() != mUserDetails.email){
+                userHashMap[Constants.EMAIL] = my_profile_et_email.text.toString()
+
+                val credential = EmailAuthProvider
+                    .getCredential(mUserDetails.email, my_profile_et_current_password.text.toString())
+
+                firebaseUser!!.reauthenticate(credential)
+                    .addOnCompleteListener {
+                            task ->
+                        if (task.isSuccessful){
+                            firebaseUser.updateEmail(my_profile_et_email.text.toString())
+                                .addOnCompleteListener {
+                                        task ->
+                                    if (task.isSuccessful) {
+                                        Log.d("Email updated", "User email address updated.")
+                                    }
+                                }.addOnFailureListener {
+                                    Log.e("Email update error", "User email address NOT updated.")
+                                }
+                        }
+                    }.addOnFailureListener {
+                        showErrorSnackBar("Authorization failed")
+                    }
+
+                anyChangesMade = true
+            }
+            if(sw_my_profile_edit_password.isChecked
+                && validateEditPasswordFields(my_profile_et_current_password.text.toString(),
+                    my_profile_et_new_password.text.toString(), my_profile_et_repeat_new_password.text.toString())){
+
+                val credential = EmailAuthProvider
+                    .getCredential(my_profile_et_email.text.toString(), my_profile_et_current_password.text.toString())
+
+                firebaseUser!!.reauthenticate(credential)
+                    .addOnCompleteListener {
+                            task ->
+                        if (task.isSuccessful){
+                        firebaseUser.updatePassword(my_profile_et_new_password.text.toString())
+                            .addOnCompleteListener {
+                                    task ->
+                                if (task.isSuccessful) {
+                                    Log.d("Password updated", "User password updated.")
+                                }
+                            }.addOnFailureListener {  Log.e("Password NOT updated", "User password NOT updated.") }
+                        }
+                    }.addOnFailureListener { showErrorSnackBar("Authorization failed") }
+
+                anyChangesMade = true
+            }
+
+            //TODO ADD EMAIL EDIT AND PASSWORD EDIT + RESETTING PASSWORD IN SING IN ACTIVITY
+
             if(anyChangesMade) {
                 FirestoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
             }
 
             hideProgressDialog()
+        }
+    }
+
+    private fun validateEditPasswordFields(currentPassword: String, newPassword: String,
+                                           repeatPassword: String): Boolean{
+        return if(currentPassword.isBlank() || newPassword.isBlank() || repeatPassword.isBlank()){
+            showErrorSnackBar(resources.getString(R.string.please_enter_your_password))
+            false
+        }else if(newPassword != repeatPassword){
+            showErrorSnackBar(resources.getString(R.string.passwords_not_matching))
+            false
+        }else{
+            true
+        }
+    }
+
+    private fun validatePasswordField(password: String): Boolean{
+        return if(password.isBlank()){
+            showErrorSnackBar(resources.getString(R.string.please_enter_your_password))
+            false
+        }else{
+            true
         }
     }
 

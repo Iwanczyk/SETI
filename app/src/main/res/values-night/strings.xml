@@ -31,4 +31,10 @@
     <string name="delete_account_confirmation">Are you sure you want delete your accound?</string>
     <string name="yes">YES</string>
     <string name="cancel">CANCEL</string>
+    <string name="edit_email">Edit email</string>
+    <string name="edit_password">Edit Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="repeat_new_password">Repeat New Password</string>
+    <string name="editing_sensitive_data_requires_confirmation_with_password">Editing sensitive data requires confirmation with password</string>
 </resources>

@@ -86,6 +86,20 @@
                         android:textSize="@dimen/et_text_size" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tv_forgot_password_sign_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd"
+                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd"
+                    android:gravity="center"
+                    android:textStyle="italic"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondary_color"
+                    android:text="@string/forgot_password"
+                    />
+
                 <Button
                     android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"

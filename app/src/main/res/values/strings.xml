@@ -39,4 +39,8 @@
     <string name="new_password">New Password</string>
     <string name="repeat_new_password">Repeat New Password</string>
     <string name="editing_sensitive_data_requires_confirmation_with_password">Editing sensitive data requires confirmation with password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="reset_your_password">Reset your password</string>
+    <string name="enter_email_address">Enter email address</string>
+    <string name="send">SEND</string>
 </resources>

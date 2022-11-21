@@ -1,5 +1,6 @@
 package rafal.iwanczyk.praca.inzynierska.seti.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,8 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlinx.android.synthetic.main.activity_sign_in.et_email
 import kotlinx.android.synthetic.main.activity_sign_in.et_password
+import kotlinx.android.synthetic.main.dialog_delete_account.*
+import kotlinx.android.synthetic.main.dialog_forgot_password.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
@@ -36,6 +39,10 @@ class SignInActivity : BaseActivity() {
 
         btn_sign_in.setOnClickListener {
             signInRegisteredUser()
+        }
+
+        tv_forgot_password_sign_in.setOnClickListener {
+            showForgotPasswordDialog()
         }
     }
 
@@ -95,4 +102,28 @@ class SignInActivity : BaseActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
+
+    private fun showForgotPasswordDialog(){
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_forgot_password)
+
+        dialog.tv_cancel_reset_password.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.tv_send_reset_password_email.setOnClickListener {
+            if(dialog.et_reset_password_sign_in.text!!.isBlank()){
+                showToast(this, "Please enter account email address")
+            }else {
+                auth.sendPasswordResetEmail(dialog.et_reset_password_sign_in.text!!.toString())
+                    .addOnCompleteListener {
+                        showToast(this, "Email to reset your password was sent!")
+                    }
+                finish()
+            }
+        }
+        dialog.show()
+    }
+
 }

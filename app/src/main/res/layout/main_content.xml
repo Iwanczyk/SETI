@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="false"
+
+        >
+
+        <RadioGroup
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="16dp"
+            >
+
+            <RadioButton
+                android:id="@+id/rb_monday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mon"
+                android:button="@null"
+                android:background="@drawable/bg_radio_button"
+                />
+
+
+            <RadioButton
+                android:id="@+id/rb_tuesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tue"
+                android:button="@null"
+                android:background="@drawable/bg_radio_button"
+                />
+
+            <RadioButton
+                android:id="@+id/rb_wednesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wed"
+                android:button="@null"
+                android:background="@drawable/bg_radio_button"
+                />
+
+            <RadioButton
+                android:id="@+id/rb_thursday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thu"
+                android:button="@null"
+                android:background="@drawable/bg_radio_button"
+                />
+
+            <RadioButton
+                android:id="@+id/rb_friday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fri"
+                android:button="@null"
+                android:background="@drawable/bg_radio_button"
+                />
+
+            <RadioButton
+                android:id="@+id/rb_saturday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sat"
+                android:button="@null"
+                android:background="@drawable/bg_radio_button"
+                />
+
+            <RadioButton
+                android:id="@+id/rb_sunday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun"
+                android:button="@null"
+                android:background="@drawable/bg_radio_button"
+                />
+
+
+        </RadioGroup>
+
+
+    </HorizontalScrollView>
+
+
+
+</LinearLayout>

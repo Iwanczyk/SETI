@@ -53,7 +53,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         daysOfWeekButtonsSetup()
 
         fab_create_regular_engagement.setOnClickListener {
-            val intent = Intent(this, CreateRegularEngagementActivity::class.java)
+            val intent = Intent(this@MainActivity, CreateRegularEngagementActivity::class.java)
             intent.putExtra(Constants.WEEKPLAN, mWeekPlan)
             startActivityForResult(intent, CREATE_REGULAR_ENGAGEMENT_CODE)
         }
@@ -123,6 +123,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         else{
             Log.e("Cancelled", "Cancelled")
         }
+
+        println("requetCode: $requestCode\nresultCode: $resultCode ----------------")
     }
 
     fun updateNavigationUserDetails(user: User, readWeekPlanRegularEngagements: Boolean){

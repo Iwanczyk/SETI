@@ -110,7 +110,6 @@ class CreateRegularEngagementActivity : BaseActivity() {
         btn_add_regular_engagement.setOnClickListener {
             if(validateRequiredFields()){
                 addRegularEngagement()
-                finish()
             }else{
                 showErrorSnackBar("You have not filled all required fields (Title, start time, end time)")
             }
@@ -148,11 +147,7 @@ class CreateRegularEngagementActivity : BaseActivity() {
             "Sunday" -> mWeekEngagements.sundayEngagements.add(newRegularEngagement)
         }
 
-        //TODO dodać nowoutworzone zajęcie do listy we właściwym dniu (zrobić switchem?)
-        // a potem przesłać obiekt WeekEngagements do poniższej metody żeby dodać wydarzenie w bazie danych
-
         FirestoreClass().createRegularEngagement(this, mWeekEngagements)
-
     }
 
     fun regularEngagementCreatedSuccessfully(){

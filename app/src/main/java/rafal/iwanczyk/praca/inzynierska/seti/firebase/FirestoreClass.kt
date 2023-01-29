@@ -113,52 +113,12 @@ class FirestoreClass {
     }
 
     fun createRegularEngagement(activity: CreateRegularEngagementActivity, weekEngagements: WeekEngagements){
-
-        val regularEngagementsHashMap = HashMap<String, Any>()
-        //regularEngagementsHashMap[Constants.WEEKPLAN] = weekEngagements
-
-        regularEngagementsHashMap["mondayEngagements"] = weekEngagements.mondayEngagements
-        regularEngagementsHashMap["tuesdayEngagements"] = weekEngagements.tuesdayEngagements
-        regularEngagementsHashMap["wednesdayEngagements"] = weekEngagements.wednesdayEngagements
-        /*
-        mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.assignedTo)
-            .update(regularEngagementsHashMap)
-            .addOnSuccessListener {
-                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
-
-                activity.regularEngagementCreatedSuccessfully()
-            }
-
-         */
-
-        /*
-        mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
-            .update(regularEngagementsHashMap)
-            .addOnSuccessListener {
-                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
-
-                activity.regularEngagementCreatedSuccessfully()
-            }
-
-         */
-        mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
-            .update(regularEngagementsHashMap)
-            .addOnSuccessListener {
-                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
-
-                activity.regularEngagementCreatedSuccessfully()
-            }
-        /*
-        //TODO przerobić metodę, żeby przyjmowała listę regular engagementów i updatowała to w firebase
         mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
             .set(weekEngagements)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
-
                 activity.regularEngagementCreatedSuccessfully()
             }
-
-         */
     }
 
 
@@ -168,7 +128,7 @@ class FirestoreClass {
             .addOnSuccessListener {
                 println("STWORZONO PLAN")
             }.addOnFailureListener {
-                println("DYNTKA :((")
+                println("Błąd w trakcie tworzenia :((")
             }
     }
 

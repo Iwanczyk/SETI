@@ -2,17 +2,17 @@ package rafal.iwanczyk.praca.inzynierska.seti.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
-import rafal.iwanczyk.praca.inzynierska.seti.activities.MainActivity
-import rafal.iwanczyk.praca.inzynierska.seti.activities.MyProfileActivity
-import rafal.iwanczyk.praca.inzynierska.seti.activities.SignInActivity
-import rafal.iwanczyk.praca.inzynierska.seti.activities.SignUpActivity
+import rafal.iwanczyk.praca.inzynierska.seti.activities.*
+import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
+import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
 
 class FirestoreClass {
@@ -24,6 +24,9 @@ class FirestoreClass {
             .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
                 activity.userRegisteredSuccess()
+
+                //????????????????
+                createWeekPlan(WeekEngagements(getCurrentUserID()))
             }.addOnFailureListener {
                 Log.e("Registration", "Error while registering")
             }
@@ -48,7 +51,7 @@ class FirestoreClass {
         return documents.documents
     }
 
-    fun loadUserData(activity: Activity){
+    fun loadUserData(activity: Activity, readWeekPlanRegularEngagements: Boolean = false){
         mFireStore.collection(Constants.USERS).document(getCurrentUserID())
             .get()
             .addOnSuccessListener {
@@ -60,7 +63,7 @@ class FirestoreClass {
                         activity.signInSuccess(loggedInUser)
                     }
                     is MainActivity -> {
-                        activity.updateNavigationUserDetails(loggedInUser)
+                        activity.updateNavigationUserDetails(loggedInUser, readWeekPlanRegularEngagements)
                     }
                     is MyProfileActivity -> {
                         activity.setUserDataInUI(loggedInUser)
@@ -107,6 +110,79 @@ class FirestoreClass {
             .delete()
             .addOnSuccessListener { task -> Log.i("Firestore deletion","Firestore document deleted") }
             .addOnFailureListener { task -> Log.e("Firestore error","Firestore document NOT deleted") }
+    }
+
+    fun createRegularEngagement(activity: CreateRegularEngagementActivity, weekEngagements: WeekEngagements){
+
+        val regularEngagementsHashMap = HashMap<String, Any>()
+        //regularEngagementsHashMap[Constants.WEEKPLAN] = weekEngagements
+
+        regularEngagementsHashMap["mondayEngagements"] = weekEngagements.mondayEngagements
+        regularEngagementsHashMap["tuesdayEngagements"] = weekEngagements.tuesdayEngagements
+        regularEngagementsHashMap["wednesdayEngagements"] = weekEngagements.wednesdayEngagements
+        /*
+        mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.assignedTo)
+            .update(regularEngagementsHashMap)
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
+
+                activity.regularEngagementCreatedSuccessfully()
+            }
+
+         */
+
+        /*
+        mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
+            .update(regularEngagementsHashMap)
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
+
+                activity.regularEngagementCreatedSuccessfully()
+            }
+
+         */
+        mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
+            .update(regularEngagementsHashMap)
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
+
+                activity.regularEngagementCreatedSuccessfully()
+            }
+        /*
+        //TODO przerobić metodę, żeby przyjmowała listę regular engagementów i updatowała to w firebase
+        mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
+            .set(weekEngagements)
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
+
+                activity.regularEngagementCreatedSuccessfully()
+            }
+
+         */
+    }
+
+
+    //Automatically creates empty week plan for newly registered user
+    private fun createWeekPlan(weekEngagements: WeekEngagements){
+        mFireStore.collection(Constants.WEEKPLAN).document().set(weekEngagements, SetOptions.merge())
+            .addOnSuccessListener {
+                println("STWORZONO PLAN")
+            }.addOnFailureListener {
+                println("DYNTKA :((")
+            }
+    }
+
+    fun getWeekPlan(activity: MainActivity){
+        mFireStore.collection(Constants.WEEKPLAN).whereEqualTo(Constants.ASSIGNED_TO,getCurrentUserID())
+            .get().addOnSuccessListener {
+                document -> Log.i(activity.javaClass.simpleName,document.documents.toString())
+                val weekPlan: WeekEngagements = document.documents[0].toObject(WeekEngagements::class.java)!!
+                weekPlan.documentID = document.documents[0].id
+                activity.populateWeekPlanToUI(weekPlan)
+            }.addOnFailureListener {
+                e -> activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while populating week plan!")
+            }
     }
 
     }

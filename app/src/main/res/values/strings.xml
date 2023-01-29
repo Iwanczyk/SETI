@@ -48,4 +48,20 @@
         <item>English</item>
         <item>Polish</item>
     </string-array>
+
+    <string-array name="DaysOfWeek">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="TypeOfEngagement">
+        <item>Study</item>
+        <item>Work</item>
+        <item>Other</item>
+    </string-array>
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/divider_color"/>
+                    <corners android:radius="5dp"/>
+                    <padding android:left="10dp"/>
+                </shape>
+            </item>
+
+            <item android:gravity="right" android:drawable="@drawable/ic_dropdown_arrow_week_day_list"/>
+        </layer-list>
+    </item>
+</selector>

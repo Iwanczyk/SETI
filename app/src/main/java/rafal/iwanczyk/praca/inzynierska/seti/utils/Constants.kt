@@ -18,6 +18,11 @@ object Constants {
     const val BACKGROUND: String = "background"
     const val EMAIL: String = "email"
 
+    const val WEEKPLAN: String = "weekPlan"
+    const val REGULAR_ENGAGEMENTS = "regularEngagements"
+
+    const val ASSIGNED_TO: String = "assignedTo"
+
 
 
     fun showImageChooser(activity: Activity){

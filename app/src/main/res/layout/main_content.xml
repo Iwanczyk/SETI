@@ -3,16 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@drawable/nav_header_main_background">
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="false"
-
         >
 
         <RadioGroup
+            android:id="@+id/rg_days_of_week"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,6 +95,33 @@
 
 
     </HorizontalScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="@dimen/card_view_elevation"
+        app:cardCornerRadius="16dp"
+        >
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_regular_engagements_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/tv_no_regular_engagements_available"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No regular activities available"
+            android:visibility="gone"
+            android:gravity="center"/>
+
+
+
+    </androidx.cardview.widget.CardView>
 
 
 

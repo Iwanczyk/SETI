@@ -146,7 +146,7 @@ class CreateRegularEngagementActivity : BaseActivity() {
             actionBar.title = resources.getString(R.string.add_new_regular_engagement)
         }
 
-        toolbar_my_profile_activity.setNavigationOnClickListener { onBackPressed() }
+        toolbar_create_regular_engagement.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun validateAddingNewRegularEngagement(): Boolean{

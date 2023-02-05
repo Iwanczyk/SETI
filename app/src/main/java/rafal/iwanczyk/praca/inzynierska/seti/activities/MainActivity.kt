@@ -24,6 +24,7 @@ import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -188,13 +189,34 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         rv_regular_engagements_list.setHasFixedSize(true)
 
         when(currentDay){
-            Calendar.MONDAY -> adapter = RegularEngagementsAdapter(this, weekPlan.mondayEngagements)
-            Calendar.TUESDAY -> adapter = RegularEngagementsAdapter(this, weekPlan.tuesdayEngagements)
-            Calendar.WEDNESDAY -> adapter = RegularEngagementsAdapter(this, weekPlan.wednesdayEngagements)
-            Calendar.THURSDAY -> adapter = RegularEngagementsAdapter(this, weekPlan.thursdayEngagements)
-            Calendar.FRIDAY -> adapter = RegularEngagementsAdapter(this, weekPlan.fridayEngagements)
-            Calendar.SATURDAY -> adapter = RegularEngagementsAdapter(this, weekPlan.saturdayEngagements)
-            Calendar.SUNDAY -> adapter = RegularEngagementsAdapter(this, weekPlan.sundayEngagements)
+            Calendar.MONDAY -> {
+                weekPlan.mondayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, weekPlan.mondayEngagements)
+            }
+            Calendar.TUESDAY -> {
+                weekPlan.tuesdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, weekPlan.tuesdayEngagements)
+            }
+            Calendar.WEDNESDAY -> {
+                weekPlan.wednesdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, weekPlan.wednesdayEngagements)
+            }
+            Calendar.THURSDAY -> {
+                weekPlan.thursdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, weekPlan.thursdayEngagements)
+            }
+            Calendar.FRIDAY -> {
+                weekPlan.fridayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, weekPlan.fridayEngagements)
+            }
+            Calendar.SATURDAY -> {
+                weekPlan.saturdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, weekPlan.saturdayEngagements)
+            }
+            Calendar.SUNDAY -> {
+                weekPlan.sundayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, weekPlan.sundayEngagements)
+            }
         }
         rv_regular_engagements_list.adapter = adapter
 
@@ -210,13 +232,33 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         rv_regular_engagements_list.setHasFixedSize(true)
 
         when(checkedId){
-            R.id.rb_monday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.mondayEngagements)
-            R.id.rb_tuesday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.tuesdayEngagements)
-            R.id.rb_wednesday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.wednesdayEngagements)
-            R.id.rb_thursday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.thursdayEngagements)
-            R.id.rb_friday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.fridayEngagements)
-            R.id.rb_saturday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.saturdayEngagements)
-            R.id.rb_sunday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.sundayEngagements)
+            R.id.rb_monday -> {
+                mWeekPlan.mondayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, mWeekPlan.mondayEngagements)}
+            R.id.rb_tuesday -> {
+                mWeekPlan.tuesdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, mWeekPlan.tuesdayEngagements)
+            }
+            R.id.rb_wednesday -> {
+                mWeekPlan.wednesdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, mWeekPlan.wednesdayEngagements)
+            }
+            R.id.rb_thursday -> {
+                mWeekPlan.thursdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, mWeekPlan.thursdayEngagements)
+            }
+            R.id.rb_friday -> {
+                mWeekPlan.fridayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, mWeekPlan.fridayEngagements)
+            }
+            R.id.rb_saturday -> {
+                mWeekPlan.saturdayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, mWeekPlan.saturdayEngagements)
+            }
+            R.id.rb_sunday -> {
+                mWeekPlan.sundayEngagements.sortBy { it.startTime }
+                adapter = RegularEngagementsAdapter(this, mWeekPlan.sundayEngagements)
+            }
         }
         rv_regular_engagements_list.adapter = adapter
 

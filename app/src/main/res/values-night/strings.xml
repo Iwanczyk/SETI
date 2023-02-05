@@ -41,4 +41,11 @@
     <string name="reset_your_password">Reset your password</string>
     <string name="enter_email_address">Enter email address</string>
     <string name="send">SEND</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
 </resources>

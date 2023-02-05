@@ -24,15 +24,17 @@
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
             android:layout_marginBottom="16dp"
+            android:textAlignment="center"
             >
 
             <RadioButton
                 android:id="@+id/rb_monday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mon"
+                android:text="@string/mon"
                 android:button="@null"
                 android:background="@drawable/bg_radio_button"
+                android:textAlignment="center"
                 />
 
 
@@ -40,54 +42,60 @@
                 android:id="@+id/rb_tuesday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tue"
+                android:text="@string/tue"
                 android:button="@null"
                 android:background="@drawable/bg_radio_button"
+                android:textAlignment="center"
                 />
 
             <RadioButton
                 android:id="@+id/rb_wednesday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wed"
+                android:text="@string/wed"
                 android:button="@null"
                 android:background="@drawable/bg_radio_button"
+                android:textAlignment="center"
                 />
 
             <RadioButton
                 android:id="@+id/rb_thursday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thu"
+                android:text="@string/thu"
                 android:button="@null"
                 android:background="@drawable/bg_radio_button"
+                android:textAlignment="center"
                 />
 
             <RadioButton
                 android:id="@+id/rb_friday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fri"
+                android:text="@string/fri"
                 android:button="@null"
                 android:background="@drawable/bg_radio_button"
+                android:textAlignment="center"
                 />
 
             <RadioButton
                 android:id="@+id/rb_saturday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sat"
+                android:text="@string/sat"
                 android:button="@null"
                 android:background="@drawable/bg_radio_button"
+                android:textAlignment="center"
                 />
 
             <RadioButton
                 android:id="@+id/rb_sunday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sun"
+                android:text="@string/sun"
                 android:button="@null"
                 android:background="@drawable/bg_radio_button"
+                android:textAlignment="center"
                 />
 
 

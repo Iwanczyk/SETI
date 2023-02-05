@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
 import kotlinx.android.synthetic.main.activity_create_regual_engagement.*
+import kotlinx.android.synthetic.main.activity_my_profile.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
@@ -31,6 +32,8 @@ class CreateRegularEngagementActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_regual_engagement)
+
+        setupActionBar()
 
         //Get user's week plan
         if(intent.hasExtra(Constants.WEEKPLAN)){
@@ -132,6 +135,18 @@ class CreateRegularEngagementActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun setupActionBar(){
+        setSupportActionBar(toolbar_create_regular_engagement)
+        val actionBar = supportActionBar
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_icon_24dp)
+            actionBar.title = resources.getString(R.string.add_new_regular_engagement)
+        }
+
+        toolbar_my_profile_activity.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun validateAddingNewRegularEngagement(): Boolean{

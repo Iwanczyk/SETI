@@ -6,12 +6,10 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.RadioButton
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
-import com.google.android.gms.common.config.GservicesValue.value
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -49,13 +47,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         FirestoreClass().loadUserData(this, true)
 
-        //setup buttons of days
+        //Setup buttons of days
         daysOfWeekButtonsSetup()
 
+        //Adding new regular engagements
         fab_create_regular_engagement.setOnClickListener {
             val intent = Intent(this@MainActivity, CreateRegularEngagementActivity::class.java)
             intent.putExtra(Constants.WEEKPLAN, mWeekPlan)
             startActivityForResult(intent, CREATE_REGULAR_ENGAGEMENT_CODE)
+        }
+
+        //Days radio group listener
+        rg_days_of_week.setOnCheckedChangeListener { group, checkedId ->
+            changeDaysOfWeekAdapter(checkedId)
         }
     }
 
@@ -117,14 +121,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if(resultCode == Activity.RESULT_OK && requestCode == MY_PROFILE_REQUEST_CODE){
             FirestoreClass().loadUserData(this)
         }else if(resultCode == Activity.RESULT_OK && requestCode == CREATE_REGULAR_ENGAGEMENT_CODE){
-            println("ACTIVITY FOR RESULT USED")
             FirestoreClass().getWeekPlan(this)
         }
         else{
             Log.e("Cancelled", "Cancelled")
         }
-
-        println("requetCode: $requestCode\nresultCode: $resultCode ----------------")
     }
 
     fun updateNavigationUserDetails(user: User, readWeekPlanRegularEngagements: Boolean){
@@ -167,8 +168,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun daysOfWeekButtonsSetup(){
-        println("DAY: ${calendar.get(Calendar.DAY_OF_WEEK)}")
-
         when(currentDay){
             Calendar.MONDAY -> rb_monday.isChecked = true
             Calendar.TUESDAY -> rb_tuesday.isChecked = true
@@ -178,7 +177,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             Calendar.SATURDAY -> rb_saturday.isChecked = true
             Calendar.SUNDAY -> rb_sunday.isChecked = true
         }
-
     }
 
     fun populateWeekPlanToUI(weekPlan: WeekEngagements){
@@ -205,6 +203,27 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 //startActivity(Intent(this@MainActivity, RegularEngagementDetail::class.java))
             }
         })
+    }
 
+    private fun changeDaysOfWeekAdapter(checkedId: Int) {
+        rv_regular_engagements_list.layoutManager = LinearLayoutManager(this)
+        rv_regular_engagements_list.setHasFixedSize(true)
+
+        when(checkedId){
+            R.id.rb_monday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.mondayEngagements)
+            R.id.rb_tuesday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.tuesdayEngagements)
+            R.id.rb_wednesday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.wednesdayEngagements)
+            R.id.rb_thursday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.thursdayEngagements)
+            R.id.rb_friday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.fridayEngagements)
+            R.id.rb_saturday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.saturdayEngagements)
+            R.id.rb_sunday -> adapter = RegularEngagementsAdapter(this, mWeekPlan.sundayEngagements)
+        }
+        rv_regular_engagements_list.adapter = adapter
+
+        adapter.setOnClickListener(object: RegularEngagementsAdapter.OnClickListener{
+            override fun onClick(position: Int, model: RegularEngagement) {
+                //startActivity(Intent(this@MainActivity, RegularEngagementDetail::class.java))
+            }
+        })
     }
 }

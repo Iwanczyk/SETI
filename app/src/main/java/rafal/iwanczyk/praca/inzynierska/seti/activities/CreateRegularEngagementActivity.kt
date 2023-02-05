@@ -62,7 +62,8 @@ class CreateRegularEngagementActivity : BaseActivity() {
             ) {
                 mSelectedTypeOfEngagement = dropdown_list_chose_type_of_engagement.getItemAtPosition(position).toString()
 
-                if(dropdown_list_chose_type_of_engagement.getItemAtPosition(position).toString() == "Study"){
+                if(dropdown_list_chose_type_of_engagement.getItemAtPosition(position).toString()
+                    == resources.getString(R.string.study)){
                     et_lecture_room_number_of_engagement.visibility = View.VISIBLE
                     et_building_number_of_engagement.visibility = View.VISIBLE
                 }else{
@@ -151,7 +152,7 @@ class CreateRegularEngagementActivity : BaseActivity() {
             && btn_pick_end_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))){
             true
         }else{
-            showErrorSnackBar("Please fill required fields (Title, Start Time, End Time)!!!")
+            showErrorSnackBar(resources.getString(R.string.fill_required_fields_alert))
             false
         }
     }
@@ -162,17 +163,17 @@ class CreateRegularEngagementActivity : BaseActivity() {
 
         if(btn_pick_start_time_regular_engagement.text.toString()
             == btn_pick_end_time_regular_engagement.text.toString()){
-            showErrorSnackBar("Start Time and End Time cannot be the same!!!")
+            showErrorSnackBar(resources.getString(R.string.start_time_and_end_time_the_same_alert))
             return false
         }else if(btn_pick_end_time_regular_engagement.text.toString() == "00:00"){
-            showErrorSnackBar("Regular engagement cannot end at midnight!")
+            showErrorSnackBar(resources.getString(R.string.engagement_ends_at_midnight_alert))
             return false
         }else if((btn_pick_start_time_regular_engagement.text.toString() == "00:00"
                     && btn_pick_end_time_regular_engagement.text.toString() != "00:00")){
             return true
         }else if((endTimeArray[0].toInt() * 60 + endTimeArray[1].toInt()) -
             (startTimeArray[0].toInt() * 60 + startTimeArray[1].toInt()) <= 0){
-            showErrorSnackBar("End time cannot be before Start Time!!!")
+            showErrorSnackBar(resources.getString(R.string.end_time_before_start_time_alert))
             return false
         }else{
             return true
@@ -247,7 +248,7 @@ class CreateRegularEngagementActivity : BaseActivity() {
             && btn_pick_end_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9] [A-Z][A-Z]"))){
             true
         }else{
-            showErrorSnackBar("Please fill required fields (Title, Start Time, End Time)!!!")
+            showErrorSnackBar(resources.getString(R.string.fill_required_fields_alert))
             false
         }
     }
@@ -290,11 +291,10 @@ class CreateRegularEngagementActivity : BaseActivity() {
         }
 
         return if(startTime == endTime){
-            showErrorSnackBar("Start Time and End Time cannot be the same!!! StartTime: $startTime\n" +
-                    "EndTime: $endTime")
+            showErrorSnackBar(resources.getString(R.string.start_time_and_end_time_the_same_alert))
             false
         }else if(endTime - startTime <= 0){
-            showErrorSnackBar("End time cannot be before Start Time!!!")
+            showErrorSnackBar(resources.getString(R.string.end_time_before_start_time_alert))
             false
         }else{
             true
@@ -338,13 +338,13 @@ class CreateRegularEngagementActivity : BaseActivity() {
         }
 
         when(mSelectedDay){
-            "Monday" -> tmpListRegularEngagements = mWeekEngagements.mondayEngagements
-            "Tuesday" -> tmpListRegularEngagements = mWeekEngagements.tuesdayEngagements
-            "Wednesday" -> tmpListRegularEngagements = mWeekEngagements.wednesdayEngagements
-            "Thursday" -> tmpListRegularEngagements = mWeekEngagements.thursdayEngagements
-            "Friday" -> tmpListRegularEngagements = mWeekEngagements.fridayEngagements
-            "Saturday" -> tmpListRegularEngagements = mWeekEngagements.saturdayEngagements
-            "Sunday" -> tmpListRegularEngagements = mWeekEngagements.sundayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[0] -> tmpListRegularEngagements = mWeekEngagements.mondayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[1] -> tmpListRegularEngagements = mWeekEngagements.tuesdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[2] -> tmpListRegularEngagements = mWeekEngagements.wednesdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[3] -> tmpListRegularEngagements = mWeekEngagements.thursdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[4] -> tmpListRegularEngagements = mWeekEngagements.fridayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[5] -> tmpListRegularEngagements = mWeekEngagements.saturdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[6] -> tmpListRegularEngagements = mWeekEngagements.sundayEngagements
         }
 
         for(i in tmpListRegularEngagements){
@@ -382,14 +382,14 @@ class CreateRegularEngagementActivity : BaseActivity() {
 
             if(startTime >= (tmpStartTime)
                 && startTime <= (tmpEndTime)){
-                showErrorSnackBar("Start time interrupts regular engagement ${i.name}!")
+                showErrorSnackBar(resources.getString(R.string.start_time_interrupts_another_engagement_alert)+i.name)
                 return false
             }else if(endTime >= (tmpStartTime)
                 && endTime <= (tmpEndTime)){
-                showErrorSnackBar("End time interrupts regular engagement ${i.name}")
+                showErrorSnackBar(resources.getString(R.string.end_time_interrupts_another_engagement_alert)+i.name)
                 return false
             }else if(tmpStartTime in startTime..endTime){
-                showErrorSnackBar("Regular engagement duration interrupts with ${i.name}")
+                showErrorSnackBar(resources.getString(R.string.regular_engagement_duration_interrupts_alert)+i.name)
                 return false
             }
         }

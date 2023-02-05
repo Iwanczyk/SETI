@@ -44,6 +44,18 @@
     <string name="enter_email_address">Enter email address</string>
     <string name="send">SEND</string>
 
+    <string name="study">Study</string>
+    <string name="work">Work</string>
+    <string name="other">Other</string>
+
+    <string name="fill_required_fields_alert">Please fill required fields (Title, Start Time, End Time)</string>
+    <string name="start_time_and_end_time_the_same_alert">Start Time and End Time cannot be the same!</string>
+    <string name="engagement_ends_at_midnight_alert">Regular engagement cannot end at midnight!</string>
+    <string name="end_time_before_start_time_alert">End time cannot be before Start Time!</string>
+    <string name="start_time_interrupts_another_engagement_alert">Start time interrupts regular engagement </string>
+    <string name="end_time_interrupts_another_engagement_alert">End time interrupts regular engagement </string>
+    <string name="regular_engagement_duration_interrupts_alert">Regular engagement duration interrupts </string>
+
     <string-array name="Languages">
         <item>English</item>
         <item>Polish</item>

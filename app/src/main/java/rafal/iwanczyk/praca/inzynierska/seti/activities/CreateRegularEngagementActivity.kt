@@ -15,13 +15,18 @@ import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CreateRegularEngagementActivity : BaseActivity() {
 
     private var mSelectedDay: String = ""
     private var mSelectedTypeOfEngagement: String = ""
     lateinit var mWeekEngagements: WeekEngagements
+    private lateinit var tmpListRegularEngagements: ArrayList<RegularEngagement>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,9 +83,13 @@ class CreateRegularEngagementActivity : BaseActivity() {
                 cal.set(Calendar.HOUR_OF_DAY, hour)
                 cal.set(Calendar.MINUTE, minute)
 
+                if(Locale.getDefault().displayLanguage == "English"){
+                btn_pick_start_time_regular_engagement.text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format((cal.time))
+                }else{
                 btn_pick_start_time_regular_engagement.text = SimpleDateFormat("HH:mm").format((cal.time))
+                }
             }
-            if(Locale.getDefault().getDisplayLanguage() == "English"){
+            if(Locale.getDefault().displayLanguage == "English"){
             TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),false).show()
             }else{
                 TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
@@ -95,9 +104,13 @@ class CreateRegularEngagementActivity : BaseActivity() {
                 cal.set(Calendar.HOUR_OF_DAY, hour)
                 cal.set(Calendar.MINUTE, minute)
 
-                btn_pick_end_time_regular_engagement.text = SimpleDateFormat("HH:mm").format((cal.time))
+                if(Locale.getDefault().displayLanguage == "English") {
+                    btn_pick_end_time_regular_engagement.text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format((cal.time))
+                }else{
+                    btn_pick_end_time_regular_engagement.text = SimpleDateFormat("HH:mm").format((cal.time))
+                }
             }
-            if(Locale.getDefault().getDisplayLanguage() == "English"){
+            if(Locale.getDefault().displayLanguage == "English"){
                 TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY),
                     cal.get(Calendar.MINUTE),false).show()
             }else{
@@ -108,18 +121,98 @@ class CreateRegularEngagementActivity : BaseActivity() {
 
         //Button create regular engagement
         btn_add_regular_engagement.setOnClickListener {
-            if(validateRequiredFields()){
-                addRegularEngagement()
+            if(Locale.getDefault().displayLanguage == "English"){
+                if(validateAddingNewRegularEngagementEN()){
+                    addRegularEngagement()
+                }
             }else{
-                showErrorSnackBar("You have not filled all required fields (Title, start time, end time)")
+                if(validateAddingNewRegularEngagement()){
+                    addRegularEngagement()
+                }
             }
         }
     }
 
+    private fun validateAddingNewRegularEngagement(): Boolean{
+        return validateRequiredFields()
+                && validateStartEndTimeFilledProperly()
+                && validateStartEndTimeWithOtherEngagements()
+    }
+
+    private fun validateAddingNewRegularEngagementEN(): Boolean{
+        return validateRequiredFieldsEN()
+                && validateStartEndTimeFilledProperlyEN()
+                && validateStartEndTimeWithOtherEngagementsEN()
+    }
+
     private fun validateRequiredFields(): Boolean{
-        return (et_title_of_engagement.text!!.isNotBlank()
-                && btn_pick_start_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))
-                && btn_pick_end_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9]")))
+        return if(et_title_of_engagement.text!!.isNotBlank()
+            && btn_pick_start_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))
+            && btn_pick_end_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))){
+            true
+        }else{
+            showErrorSnackBar("Please fill required fields (Title, Start Time, End Time)!!!")
+            false
+        }
+    }
+
+    private fun validateStartEndTimeFilledProperly(): Boolean{
+        val startTimeArray = btn_pick_start_time_regular_engagement.text.toString().split(":")
+        val endTimeArray = btn_pick_end_time_regular_engagement.text.toString().split(":")
+
+        if(btn_pick_start_time_regular_engagement.text.toString()
+            == btn_pick_end_time_regular_engagement.text.toString()){
+            showErrorSnackBar("Start Time and End Time cannot be the same!!!")
+            return false
+        }else if(btn_pick_end_time_regular_engagement.text.toString() == "00:00"){
+            showErrorSnackBar("Regular engagement cannot end at midnight!")
+            return false
+        }else if((btn_pick_start_time_regular_engagement.text.toString() == "00:00"
+                    && btn_pick_end_time_regular_engagement.text.toString() != "00:00")){
+            return true
+        }else if((endTimeArray[0].toInt() * 60 + endTimeArray[1].toInt()) -
+            (startTimeArray[0].toInt() * 60 + startTimeArray[1].toInt()) <= 0){
+            showErrorSnackBar("End time cannot be before Start Time!!!")
+            return false
+        }else{
+            return true
+        }
+    }
+
+    private fun validateStartEndTimeWithOtherEngagements(): Boolean{
+
+        when(mSelectedDay){
+            "Monday" -> tmpListRegularEngagements = mWeekEngagements.mondayEngagements
+            "Tuesday" -> tmpListRegularEngagements = mWeekEngagements.tuesdayEngagements
+            "Wednesday" -> tmpListRegularEngagements = mWeekEngagements.wednesdayEngagements
+            "Thursday" -> tmpListRegularEngagements = mWeekEngagements.thursdayEngagements
+            "Friday" -> tmpListRegularEngagements = mWeekEngagements.fridayEngagements
+            "Saturday" -> tmpListRegularEngagements = mWeekEngagements.saturdayEngagements
+            "Sunday" -> tmpListRegularEngagements = mWeekEngagements.sundayEngagements
+        }
+
+        val startTimeArray = btn_pick_start_time_regular_engagement.text.toString().split(":")
+        val endTimeArray = btn_pick_end_time_regular_engagement.text.toString().split(":")
+
+        val startTime = startTimeArray[0].toInt() * 60 + startTimeArray[1].toInt()
+        val endTime = endTimeArray[0].toInt() * 60 + endTimeArray[1].toInt()
+
+        for(i in tmpListRegularEngagements){
+            if(startTime >= (i.startTime.substring(0,2).toInt() * 60 + i.startTime.substring(3,5).toInt())
+                && startTime <= (i.endTime.substring(0,2).toInt() * 60 + i.endTime.substring(3,5).toInt())){
+                showErrorSnackBar("Start time interrupts regular engagement ${i.name}!")
+                return false
+            }else if(endTime >= (i.startTime.substring(0,2).toInt() * 60 + i.startTime.substring(3,5).toInt())
+                && endTime <= (i.endTime.substring(0,2).toInt() * 60 + i.endTime.substring(3,5).toInt())){
+                showErrorSnackBar("End time interrupts regular engagement ${i.name}")
+                return false
+            }else if(i.startTime.substring(0,2).toInt() * 60 + i.startTime.substring(3,5).toInt() in startTime..endTime){
+                showErrorSnackBar("Regular engagement duration interrupts with ${i.name}")
+                return false
+            }
+        }
+
+        return true
     }
 
     private fun addRegularEngagement(){
@@ -135,8 +228,6 @@ class CreateRegularEngagementActivity : BaseActivity() {
             et_building_number_of_engagement.text.toString()
         )
 
-        println("Created regular engagement: "+newRegularEngagement.toString())
-
         when(mSelectedDay){
             "Monday" -> mWeekEngagements.mondayEngagements.add(newRegularEngagement)
             "Tuesday" -> mWeekEngagements.tuesdayEngagements.add(newRegularEngagement)
@@ -148,6 +239,161 @@ class CreateRegularEngagementActivity : BaseActivity() {
         }
 
         FirestoreClass().createRegularEngagement(this, mWeekEngagements)
+    }
+
+    private fun validateRequiredFieldsEN(): Boolean{
+        return if(et_title_of_engagement.text!!.isNotBlank()
+            && btn_pick_start_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9] [A-Z][A-Z]"))
+            && btn_pick_end_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9] [A-Z][A-Z]"))){
+            true
+        }else{
+            showErrorSnackBar("Please fill required fields (Title, Start Time, End Time)!!!")
+            false
+        }
+    }
+
+    private fun validateStartEndTimeFilledProperlyEN(): Boolean{
+
+        var additionalStartAMPMvalue = 0
+        var additionalEndAMPMvalue = 0
+
+        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) != "12"
+            && btn_pick_start_time_regular_engagement.text.toString().substring(6) == "PM"){
+            additionalStartAMPMvalue = 12
+        }
+
+        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) != "12"
+            && btn_pick_end_time_regular_engagement.text.toString().substring(6) == "PM"){
+            additionalEndAMPMvalue = 12
+        }
+
+        var startTime = 0
+
+        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) == "12"
+            &&  btn_pick_start_time_regular_engagement.text.toString().substring(6) == "AM"){
+            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
+        }else{
+            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
+            btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt() +
+            additionalStartAMPMvalue*60
+
+        }
+
+        var endTime = 0
+
+        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) == "12"
+            &&  btn_pick_end_time_regular_engagement.text.toString().substring(6) == "AM"){
+            endTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
+        }else{
+            endTime = btn_pick_end_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
+            btn_pick_end_time_regular_engagement.text.toString().substring(3,5).toInt() + additionalEndAMPMvalue*60
+        }
+
+        return if(startTime == endTime){
+            showErrorSnackBar("Start Time and End Time cannot be the same!!! StartTime: $startTime\n" +
+                    "EndTime: $endTime")
+            false
+        }else if(endTime - startTime <= 0){
+            showErrorSnackBar("End time cannot be before Start Time!!!")
+            false
+        }else{
+            true
+        }
+    }
+
+    private fun validateStartEndTimeWithOtherEngagementsEN(): Boolean{
+
+        var additionalStartAMPMvalue = 0
+        var additionalEndAMPMvalue = 0
+
+        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) != "12"
+            && btn_pick_start_time_regular_engagement.text.toString().substring(6) == "PM"){
+            additionalStartAMPMvalue = 12
+        }
+
+        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) != "12"
+            && btn_pick_end_time_regular_engagement.text.toString().substring(6) == "PM"){
+            additionalEndAMPMvalue = 12
+        }
+
+        var startTime = 0
+
+        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) == "12"
+            &&  btn_pick_start_time_regular_engagement.text.toString().substring(6) == "AM"){
+            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
+        }else{
+            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
+                    btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt() +
+                    additionalStartAMPMvalue*60
+        }
+
+        var endTime = 0
+
+        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) == "12"
+            &&  btn_pick_end_time_regular_engagement.text.toString().substring(6) == "AM"){
+            endTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
+        }else{
+           endTime = btn_pick_end_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
+                    btn_pick_end_time_regular_engagement.text.toString().substring(3,5).toInt() + additionalEndAMPMvalue*60
+        }
+
+        when(mSelectedDay){
+            "Monday" -> tmpListRegularEngagements = mWeekEngagements.mondayEngagements
+            "Tuesday" -> tmpListRegularEngagements = mWeekEngagements.tuesdayEngagements
+            "Wednesday" -> tmpListRegularEngagements = mWeekEngagements.wednesdayEngagements
+            "Thursday" -> tmpListRegularEngagements = mWeekEngagements.thursdayEngagements
+            "Friday" -> tmpListRegularEngagements = mWeekEngagements.fridayEngagements
+            "Saturday" -> tmpListRegularEngagements = mWeekEngagements.saturdayEngagements
+            "Sunday" -> tmpListRegularEngagements = mWeekEngagements.sundayEngagements
+        }
+
+        for(i in tmpListRegularEngagements){
+            var tmpAdditionalAMPMstartTime = 0
+            var tmpAdditionalAMPMendTime = 0
+            var tmpStartTime = 0
+            var tmpEndTime = 0
+
+            if(i.startTime.substring(0,2) != "12"
+                && i.startTime.substring(6) == "PM"){
+                tmpAdditionalAMPMstartTime = 12
+            }
+
+            if(i.endTime.substring(0,2) != "12"
+                && i.endTime.substring(6) == "PM"){
+                tmpAdditionalAMPMendTime = 12
+            }
+
+            if(i.startTime.substring(0,2) == "12"
+                &&  i.startTime.substring(6) == "AM"){
+                tmpStartTime = i.startTime.substring(3,5).toInt()
+            }else{
+                tmpStartTime = i.startTime.substring(0,2).toInt()*60 +
+                        i.startTime.substring(3,5).toInt() +
+                        tmpAdditionalAMPMstartTime*60
+            }
+
+            if(i.endTime.substring(0,2) == "12"
+                &&  i.endTime.substring(6) == "AM"){
+                tmpEndTime = i.endTime.substring(3,5).toInt()
+            }else{
+                tmpEndTime = i.endTime.substring(0,2).toInt()*60 +
+                        i.endTime.substring(3,5).toInt() + tmpAdditionalAMPMendTime*60
+            }
+
+            if(startTime >= (tmpStartTime)
+                && startTime <= (tmpEndTime)){
+                showErrorSnackBar("Start time interrupts regular engagement ${i.name}!")
+                return false
+            }else if(endTime >= (tmpStartTime)
+                && endTime <= (tmpEndTime)){
+                showErrorSnackBar("End time interrupts regular engagement ${i.name}")
+                return false
+            }else if(tmpStartTime in startTime..endTime){
+                showErrorSnackBar("Regular engagement duration interrupts with ${i.name}")
+                return false
+            }
+        }
+        return true
     }
 
     fun regularEngagementCreatedSuccessfully(){

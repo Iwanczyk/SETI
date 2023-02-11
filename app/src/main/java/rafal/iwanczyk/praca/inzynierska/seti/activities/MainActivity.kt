@@ -23,6 +23,11 @@ import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -188,33 +193,39 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         rv_regular_engagements_list.layoutManager = LinearLayoutManager(this)
         rv_regular_engagements_list.setHasFixedSize(true)
 
+        val formatter = if(Locale.getDefault().displayLanguage == "English"){
+            DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
+        }else{
+            DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
+        }
+
         when(currentDay){
             Calendar.MONDAY -> {
-                weekPlan.mondayEngagements.sortBy { it.startTime }
+                mWeekPlan.mondayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, weekPlan.mondayEngagements)
             }
             Calendar.TUESDAY -> {
-                weekPlan.tuesdayEngagements.sortBy { it.startTime }
+                mWeekPlan.tuesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, weekPlan.tuesdayEngagements)
             }
             Calendar.WEDNESDAY -> {
-                weekPlan.wednesdayEngagements.sortBy { it.startTime }
+                mWeekPlan.wednesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, weekPlan.wednesdayEngagements)
             }
             Calendar.THURSDAY -> {
-                weekPlan.thursdayEngagements.sortBy { it.startTime }
+                mWeekPlan.thursdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, weekPlan.thursdayEngagements)
             }
             Calendar.FRIDAY -> {
-                weekPlan.fridayEngagements.sortBy { it.startTime }
+                mWeekPlan.fridayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, weekPlan.fridayEngagements)
             }
             Calendar.SATURDAY -> {
-                weekPlan.saturdayEngagements.sortBy { it.startTime }
+                mWeekPlan.saturdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, weekPlan.saturdayEngagements)
             }
             Calendar.SUNDAY -> {
-                weekPlan.sundayEngagements.sortBy { it.startTime }
+                mWeekPlan.sundayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, weekPlan.sundayEngagements)
             }
         }
@@ -231,32 +242,38 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         rv_regular_engagements_list.layoutManager = LinearLayoutManager(this)
         rv_regular_engagements_list.setHasFixedSize(true)
 
+        val formatter = if(Locale.getDefault().displayLanguage == "English"){
+            DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
+        }else{
+            DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
+        }
+
         when(checkedId){
             R.id.rb_monday -> {
-                mWeekPlan.mondayEngagements.sortBy { it.startTime }
+                mWeekPlan.mondayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, mWeekPlan.mondayEngagements)}
             R.id.rb_tuesday -> {
-                mWeekPlan.tuesdayEngagements.sortBy { it.startTime }
+                mWeekPlan.tuesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, mWeekPlan.tuesdayEngagements)
             }
             R.id.rb_wednesday -> {
-                mWeekPlan.wednesdayEngagements.sortBy { it.startTime }
+                mWeekPlan.wednesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, mWeekPlan.wednesdayEngagements)
             }
             R.id.rb_thursday -> {
-                mWeekPlan.thursdayEngagements.sortBy { it.startTime }
+                mWeekPlan.thursdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, mWeekPlan.thursdayEngagements)
             }
             R.id.rb_friday -> {
-                mWeekPlan.fridayEngagements.sortBy { it.startTime }
+                mWeekPlan.fridayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, mWeekPlan.fridayEngagements)
             }
             R.id.rb_saturday -> {
-                mWeekPlan.saturdayEngagements.sortBy { it.startTime }
+                mWeekPlan.saturdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, mWeekPlan.saturdayEngagements)
             }
             R.id.rb_sunday -> {
-                mWeekPlan.sundayEngagements.sortBy { it.startTime }
+                mWeekPlan.sundayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
                 adapter = RegularEngagementsAdapter(this, mWeekPlan.sundayEngagements)
             }
         }

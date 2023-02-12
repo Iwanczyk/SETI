@@ -109,12 +109,21 @@ class FirestoreClass {
             .addOnFailureListener { task -> Log.e("Firestore error","Firestore document NOT deleted") }
     }
 
-    fun createUpdateRegularEngagement(activity: CreateRegularEngagementActivity, weekEngagements: WeekEngagements){
+    fun createUpdateRegularEngagement(activity: Activity, weekEngagements: WeekEngagements){
         mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
             .set(weekEngagements)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
-                activity.regularEngagementCreatedSuccessfully()
+
+                when(activity){
+                    is CreateRegularEngagementActivity ->{
+                        activity.regularEngagementCreatedSuccessfully()
+                    }
+                    is RegularEngagementDetailsActivity -> {
+                        activity.regularEngagementChangeSuccessful()
+                    }
+                }
+
             }
     }
 

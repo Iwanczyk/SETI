@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.RadioButton
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -36,12 +37,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     companion object{
         const val MY_PROFILE_REQUEST_CODE: Int = 11
         const val CREATE_REGULAR_ENGAGEMENT_CODE: Int = 12
+        const val EDIT_REGULAR_ENGAGEMENT_CODE: Int = 13
     }
 
     lateinit var adapter :RegularEngagementsAdapter
     private val calendar: Calendar = Calendar.getInstance()
     private val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
     lateinit var mWeekPlan: WeekEngagements
+    private var mSelectedDay: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +68,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         //Days radio group listener
         rg_days_of_week.setOnCheckedChangeListener { group, checkedId ->
+            mSelectedDay = findViewById<RadioButton>(checkedId).text.toString()
             changeDaysOfWeekAdapter(checkedId)
         }
     }
@@ -126,7 +130,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK && requestCode == MY_PROFILE_REQUEST_CODE){
             FirestoreClass().loadUserData(this)
-        }else if(resultCode == Activity.RESULT_OK && requestCode == CREATE_REGULAR_ENGAGEMENT_CODE){
+        }else if((resultCode == Activity.RESULT_OK && requestCode == CREATE_REGULAR_ENGAGEMENT_CODE)
+                || (resultCode == Activity.RESULT_OK && requestCode == EDIT_REGULAR_ENGAGEMENT_CODE)){
             FirestoreClass().getWeekPlan(this)
         }
         else{
@@ -175,13 +180,34 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun daysOfWeekButtonsSetup(){
         when(currentDay){
-            Calendar.MONDAY -> rb_monday.isChecked = true
-            Calendar.TUESDAY -> rb_tuesday.isChecked = true
-            Calendar.WEDNESDAY -> rb_wednesday.isChecked = true
-            Calendar.THURSDAY -> rb_thursday.isChecked = true
-            Calendar.FRIDAY -> rb_friday.isChecked = true
-            Calendar.SATURDAY -> rb_saturday.isChecked = true
-            Calendar.SUNDAY -> rb_sunday.isChecked = true
+            Calendar.MONDAY -> {
+                rb_monday.isChecked = true
+                mSelectedDay = rb_monday.text.toString()
+            }
+            Calendar.TUESDAY -> {
+                rb_tuesday.isChecked = true
+                mSelectedDay = rb_tuesday.text.toString()
+            }
+            Calendar.WEDNESDAY -> {
+                rb_wednesday.isChecked = true
+                mSelectedDay = rb_wednesday.text.toString()
+            }
+            Calendar.THURSDAY -> {
+                rb_thursday.isChecked = true
+                mSelectedDay = rb_thursday.text.toString()
+            }
+            Calendar.FRIDAY -> {
+                rb_friday.isChecked = true
+                mSelectedDay = rb_friday.text.toString()
+            }
+            Calendar.SATURDAY -> {
+                rb_saturday.isChecked = true
+                mSelectedDay = rb_saturday.text.toString()
+            }
+            Calendar.SUNDAY -> {
+                rb_sunday.isChecked = true
+                mSelectedDay = rb_sunday.text.toString()
+            }
         }
     }
 
@@ -234,9 +260,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         adapter.setOnClickListener(object: RegularEngagementsAdapter.OnClickListener{
             override fun onClick(position: Int, model: RegularEngagement) {
                 val intent = Intent(this@MainActivity, RegularEngagementDetailsActivity::class.java)
+                intent.putExtra(Constants.WEEKPLAN, mWeekPlan)
                 intent.putExtra(Constants.REGULAR_ENGAGEMENT, model)
                 intent.putExtra(Constants.REGULAR_ENGAGEMENT_LIST_POSITION, position)
-                startActivity(intent)
+                intent.putExtra(Constants.DISPLAYED_DAY_OF_WEEK, mSelectedDay)
+                startActivityForResult(intent, EDIT_REGULAR_ENGAGEMENT_CODE)
             }
         })
     }
@@ -285,9 +313,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         adapter.setOnClickListener(object: RegularEngagementsAdapter.OnClickListener{
             override fun onClick(position: Int, model: RegularEngagement) {
                 val intent = Intent(this@MainActivity, RegularEngagementDetailsActivity::class.java)
+                intent.putExtra(Constants.WEEKPLAN, mWeekPlan)
                 intent.putExtra(Constants.REGULAR_ENGAGEMENT, model)
                 intent.putExtra(Constants.REGULAR_ENGAGEMENT_LIST_POSITION, position)
-                startActivity(intent)
+                intent.putExtra(Constants.DISPLAYED_DAY_OF_WEEK, mSelectedDay)
+                startActivityForResult(intent, EDIT_REGULAR_ENGAGEMENT_CODE)
             }
         })
     }

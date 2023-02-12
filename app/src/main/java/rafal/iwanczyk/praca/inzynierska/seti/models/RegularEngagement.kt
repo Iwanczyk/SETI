@@ -5,14 +5,14 @@ import android.os.Parcelable
 
 data class RegularEngagement (
     val assignedTo: String = "",
-    val name: String = "",
-    val day: String = "",
-    val startTime: String = "",
-    val endTime: String = "",
-    val note: String = "",
-    val typeOfEngagement: String = "",
-    val lectureRoom: String = "",
-    val buildingNumber: String = ""
+    var name: String = "",
+    var day: String = "",
+    var startTime: String = "",
+    var endTime: String = "",
+    var note: String = "",
+    var typeOfEngagement: String = "",
+    var lectureRoom: String = "",
+    var buildingNumber: String = ""
         ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,

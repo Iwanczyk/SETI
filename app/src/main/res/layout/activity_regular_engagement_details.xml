@@ -41,6 +41,25 @@
                 android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_title_of_regular_engagement_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title"
+                    android:inputType="text"
+                    android:textSize="@dimen/et_text_size"
+                    tools:text="Activity 1"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:enabled="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_day_of_week_regular_engagement_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

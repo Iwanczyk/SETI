@@ -1,5 +1,6 @@
 package rafal.iwanczyk.praca.inzynierska.seti.activities
 
+import android.app.Activity
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,18 +15,23 @@ import kotlinx.android.synthetic.main.activity_create_regual_engagement.*
 import kotlinx.android.synthetic.main.activity_regular_engagement_details.*
 import kotlinx.android.synthetic.main.activity_regular_engagement_details.et_building_number_of_engagement_details
 import rafal.iwanczyk.praca.inzynierska.seti.R
+import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.annotation.meta.When
 
-class RegularEngagementDetailsActivity : AppCompatActivity() {
+class RegularEngagementDetailsActivity : BaseActivity() {
 
     private lateinit var mRegularEngagement: RegularEngagement
+    private lateinit var mWeekPlan: WeekEngagements
     private var mRegularEngagementListPosition: Int = -1
+    private var mDisplayedDayOfWeek: String = ""
     private var mSelectedDay: String = ""
     private var mSelectedTypeOfEngagement: String = ""
+    private lateinit var tmpListRegularEngagements: ArrayList<RegularEngagement>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,13 +126,12 @@ class RegularEngagementDetailsActivity : AppCompatActivity() {
             }
         }
 
-
         tv_cancel_edition_regular_engagement.setOnClickListener {
             cancelEditingRegularEngagement()
         }
 
         btn_save_edited_regular_engagement.setOnClickListener {
-            println("SAVED EDITED REGULAR ENGAGEMENT")
+            saveEditedRegularEngagement()
         }
     }
 
@@ -136,6 +141,12 @@ class RegularEngagementDetailsActivity : AppCompatActivity() {
         }
         if(intent.hasExtra(Constants.REGULAR_ENGAGEMENT_LIST_POSITION)){
             mRegularEngagementListPosition = intent.getIntExtra(Constants.REGULAR_ENGAGEMENT_LIST_POSITION, -1)
+        }
+        if(intent.hasExtra(Constants.WEEKPLAN)){
+            mWeekPlan = intent.getParcelableExtra<WeekEngagements>(Constants.WEEKPLAN)!!
+        }
+        if(intent.hasExtra(Constants.DISPLAYED_DAY_OF_WEEK)){
+            mDisplayedDayOfWeek = intent.getStringExtra(Constants.DISPLAYED_DAY_OF_WEEK)!!
         }
     }
 
@@ -151,6 +162,7 @@ class RegularEngagementDetailsActivity : AppCompatActivity() {
     }
 
     private fun populateRegularEngagementDetailsUI(){
+        et_title_of_regular_engagement_details.setText(mRegularEngagement.name)
         et_day_of_week_regular_engagement_details.setText(mRegularEngagement.day)
         btn_start_time_regular_engagement_details.text = mRegularEngagement.startTime
         btn_end_time_regular_engagement_details.text = mRegularEngagement.endTime
@@ -187,6 +199,8 @@ class RegularEngagementDetailsActivity : AppCompatActivity() {
     }
 
     private fun enableEditingRegularEngagement(){
+        et_title_of_regular_engagement_details.visibility = View.VISIBLE
+        et_title_of_regular_engagement_details.isEnabled = true
         et_day_of_week_regular_engagement_details.visibility = View.GONE
         dropdown_list_day_of_week_details.visibility = View.VISIBLE
         btn_start_time_regular_engagement_details.isEnabled = true
@@ -203,6 +217,8 @@ class RegularEngagementDetailsActivity : AppCompatActivity() {
     }
 
     private fun cancelEditingRegularEngagement(){
+        et_title_of_regular_engagement_details.visibility = View.GONE
+        et_title_of_regular_engagement_details.isEnabled = false
         et_day_of_week_regular_engagement_details.visibility = View.VISIBLE
         dropdown_list_day_of_week_details.visibility = View.GONE
         btn_start_time_regular_engagement_details.isEnabled = false
@@ -228,7 +244,7 @@ class RegularEngagementDetailsActivity : AppCompatActivity() {
 
         builder.setPositiveButton(resources.getString(R.string.yes)){ dialogInterface, which ->
             dialogInterface.dismiss()
-            //deleteRegularEngagement()
+            deleteRegularEngagement()
         }
         builder.setNegativeButton(resources.getString(R.string.cancel)){ dialogInterface, which ->
             dialogInterface.dismiss()
@@ -240,10 +256,396 @@ class RegularEngagementDetailsActivity : AppCompatActivity() {
     }
 
     private fun deleteRegularEngagement(){
-
+        when(mRegularEngagement.day){
+            resources.getStringArray(R.array.DaysOfWeek)[0] -> {
+                mWeekPlan.mondayEngagements.removeAt(mRegularEngagementListPosition)
+            }
+            resources.getStringArray(R.array.DaysOfWeek)[1] -> {
+                mWeekPlan.tuesdayEngagements.removeAt(mRegularEngagementListPosition)
+            }
+            resources.getStringArray(R.array.DaysOfWeek)[2] -> {
+                mWeekPlan.wednesdayEngagements.removeAt(mRegularEngagementListPosition)
+            }
+            resources.getStringArray(R.array.DaysOfWeek)[3] -> {
+                mWeekPlan.thursdayEngagements.removeAt(mRegularEngagementListPosition)
+            }
+            resources.getStringArray(R.array.DaysOfWeek)[4] -> {
+                mWeekPlan.fridayEngagements.removeAt(mRegularEngagementListPosition)
+            }
+            resources.getStringArray(R.array.DaysOfWeek)[5] -> {
+                mWeekPlan.saturdayEngagements.removeAt(mRegularEngagementListPosition)
+            }
+            resources.getStringArray(R.array.DaysOfWeek)[6] -> {
+                mWeekPlan.sundayEngagements.removeAt(mRegularEngagementListPosition)
+            }
+        }
+        showProgressDialog()
+        FirestoreClass().createUpdateRegularEngagement(this@RegularEngagementDetailsActivity, mWeekPlan)
     }
 
     private fun saveEditedRegularEngagement(){
+        if(Locale.getDefault().displayLanguage == "English"){
+            if(validateAddingNewRegularEngagementEN()){
+                insertEditedRegularEngagement()
+            }
+        }else{
+            if(validateAddingNewRegularEngagement()){
+                insertEditedRegularEngagement()
+            }
+        }
+    }
 
+    private fun insertEditedRegularEngagement(){
+        //If the regular engagement is edited within the same day or it has to be transferred to the another day
+        if(mSelectedDay == mRegularEngagement.day){
+            mRegularEngagement.name = et_title_of_regular_engagement_details.text.toString()
+            mRegularEngagement.day = mSelectedDay
+            mRegularEngagement.startTime = btn_start_time_regular_engagement_details.text.toString()
+            mRegularEngagement.endTime = btn_end_time_regular_engagement_details.text.toString()
+            mRegularEngagement.note = et_note_of_engagement_details.text.toString()
+            mRegularEngagement.typeOfEngagement = mSelectedTypeOfEngagement
+            mRegularEngagement.lectureRoom = et_lecture_room_number_of_engagement_details.text.toString()
+            mRegularEngagement.buildingNumber = et_building_number_of_engagement_details.text.toString()
+
+            when(mSelectedDay){
+                resources.getStringArray(R.array.DaysOfWeek)[0] -> {
+                    mWeekPlan.mondayEngagements[mRegularEngagementListPosition] = mRegularEngagement
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[1] -> {
+                    mWeekPlan.tuesdayEngagements[mRegularEngagementListPosition] = mRegularEngagement
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[2] -> {
+                    mWeekPlan.wednesdayEngagements[mRegularEngagementListPosition] = mRegularEngagement
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[3] -> {
+                    mWeekPlan.thursdayEngagements[mRegularEngagementListPosition] = mRegularEngagement
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[4] -> {
+                    mWeekPlan.fridayEngagements[mRegularEngagementListPosition] = mRegularEngagement
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[5] -> {
+                    mWeekPlan.saturdayEngagements[mRegularEngagementListPosition] = mRegularEngagement
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[6] -> {
+                    mWeekPlan.sundayEngagements[mRegularEngagementListPosition] = mRegularEngagement
+                }
+            }
+        }else{
+            val newEditedRegularEngagement = RegularEngagement(
+            getCurrentUserID(),
+            et_title_of_regular_engagement_details.text.toString(),
+            mSelectedDay,
+            btn_start_time_regular_engagement_details.text.toString(),
+            btn_end_time_regular_engagement_details.text.toString(),
+            et_note_of_engagement_details.text.toString(),
+            mSelectedTypeOfEngagement,
+            et_lecture_room_number_of_engagement_details.text.toString(),
+            et_building_number_of_engagement_details.text.toString()
+            )
+
+            when(mRegularEngagement.day){
+                resources.getStringArray(R.array.DaysOfWeek)[0] -> {
+                    mWeekPlan.mondayEngagements.removeAt(mRegularEngagementListPosition)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[1] -> {
+                    mWeekPlan.tuesdayEngagements.removeAt(mRegularEngagementListPosition)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[2] -> {
+                    mWeekPlan.wednesdayEngagements.removeAt(mRegularEngagementListPosition)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[3] -> {
+                    mWeekPlan.thursdayEngagements.removeAt(mRegularEngagementListPosition)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[4] -> {
+                    mWeekPlan.fridayEngagements.removeAt(mRegularEngagementListPosition)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[5] -> {
+                    mWeekPlan.saturdayEngagements.removeAt(mRegularEngagementListPosition)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[6] -> {
+                    mWeekPlan.sundayEngagements.removeAt(mRegularEngagementListPosition)
+                }
+            }
+
+            when(mSelectedDay){
+                resources.getStringArray(R.array.DaysOfWeek)[0] -> {
+                    mWeekPlan.mondayEngagements.add(newEditedRegularEngagement)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[1] -> {
+                    mWeekPlan.tuesdayEngagements.add(newEditedRegularEngagement)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[2] -> {
+                    mWeekPlan.wednesdayEngagements.add(newEditedRegularEngagement)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[3] -> {
+                    mWeekPlan.thursdayEngagements.add(newEditedRegularEngagement)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[4] -> {
+                    mWeekPlan.fridayEngagements.add(newEditedRegularEngagement)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[5] -> {
+                    mWeekPlan.saturdayEngagements.add(newEditedRegularEngagement)
+                }
+                resources.getStringArray(R.array.DaysOfWeek)[6] -> {
+                    mWeekPlan.sundayEngagements.add(newEditedRegularEngagement)
+                }
+            }
+        }
+       showProgressDialog()
+       FirestoreClass().createUpdateRegularEngagement(this, mWeekPlan)
+    }
+
+    fun regularEngagementChangeSuccessful(){
+        hideProgressDialog()
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
+    private fun validateAddingNewRegularEngagement(): Boolean{
+        return validateRequiredFields()
+                && validateStartEndTimeFilledProperly()
+                && validateStartEndTimeWithOtherEngagements()
+    }
+
+    private fun validateAddingNewRegularEngagementEN(): Boolean{
+        return validateRequiredFieldsEN()
+                && validateStartEndTimeFilledProperlyEN()
+                && validateStartEndTimeWithOtherEngagementsEN()
+    }
+
+    private fun validateRequiredFields(): Boolean{
+        return if(et_title_of_regular_engagement_details.text!!.isNotBlank()
+            && btn_start_time_regular_engagement_details.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))
+            && btn_end_time_regular_engagement_details.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))){
+            true
+        }else{
+            showErrorSnackBar(resources.getString(R.string.fill_required_fields_alert))
+            false
+        }
+    }
+
+    private fun validateStartEndTimeFilledProperly(): Boolean{
+        val startTimeArray = btn_start_time_regular_engagement_details.text.toString().split(":")
+        val endTimeArray = btn_end_time_regular_engagement_details.text.toString().split(":")
+
+        if(btn_start_time_regular_engagement_details.text.toString()
+            == btn_end_time_regular_engagement_details.text.toString()){
+            showErrorSnackBar(resources.getString(R.string.start_time_and_end_time_the_same_alert))
+            return false
+        }else if(btn_end_time_regular_engagement_details.text.toString() == "00:00"){
+            showErrorSnackBar(resources.getString(R.string.engagement_ends_at_midnight_alert))
+            return false
+        }else if((btn_start_time_regular_engagement_details.text.toString() == "00:00"
+                    && btn_end_time_regular_engagement_details.text.toString() != "00:00")){
+            return true
+        }else if((endTimeArray[0].toInt() * 60 + endTimeArray[1].toInt()) -
+            (startTimeArray[0].toInt() * 60 + startTimeArray[1].toInt()) <= 0){
+            showErrorSnackBar(resources.getString(R.string.end_time_before_start_time_alert))
+            return false
+        }else{
+            return true
+        }
+    }
+
+    private fun validateStartEndTimeWithOtherEngagements(): Boolean{
+
+        when(mSelectedDay){
+            resources.getStringArray(R.array.DaysOfWeek)[0] -> tmpListRegularEngagements = mWeekPlan.mondayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[1] -> tmpListRegularEngagements = mWeekPlan.tuesdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[2] -> tmpListRegularEngagements = mWeekPlan.wednesdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[3] -> tmpListRegularEngagements = mWeekPlan.thursdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[4] -> tmpListRegularEngagements = mWeekPlan.fridayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[5] -> tmpListRegularEngagements = mWeekPlan.saturdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[6] -> tmpListRegularEngagements = mWeekPlan.sundayEngagements
+        }
+
+        val startTimeArray = btn_start_time_regular_engagement_details.text.toString().split(":")
+        val endTimeArray = btn_end_time_regular_engagement_details.text.toString().split(":")
+
+        val startTime = startTimeArray[0].toInt() * 60 + startTimeArray[1].toInt()
+        val endTime = endTimeArray[0].toInt() * 60 + endTimeArray[1].toInt()
+
+        for(i in tmpListRegularEngagements) {
+
+            if (i == mRegularEngagement) {
+                continue
+            }else{
+                if (startTime >= (i.startTime.substring(0, 2).toInt() * 60 + i.startTime.substring(3, 5).toInt())
+                    && startTime <= (i.endTime.substring(0, 2).toInt() * 60 + i.endTime.substring(3,5).toInt())
+                ) {
+                    showErrorSnackBar("Start time interrupts regular engagement ${i.name}!")
+                    return false
+                } else if (endTime >= (i.startTime.substring(0, 2).toInt() * 60 + i.startTime.substring(3, 5).toInt())
+                    && endTime <= (i.endTime.substring(0, 2).toInt() * 60 + i.endTime.substring(3,5).toInt())
+                ) {
+                    showErrorSnackBar("End time interrupts regular engagement ${i.name}")
+                    return false
+                } else if (i.startTime.substring(0, 2).toInt() * 60 + i.startTime.substring(3, 5).toInt() in startTime..endTime
+                ) {
+                    showErrorSnackBar("Regular engagement duration interrupts with ${i.name}")
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    private fun validateRequiredFieldsEN(): Boolean{
+        return if(et_title_of_regular_engagement_details.text!!.isNotBlank()
+            && btn_start_time_regular_engagement_details.text.contains(Regex("[0-9][0-9]:[0-9][0-9] [A-Z][A-Z]"))
+            && btn_end_time_regular_engagement_details.text.contains(Regex("[0-9][0-9]:[0-9][0-9] [A-Z][A-Z]"))){
+            true
+        }else{
+            showErrorSnackBar(resources.getString(R.string.fill_required_fields_alert))
+            false
+        }
+    }
+
+    private fun validateStartEndTimeFilledProperlyEN(): Boolean{
+
+        var additionalStartAMPMvalue = 0
+        var additionalEndAMPMvalue = 0
+
+        if(btn_start_time_regular_engagement_details.text.toString().substring(0,2) != "12"
+            && btn_start_time_regular_engagement_details.text.toString().substring(6) == "PM"){
+            additionalStartAMPMvalue = 12
+        }
+
+        if(btn_end_time_regular_engagement_details.text.toString().substring(0,2) != "12"
+            && btn_end_time_regular_engagement_details.text.toString().substring(6) == "PM"){
+            additionalEndAMPMvalue = 12
+        }
+
+        var startTime = 0
+
+        if(btn_start_time_regular_engagement_details.text.toString().substring(0,2) == "12"
+            &&  btn_start_time_regular_engagement_details.text.toString().substring(6) == "AM"){
+            startTime = btn_start_time_regular_engagement_details.text.toString().substring(3,5).toInt()
+        }else{
+            startTime = btn_start_time_regular_engagement_details.text.toString().substring(0,2).toInt()*60 +
+                    btn_start_time_regular_engagement_details.text.toString().substring(3,5).toInt() +
+                    additionalStartAMPMvalue*60
+
+        }
+
+        var endTime = 0
+
+        if(btn_end_time_regular_engagement_details.text.toString().substring(0,2) == "12"
+            &&  btn_end_time_regular_engagement_details.text.toString().substring(6) == "AM"){
+            endTime = btn_start_time_regular_engagement_details.text.toString().substring(3,5).toInt()
+        }else{
+            endTime = btn_end_time_regular_engagement_details.text.toString().substring(0,2).toInt()*60 +
+                    btn_end_time_regular_engagement_details.text.toString().substring(3,5).toInt() + additionalEndAMPMvalue*60
+        }
+
+        return if(startTime == endTime){
+            showErrorSnackBar(resources.getString(R.string.start_time_and_end_time_the_same_alert))
+            false
+        }else if(endTime - startTime <= 0){
+            showErrorSnackBar(resources.getString(R.string.end_time_before_start_time_alert))
+            false
+        }else{
+            true
+        }
+    }
+
+    private fun validateStartEndTimeWithOtherEngagementsEN(): Boolean{
+
+        var additionalStartAMPMvalue = 0
+        var additionalEndAMPMvalue = 0
+
+        if(btn_start_time_regular_engagement_details.text.toString().substring(0,2) != "12"
+            && btn_start_time_regular_engagement_details.text.toString().substring(6) == "PM"){
+            additionalStartAMPMvalue = 12
+        }
+
+        if(btn_end_time_regular_engagement_details.text.toString().substring(0,2) != "12"
+            && btn_end_time_regular_engagement_details.text.toString().substring(6) == "PM"){
+            additionalEndAMPMvalue = 12
+        }
+
+        var startTime = 0
+
+        if(btn_start_time_regular_engagement_details.text.toString().substring(0,2) == "12"
+            &&  btn_start_time_regular_engagement_details.text.toString().substring(6) == "AM"){
+            startTime = btn_start_time_regular_engagement_details.text.toString().substring(3,5).toInt()
+        }else{
+            startTime = btn_start_time_regular_engagement_details.text.toString().substring(0,2).toInt()*60 +
+                    btn_start_time_regular_engagement_details.text.toString().substring(3,5).toInt() +
+                    additionalStartAMPMvalue*60
+        }
+
+        var endTime = 0
+
+        if(btn_end_time_regular_engagement_details.text.toString().substring(0,2) == "12"
+            &&  btn_end_time_regular_engagement_details.text.toString().substring(6) == "AM"){
+            endTime = btn_start_time_regular_engagement_details.text.toString().substring(3,5).toInt()
+        }else{
+            endTime = btn_end_time_regular_engagement_details.text.toString().substring(0,2).toInt()*60 +
+                    btn_end_time_regular_engagement_details.text.toString().substring(3,5).toInt() + additionalEndAMPMvalue*60
+        }
+
+        when(mSelectedDay){
+            resources.getStringArray(R.array.DaysOfWeek)[0] -> tmpListRegularEngagements = mWeekPlan.mondayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[1] -> tmpListRegularEngagements = mWeekPlan.tuesdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[2] -> tmpListRegularEngagements = mWeekPlan.wednesdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[3] -> tmpListRegularEngagements = mWeekPlan.thursdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[4] -> tmpListRegularEngagements = mWeekPlan.fridayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[5] -> tmpListRegularEngagements = mWeekPlan.saturdayEngagements
+            resources.getStringArray(R.array.DaysOfWeek)[6] -> tmpListRegularEngagements = mWeekPlan.sundayEngagements
+        }
+
+        for(i in tmpListRegularEngagements){
+
+            if(i == mRegularEngagement){
+                continue
+            }else{
+            var tmpAdditionalAMPMstartTime = 0
+            var tmpAdditionalAMPMendTime = 0
+            var tmpStartTime = 0
+            var tmpEndTime = 0
+
+            if(i.startTime.substring(0,2) != "12"
+                && i.startTime.substring(6) == "PM"){
+                tmpAdditionalAMPMstartTime = 12
+            }
+
+            if(i.endTime.substring(0,2) != "12"
+                && i.endTime.substring(6) == "PM"){
+                tmpAdditionalAMPMendTime = 12
+            }
+
+            if(i.startTime.substring(0,2) == "12"
+                &&  i.startTime.substring(6) == "AM"){
+                tmpStartTime = i.startTime.substring(3,5).toInt()
+            }else{
+                tmpStartTime = i.startTime.substring(0,2).toInt()*60 +
+                        i.startTime.substring(3,5).toInt() +
+                        tmpAdditionalAMPMstartTime*60
+            }
+
+            if(i.endTime.substring(0,2) == "12"
+                &&  i.endTime.substring(6) == "AM"){
+                tmpEndTime = i.endTime.substring(3,5).toInt()
+            }else{
+                tmpEndTime = i.endTime.substring(0,2).toInt()*60 +
+                        i.endTime.substring(3,5).toInt() + tmpAdditionalAMPMendTime*60
+            }
+
+            if(startTime >= (tmpStartTime)
+                && startTime <= (tmpEndTime)){
+                showErrorSnackBar(resources.getString(R.string.start_time_interrupts_another_engagement_alert)+i.name)
+                return false
+            }else if(endTime >= (tmpStartTime)
+                && endTime <= (tmpEndTime)){
+                showErrorSnackBar(resources.getString(R.string.end_time_interrupts_another_engagement_alert)+i.name)
+                return false
+            }else if(tmpStartTime in startTime..endTime){
+                showErrorSnackBar(resources.getString(R.string.regular_engagement_duration_interrupts_alert)+i.name)
+                return false
+            }
+        }
+        }
+        return true
     }
 }

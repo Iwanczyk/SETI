@@ -21,6 +21,7 @@ object Constants {
     const val WEEKPLAN: String = "weekPlan"
     const val REGULAR_ENGAGEMENT = "regularEngagement"
     const val REGULAR_ENGAGEMENT_LIST_POSITION = "regular_engagement_list_position"
+    const val DISPLAYED_DAY_OF_WEEK = "displayed_day_of_week"
 
     const val ASSIGNED_TO: String = "assignedTo"
 

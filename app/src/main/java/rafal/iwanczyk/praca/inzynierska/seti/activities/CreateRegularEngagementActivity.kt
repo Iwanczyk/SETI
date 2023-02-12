@@ -2,23 +2,18 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.app.Activity
 import android.app.TimePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
 import kotlinx.android.synthetic.main.activity_create_regual_engagement.*
-import kotlinx.android.synthetic.main.activity_my_profile.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -254,7 +249,7 @@ class CreateRegularEngagementActivity : BaseActivity() {
             "Sunday" -> mWeekEngagements.sundayEngagements.add(newRegularEngagement)
         }
 
-        FirestoreClass().createRegularEngagement(this, mWeekEngagements)
+        FirestoreClass().createUpdateRegularEngagement(this, mWeekEngagements)
     }
 
     private fun validateRequiredFieldsEN(): Boolean{

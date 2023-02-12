@@ -10,7 +10,6 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import rafal.iwanczyk.praca.inzynierska.seti.activities.*
-import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
@@ -24,8 +23,6 @@ class FirestoreClass {
             .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
                 activity.userRegisteredSuccess()
-
-                //????????????????
                 createWeekPlan(WeekEngagements(getCurrentUserID()))
             }.addOnFailureListener {
                 Log.e("Registration", "Error while registering")
@@ -112,7 +109,7 @@ class FirestoreClass {
             .addOnFailureListener { task -> Log.e("Firestore error","Firestore document NOT deleted") }
     }
 
-    fun createRegularEngagement(activity: CreateRegularEngagementActivity, weekEngagements: WeekEngagements){
+    fun createUpdateRegularEngagement(activity: CreateRegularEngagementActivity, weekEngagements: WeekEngagements){
         mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
             .set(weekEngagements)
             .addOnSuccessListener {

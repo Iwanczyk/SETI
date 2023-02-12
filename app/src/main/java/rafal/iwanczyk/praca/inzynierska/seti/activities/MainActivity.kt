@@ -233,7 +233,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         adapter.setOnClickListener(object: RegularEngagementsAdapter.OnClickListener{
             override fun onClick(position: Int, model: RegularEngagement) {
-                //startActivity(Intent(this@MainActivity, RegularEngagementDetail::class.java))
+                val intent = Intent(this@MainActivity, RegularEngagementDetailsActivity::class.java)
+                intent.putExtra(Constants.REGULAR_ENGAGEMENT, model)
+                intent.putExtra(Constants.REGULAR_ENGAGEMENT_LIST_POSITION, position)
+                startActivity(intent)
             }
         })
     }
@@ -281,7 +284,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         adapter.setOnClickListener(object: RegularEngagementsAdapter.OnClickListener{
             override fun onClick(position: Int, model: RegularEngagement) {
-                //startActivity(Intent(this@MainActivity, RegularEngagementDetail::class.java))
+                val intent = Intent(this@MainActivity, RegularEngagementDetailsActivity::class.java)
+                intent.putExtra(Constants.REGULAR_ENGAGEMENT, model)
+                intent.putExtra(Constants.REGULAR_ENGAGEMENT_LIST_POSITION, position)
+                startActivity(intent)
             }
         })
     }

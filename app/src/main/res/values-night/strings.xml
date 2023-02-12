@@ -48,4 +48,7 @@
     <string name="fri">Fri</string>
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
+    <string name="edit_regular_engagement">Edit regular engagement</string>
+    <string name="delete_regular_engagement">Delete regular engagement</string>
+    <string name="day_of_week">Day of week</string>
 </resources>

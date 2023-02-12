@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.CreateRegularEngagementActivity"
+    tools:context=".activities.RegularEngagementDetailsActivity"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -13,51 +13,55 @@
         android:theme="@style/Theme.SETI.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_create_regular_engagement"
+            android:id="@+id/toolbar_regular_engagement_details"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.SETI.AppBarOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
-    
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
         android:elevation="10dp"
         app:cardCornerRadius="10dp">
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="16dp">
-            
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/dropdown_list_chose_day_of_week"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:background="@drawable/bg_dropdown_week_day_list"
-                    android:spinnerMode="dropdown"
-                    android:autofillHints="Select day"
-                    android:layout_gravity="center_horizontal"
-                    />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/et_title_of_engagement"
+                    android:id="@+id/et_day_of_week_regular_engagement_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Title"
+                    android:hint="@string/day_of_week"
                     android:inputType="text"
                     android:textSize="@dimen/et_text_size"
-                    tools:text="Activity 1" />
+                    tools:text="Activity 1"
+                    android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:layout_marginTop="12dp"
+                android:id="@+id/dropdown_list_day_of_week_details"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_dropdown_week_day_list"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,10 +84,12 @@
                         />
 
                     <Button
-                        android:id="@+id/btn_pick_start_time_regular_engagement"
+                        android:id="@+id/btn_start_time_regular_engagement_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pick Time"
+                        android:enabled="false"
+                        android:clickable="false"
+                        tools:text="Pick Time"
                         />
                 </LinearLayout>
 
@@ -102,10 +108,12 @@
                         />
 
                     <Button
-                        android:id="@+id/btn_pick_end_time_regular_engagement"
+                        android:id="@+id/btn_end_time_regular_engagement_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pick Time"
+                        android:enabled="false"
+                        android:clickable="false"
+                        tools:text="Pick Time"
                         />
                 </LinearLayout>
 
@@ -117,18 +125,37 @@
                 android:layout_marginTop="12dp">
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/et_note_of_engagement"
+                    android:id="@+id/et_note_of_engagement_details"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:hint="Title"
+                    android:layout_height="match_parent"
+                    android:hint="Additional note"
                     android:inputType="text"
                     android:textSize="@dimen/et_text_size"
-                    tools:text="Activity 1" />
+                    tools:text="Activity 1"
+                    android:enabled="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="12dp"
+                android:gravity="center">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_type_of_regular_engagement_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/day_of_week"
+                    android:inputType="text"
+                    android:textSize="@dimen/et_text_size"
+                    tools:text="Activity 1"
+                    android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/dropdown_list_chose_type_of_engagement"
+                android:id="@+id/dropdown_list_type_of_engagement_details"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="12dp"
@@ -136,7 +163,10 @@
                 android:spinnerMode="dropdown"
                 android:autofillHints="Select day"
                 android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                tools:visibility="visible"
                 />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -152,13 +182,14 @@
                     android:gravity="center">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_lecture_room_number_of_engagement"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/et_lecture_room_number_of_engagement_details"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
-                        android:hint="Title"
+                        android:hint="Lecture room number"
                         android:inputType="text"
                         android:textSize="@dimen/et_text_size"
-                        tools:text="Activity 1" />
+                        tools:text="Activity 1"
+                        android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -168,23 +199,41 @@
                     android:gravity="center">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_building_number_of_engagement"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/et_building_number_of_engagement_details"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
-                        android:hint="Title"
+                        android:hint="Building number"
                         android:inputType="text"
                         android:textSize="@dimen/et_text_size"
-                        tools:text="Activity 1" />
+                        tools:text="Activity 1"
+                        android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_add_regular_engagement"
+                android:id="@+id/btn_save_edited_regular_engagement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="ADD NEW ENGAGEMENT"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:text="SAVE ENGAGEMENT"
                 />
+
+            <TextView
+                android:id="@+id/tv_cancel_edition_regular_engagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="CANCEL"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#c40000"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

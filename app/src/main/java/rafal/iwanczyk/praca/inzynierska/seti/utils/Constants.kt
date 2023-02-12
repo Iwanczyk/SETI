@@ -19,7 +19,8 @@ object Constants {
     const val EMAIL: String = "email"
 
     const val WEEKPLAN: String = "weekPlan"
-    const val REGULAR_ENGAGEMENTS = "regularEngagements"
+    const val REGULAR_ENGAGEMENT = "regularEngagement"
+    const val REGULAR_ENGAGEMENT_LIST_POSITION = "regular_engagement_list_position"
 
     const val ASSIGNED_TO: String = "assignedTo"
 

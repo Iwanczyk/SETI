@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.annotation.meta.When
 
-class RegularEngagementDetailsActivity : BaseActivity() {
+class RegularEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var mRegularEngagement: RegularEngagement
     private lateinit var mWeekPlan: WeekEngagements
@@ -33,10 +34,13 @@ class RegularEngagementDetailsActivity : BaseActivity() {
     private var mSelectedTypeOfEngagement: String = ""
     private lateinit var tmpListRegularEngagements: ArrayList<RegularEngagement>
 
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_regular_engagement_details)
+
+        tts = TextToSpeech(this, this)
 
         getIntentData()
         setupActionBar()
@@ -194,6 +198,10 @@ class RegularEngagementDetailsActivity : BaseActivity() {
              alertDialogForDeleteRegularEngagement(mRegularEngagement.name)
              return true
          }
+        R.id.action_speak_out_regular_engagement -> {
+            speakOut()
+            return true
+        }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -647,5 +655,48 @@ class RegularEngagementDetailsActivity : BaseActivity() {
         }
         }
         return true
+    }
+
+    //Text to speech
+    override fun onInit(status: Int) {
+        if(status == TextToSpeech.SUCCESS){
+            if(Locale.getDefault().displayLanguage == "English"){
+                val result = tts!!.setLanguage(Locale.ENGLISH)
+            }else{
+                val result = tts!!.setLanguage(Locale.getDefault())
+            }
+        }else{
+            showErrorSnackBar("Text to speech initialization failed")
+        }
+    }
+
+    private fun speakOut(){
+        tts?.speak(mRegularEngagement.name, TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("Day of week: ${mRegularEngagement.day}", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("Start time: ${mRegularEngagement.startTime}", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("End time: ${mRegularEngagement.endTime}", TextToSpeech.QUEUE_ADD, null, "")
+
+        if(mRegularEngagement.note.isNotBlank()){
+            tts?.speak("Additional notes: ${mRegularEngagement.note}", TextToSpeech.QUEUE_ADD, null, "")
+        }else{
+            tts?.speak("Additional notes: None", TextToSpeech.QUEUE_ADD, null, "")
+        }
+
+        tts?.speak("Type of the engagement: ${mRegularEngagement.typeOfEngagement}", TextToSpeech.QUEUE_ADD, null, "")
+
+        if(mRegularEngagement.lectureRoom.isNotBlank()){
+            tts?.speak("Lecture room number: ${mRegularEngagement.lectureRoom}", TextToSpeech.QUEUE_ADD, null, "")
+        }
+        if(mRegularEngagement.buildingNumber.isNotBlank()){
+            tts?.speak("Lecture building number: ${mRegularEngagement.buildingNumber}", TextToSpeech.QUEUE_ADD, null, "")
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(tts != null){
+            tts?.stop()
+            tts?.shutdown()
+        }
     }
 }

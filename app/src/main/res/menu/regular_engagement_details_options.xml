@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_speak_out_regular_engagement"
+        android:icon="@drawable/ic_text_to_speech"
+        android:title="@string/text_to_speech"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/action_edit_regular_engagement"
         android:icon="@drawable/ic_edit_regular_engagement"
         android:orderInCategory="100"

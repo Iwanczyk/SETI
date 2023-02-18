@@ -67,6 +67,7 @@
     <string name="day_of_week">Day of week</string>
     <string name="delete_regular_engagement_confirmation">Are you sure you want to delete this regular engagement?</string>
     <string name="title">Title</string>
+    <string name="text_to_speech">Text to speech</string>
 
     <string-array name="Languages">
         <item>English</item>

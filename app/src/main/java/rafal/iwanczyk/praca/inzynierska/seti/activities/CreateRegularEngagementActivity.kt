@@ -14,8 +14,11 @@ import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
 
 class CreateRegularEngagementActivity : BaseActivity() {
 
@@ -120,6 +123,44 @@ class CreateRegularEngagementActivity : BaseActivity() {
 
         //Button create regular engagement
         btn_add_regular_engagement.setOnClickListener {
+
+            /*
+            try{
+                if(Locale.getDefault().displayLanguage == "English"){
+                    if(validateAddingNewRegularEngagementEN()){
+                        addRegularEngagement()
+                    }
+                }
+            }catch (e: Exception){
+                convertFrom24hFormatTo12h()
+                for (i in mWeekEngagements.fridayEngagements){
+                    println("-------------------- 1 try\nSTART TIME: "+i.startTime+" END TIME:"+i.endTime)
+                }
+            }finally {
+                if(validateAddingNewRegularEngagementEN()){
+                    addRegularEngagement()
+                }
+            }
+
+            try {
+                if(validateAddingNewRegularEngagement()){
+                    addRegularEngagement()
+                }
+            }catch (e: Exception){
+                convertFrom12hFormatTo24h()
+                for (i in mWeekEngagements.fridayEngagements){
+                    println("-------------------- 2 try\nSTART TIME: "+i.startTime+" END TIME:"+i.endTime)
+                }
+            }finally {
+                if(validateAddingNewRegularEngagement()){
+                    addRegularEngagement()
+                }
+            }
+
+             */
+
+
+            /*
             if(Locale.getDefault().displayLanguage == "English"){
                 if(validateAddingNewRegularEngagementEN()){
                     addRegularEngagement()
@@ -127,6 +168,34 @@ class CreateRegularEngagementActivity : BaseActivity() {
             }else{
                 if(validateAddingNewRegularEngagement()){
                     addRegularEngagement()
+                }
+            }
+
+             */
+
+            if(Locale.getDefault().displayLanguage == "English"){
+                try{
+                    if(validateAddingNewRegularEngagementEN()){
+                        addRegularEngagement()
+                    }
+                }catch (e: Exception){
+                    convertFrom24hFormatTo12h()
+                }finally {
+                    if(validateAddingNewRegularEngagementEN()){
+                        addRegularEngagement()
+                    }
+                }
+            }else{
+                try{
+                if(validateAddingNewRegularEngagement()){
+                    addRegularEngagement()
+                }
+                }catch (e: Exception){
+                    convertFrom12hFormatTo24h()
+                }finally {
+                    if(validateAddingNewRegularEngagement()){
+                        addRegularEngagement()
+                    }
                 }
             }
         }
@@ -410,5 +479,127 @@ class CreateRegularEngagementActivity : BaseActivity() {
         hideProgressDialog()
         setResult(Activity.RESULT_OK)
         finish()
+    }
+
+    private fun convertFrom12hFormatTo24h(){
+        val formatter12H = DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
+        val formatter24H = DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
+        for (i in mWeekEngagements.mondayEngagements){
+            if(i.startTime.length == 8){
+                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
+            }
+            if(i.endTime.length == 8){
+                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.tuesdayEngagements){
+            if(i.startTime.length == 8){
+                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
+            }
+            if(i.endTime.length == 8){
+                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.wednesdayEngagements){
+            if(i.startTime.length == 8){
+                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
+            }
+            if(i.endTime.length == 8){
+                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.thursdayEngagements){
+            if(i.startTime.length == 8){
+                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
+            }
+            if(i.endTime.length == 8){
+                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.fridayEngagements){
+            if(i.startTime.length == 8){
+                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
+            }
+            if(i.endTime.length == 8){
+                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.saturdayEngagements){
+            if(i.startTime.length == 8){
+                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
+            }
+            if(i.endTime.length == 8){
+                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.sundayEngagements){
+            if(i.startTime.length == 8){
+                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
+            }
+            if(i.endTime.length == 8){
+                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
+            }
+        }
+    }
+
+    private fun convertFrom24hFormatTo12h(){
+        val formatter12H = DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
+        val formatter24H = DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
+        for (i in mWeekEngagements.mondayEngagements){
+            if(i.startTime.length == 5){
+                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
+            }
+            if(i.endTime.length == 5){
+                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.tuesdayEngagements){
+            if(i.startTime.length == 5){
+                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
+            }
+            if(i.endTime.length == 5){
+                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.wednesdayEngagements){
+            if(i.startTime.length == 5){
+                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
+            }
+            if(i.endTime.length == 5){
+                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.thursdayEngagements){
+            if(i.startTime.length == 5){
+                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
+            }
+            if(i.endTime.length == 5){
+                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.fridayEngagements){
+            if(i.startTime.length == 5){
+                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
+            }
+            if(i.endTime.length == 5){
+                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.saturdayEngagements){
+            if(i.startTime.length == 5){
+                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
+            }
+            if(i.endTime.length == 5){
+                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
+            }
+        }
+        for (i in mWeekEngagements.sundayEngagements){
+            if(i.startTime.length == 5){
+                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
+            }
+            if(i.endTime.length == 5){
+                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
+            }
+        }
     }
 }

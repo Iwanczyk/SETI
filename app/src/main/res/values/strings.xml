@@ -68,6 +68,7 @@
     <string name="delete_regular_engagement_confirmation">Are you sure you want to delete this regular engagement?</string>
     <string name="title">Title</string>
     <string name="text_to_speech">Text to speech</string>
+    <string name="no_non_recurring_activities_available">No non-recurring activities available</string>
 
     <string-array name="Languages">
         <item>English</item>

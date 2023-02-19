@@ -25,6 +25,8 @@ object Constants {
 
     const val ASSIGNED_TO: String = "assignedTo"
 
+    const val NON_RECURRING_ENGAGEMENTS: String = "NonRecurringEngagements"
+
 
 
     fun showImageChooser(activity: Activity){

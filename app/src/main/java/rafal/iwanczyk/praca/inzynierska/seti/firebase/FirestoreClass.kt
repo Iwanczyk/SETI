@@ -10,6 +10,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import rafal.iwanczyk.praca.inzynierska.seti.activities.*
+import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
@@ -151,4 +152,13 @@ class FirestoreClass {
             }
     }
 
+    fun addUpdateDeleteNonRecurringEngagements(activity: Activity, nonRecurringEngagement: NonRecurringEngagement)
+    {
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS).document().set(nonRecurringEngagement, SetOptions.merge())
+            .addOnSuccessListener {
+                //TODO add
+            }.addOnFailureListener {
+                e -> //TODO add
+            }
+    }
     }

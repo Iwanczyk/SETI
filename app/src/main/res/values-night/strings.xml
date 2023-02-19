@@ -53,4 +53,5 @@
     <string name="day_of_week">Day of week</string>
     <string name="title">Title</string>
     <string name="text_to_speech">Text to speech</string>
+    <string name="no_non_recurring_activities_available">No non-recurring activities available</string>
 </resources>

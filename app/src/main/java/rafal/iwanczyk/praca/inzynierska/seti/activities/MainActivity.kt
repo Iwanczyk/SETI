@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MenuItem
 import android.widget.RadioButton
@@ -32,7 +33,7 @@ import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, TextToSpeech.OnInitListener {
 
     companion object{
         const val MY_PROFILE_REQUEST_CODE: Int = 11
@@ -45,6 +46,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
     lateinit var mWeekPlan: WeekEngagements
     private var mSelectedDay: String = ""
+
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,11 +74,26 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             mSelectedDay = findViewById<RadioButton>(checkedId).text.toString()
             changeDaysOfWeekAdapter(checkedId)
         }
+
+        tts = TextToSpeech(this, this)
     }
 
     override fun onResume() {
         super.onResume()
         FirestoreClass().getWeekPlan(this)
+    }
+
+    //Text to speech language initialization
+    override fun onInit(status: Int) {
+        if(status == TextToSpeech.SUCCESS){
+            if(Locale.getDefault().displayLanguage == "English"){
+                val result = tts!!.setLanguage(Locale.ENGLISH)
+            }else{
+                val result = tts!!.setLanguage(Locale.getDefault())
+            }
+        }else{
+            showErrorSnackBar("Text to speech initialization failed")
+        }
     }
 
     private fun setupActionBar(){
@@ -281,6 +299,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 startActivityForResult(intent, EDIT_REGULAR_ENGAGEMENT_CODE)
             }
         })
+
+        adapter.setOnLongClickListener(object: RegularEngagementsAdapter.OnLongClickListener{
+            override fun onLongClick(position: Int, model: RegularEngagement) {
+                speakOut(model.name, model.startTime, model.endTime, model.lectureRoom, model.buildingNumber)
+            }
+
+        })
     }
 
     private fun changeDaysOfWeekAdapter(checkedId: Int) {
@@ -344,6 +369,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 intent.putExtra(Constants.DISPLAYED_DAY_OF_WEEK, mSelectedDay)
                 startActivityForResult(intent, EDIT_REGULAR_ENGAGEMENT_CODE)
             }
+        })
+        
+        adapter.setOnLongClickListener(object: RegularEngagementsAdapter.OnLongClickListener{
+            override fun onLongClick(position: Int, model: RegularEngagement) {
+                speakOut(model.name, model.startTime, model.endTime, model.lectureRoom, model.buildingNumber)
+            }
+
         })
     }
 
@@ -469,5 +501,27 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
         //populateWeekPlanToUI(mWeekPlan)
+    }
+
+    private fun speakOut(nameOfEngagement: String, startTime: String, endTime: String,
+                         lectureRoomNumber: String, buildingNumber: String){
+        tts?.speak(nameOfEngagement, TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("Start time: $startTime", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("End time: $endTime", TextToSpeech.QUEUE_ADD, null, "")
+
+        if(lectureRoomNumber.isNotBlank()){
+            tts?.speak("Lecture room: $lectureRoomNumber", TextToSpeech.QUEUE_ADD, null, "")
+        }
+        if(buildingNumber.isNotBlank()){
+            tts?.speak("Lecture building number: $buildingNumber", TextToSpeech.QUEUE_ADD, null, "")
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(tts != null){
+            tts?.stop()
+            tts?.shutdown()
+        }
     }
 }

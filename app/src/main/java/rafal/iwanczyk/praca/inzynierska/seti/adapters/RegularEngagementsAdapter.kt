@@ -14,6 +14,7 @@ open class RegularEngagementsAdapter (private val context: Context,
     :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private var onClickListener: OnClickListener? = null
+    private var onLongClickListener: OnLongClickListener? = null
 
 
 
@@ -45,6 +46,13 @@ open class RegularEngagementsAdapter (private val context: Context,
                     onClickListener!!.onClick(position,model)
                 }
             }
+            holder.itemView.setOnLongClickListener {
+               if(onLongClickListener != null){
+                   onLongClickListener!!.onLongClick(position, model)
+                   return@setOnLongClickListener true
+               }
+                return@setOnLongClickListener false
+            }
         }
     }
 
@@ -54,6 +62,13 @@ open class RegularEngagementsAdapter (private val context: Context,
 
     fun setOnClickListener(onClickListener: OnClickListener){
         this.onClickListener = onClickListener
+    }
+    interface OnLongClickListener{
+        fun onLongClick(position: Int, model: RegularEngagement)
+    }
+
+    fun setOnLongClickListener(onLongClickListener: OnLongClickListener){
+        this.onLongClickListener = onLongClickListener
     }
 
     override fun getItemCount(): Int {

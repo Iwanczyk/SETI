@@ -1,6 +1,8 @@
 package rafal.iwanczyk.praca.inzynierska.seti.adapters
 
 import android.content.Context
+import android.graphics.Color
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +51,10 @@ open class RegularEngagementsAdapter (private val context: Context,
             holder.itemView.setOnLongClickListener {
                if(onLongClickListener != null){
                    onLongClickListener!!.onLongClick(position, model)
+                   holder.itemView.setBackgroundColor(Color.parseColor("#4cfc22"))
+                   Handler().postDelayed({
+                       holder.itemView.setBackgroundColor(context.resources.getColor(R.color.accent_color))
+                                         }, 3500)
                    return@setOnLongClickListener true
                }
                 return@setOnLongClickListener false

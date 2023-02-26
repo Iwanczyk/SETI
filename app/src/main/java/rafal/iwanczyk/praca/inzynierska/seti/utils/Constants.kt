@@ -25,7 +25,11 @@ object Constants {
 
     const val ASSIGNED_TO: String = "assignedTo"
 
+    const val NON_RECURRING_ENGAGEMENT: String = "NonRecurringEngagement"
     const val NON_RECURRING_ENGAGEMENTS: String = "NonRecurringEngagements"
+
+    const val START_DATE: String = "startDate"
+    const val END_DATE: String = "endDate"
 
 
 

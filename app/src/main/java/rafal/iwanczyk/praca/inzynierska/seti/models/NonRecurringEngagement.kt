@@ -4,16 +4,18 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class NonRecurringEngagement (
+    val documentID: String = "",
     var owner: String = "",
     val assignedTo: ArrayList<String> = ArrayList(),
     val name: String = "",
     val startDate: String = "",
-    val endDate: String = "",
     val startTime: String = "",
+    val endDate: String = "",
     val endTime: String = "",
     val note: String = ""
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
         parcel.readString()!!,
@@ -25,6 +27,7 @@ data class NonRecurringEngagement (
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(documentID)
         parcel.writeString(owner)
         parcel.writeStringList(assignedTo)
         parcel.writeString(name)

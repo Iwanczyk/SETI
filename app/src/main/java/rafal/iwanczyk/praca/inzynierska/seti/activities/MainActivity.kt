@@ -142,6 +142,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 startActivity(intent)
                 finish()
             }
+            R.id.nav_non_recurring_engagements -> {
+                startActivity(Intent(this, NonRecurringEngagementsActivity::class.java))
+            }
 
         }
         drawer_layout!!.closeDrawer(GravityCompat.START)

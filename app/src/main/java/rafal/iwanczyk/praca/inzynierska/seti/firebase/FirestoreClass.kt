@@ -14,6 +14,7 @@ import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
+import java.time.LocalDate
 
 class FirestoreClass {
 
@@ -152,13 +153,48 @@ class FirestoreClass {
             }
     }
 
-    fun addUpdateDeleteNonRecurringEngagements(activity: Activity, nonRecurringEngagement: NonRecurringEngagement)
+    fun addNonRecurringEngagements(activity: CreateNonRecurringEngagementActivity, nonRecurringEngagement: NonRecurringEngagement)
     {
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS).document().set(nonRecurringEngagement, SetOptions.merge())
             .addOnSuccessListener {
-                //TODO add
+                activity.addNonRecurringEngagementSuccessful()
             }.addOnFailureListener {
-                e -> //TODO add
+                activity.addNonRecurringEngagementFailed()
             }
     }
+
+    fun getNonRecurringEngagements(activity: NonRecurringEngagementsActivity, startDate: LocalDate, endDate: LocalDate){
+        val tmpList: ArrayList<NonRecurringEngagement> = ArrayList()
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+            //Where ownerID = owner
+            .whereGreaterThanOrEqualTo(Constants.START_DATE, startDate)
+            .whereLessThanOrEqualTo(Constants.START_DATE, endDate)
+            .get()
+            .addOnSuccessListener {
+                document1 ->
+                for(i in document1.documents){
+                    tmpList.add(i.toObject(NonRecurringEngagement::class.java)!!)
+                }
+                    mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+                    .whereGreaterThanOrEqualTo(Constants.END_DATE, startDate)
+                    .whereLessThanOrEqualTo(Constants.END_DATE, endDate)
+                    .get()
+                    .addOnSuccessListener {
+                        document2 ->
+                        for (j in document2.documents){
+                            tmpList.add(j.toObject(NonRecurringEngagement::class.java)!!)
+                        }
+                    }
+                tmpList.sortBy { it.startDate }
+                activity.populateNonRecurringEngagementsToUI(tmpList)
+            }
+        }
+
+    fun deleteNonRecurringEngagement(activity: Activity, documentID: String){
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+        .document(documentID)
+        .delete()
+        //TODO dokończyć
     }
+
+}

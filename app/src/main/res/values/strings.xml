@@ -69,6 +69,8 @@
     <string name="title">Title</string>
     <string name="text_to_speech">Text to speech</string>
     <string name="no_non_recurring_activities_available">No non-recurring activities available</string>
+    <string name="non_recurring_engagements">Non-recurring Engagements</string>
+    <string name="other_engagements">Other Engagements</string>
 
     <string-array name="Languages">
         <item>English</item>

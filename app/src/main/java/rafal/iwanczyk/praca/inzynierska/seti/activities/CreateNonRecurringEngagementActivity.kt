@@ -6,8 +6,10 @@ import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TimePicker
+import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.activity_create_non_recurring_engagement.*
 import kotlinx.android.synthetic.main.activity_create_regual_engagement.*
+import kotlinx.android.synthetic.main.activity_non_recurring_engagements.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
@@ -33,6 +35,8 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_non_recurring_engagement)
+
+        setupActionBar()
 
         formatterDateTime = if(Locale.getDefault().displayLanguage == "English")
         {
@@ -168,6 +172,17 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
         }
     }
 
+    private fun setupActionBar(){
+        setSupportActionBar(toolbar_create_non_recurring_engagement)
+        val actionBar = supportActionBar
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_icon_24dp)
+            actionBar.title = resources.getString(R.string.add_new_non_recurring_engagement)
+        }
+        toolbar_create_non_recurring_engagement.setNavigationOnClickListener { onBackPressed() }
+    }
+
     private fun validateFields(): Boolean{
         return if(et_title_of_non_recurring_engagement.text!!.isBlank()
             || !btn_pick_start_date_time_non_recurring_engagement.text
@@ -205,16 +220,19 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
     }
 
     private fun addNonRecurringEngagement(){
+        val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+
+
         val newEngagement = NonRecurringEngagement(
-"",
+        "",
         getCurrentUserID(),
         ArrayList<String>(),
         et_title_of_non_recurring_engagement.text.toString(),
-        startDate,
+        dateFormatter.parse(startDate)!!.time,
         startTime,
-        endDate,
+        dateFormatter.parse(endDate)!!.time,
         endTime,
-        et_note_of_non_recurring_engagement.text.toString()
+        et_note_of_non_recurring_engagement.text.toString(),
         )
 
         showProgressDialog()

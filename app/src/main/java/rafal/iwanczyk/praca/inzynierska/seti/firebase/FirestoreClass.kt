@@ -163,32 +163,28 @@ class FirestoreClass {
             }
     }
 
-    fun getNonRecurringEngagements(activity: NonRecurringEngagementsActivity, startDate: LocalDate, endDate: LocalDate){
+
+    fun getNonRecurringEngagements(activity: NonRecurringEngagementsActivity, ownerID: String, startDate: Long, endDate: Long){
         val tmpList: ArrayList<NonRecurringEngagement> = ArrayList()
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
-            //Where ownerID = owner
-            .whereGreaterThanOrEqualTo(Constants.START_DATE, startDate)
-            .whereLessThanOrEqualTo(Constants.START_DATE, endDate)
+            .whereEqualTo("owner", ownerID)
             .get()
             .addOnSuccessListener {
-                document1 ->
+                    document1 ->
                 for(i in document1.documents){
-                    tmpList.add(i.toObject(NonRecurringEngagement::class.java)!!)
-                }
-                    mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
-                    .whereGreaterThanOrEqualTo(Constants.END_DATE, startDate)
-                    .whereLessThanOrEqualTo(Constants.END_DATE, endDate)
-                    .get()
-                    .addOnSuccessListener {
-                        document2 ->
-                        for (j in document2.documents){
-                            tmpList.add(j.toObject(NonRecurringEngagement::class.java)!!)
-                        }
+                    val nonRecurringEngagement = i.toObject(NonRecurringEngagement::class.java)!!
+                    nonRecurringEngagement.documentID = i.id
+
+                    if((nonRecurringEngagement.startDate in startDate..endDate)
+                        || (nonRecurringEngagement.endDate in startDate..endDate)
+                        || (nonRecurringEngagement.startDate < startDate && nonRecurringEngagement.endDate > endDate)){
+                        tmpList.add(nonRecurringEngagement)
                     }
+                }
                 tmpList.sortBy { it.startDate }
                 activity.populateNonRecurringEngagementsToUI(tmpList)
-            }
-        }
+    }
+    }
 
     fun deleteNonRecurringEngagement(activity: Activity, documentID: String){
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)

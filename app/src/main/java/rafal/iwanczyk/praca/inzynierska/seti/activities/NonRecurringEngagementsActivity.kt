@@ -11,8 +11,10 @@ import kotlinx.android.synthetic.main.activity_non_recurring_engagements.*
 import kotlinx.android.synthetic.main.main_content.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.adapters.NonRecurringEngagementsAdapter
+import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -26,6 +28,7 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
     }
 
     private val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
     private lateinit var displayStartData: LocalDate
     private lateinit var displayEndData: LocalDate
     private var mEngagementsList: ArrayList<NonRecurringEngagement> = ArrayList()
@@ -40,13 +43,19 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
         setupDisplayedDates()
         tts = TextToSpeech(this, this)
 
+        FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+            dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
+            dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
 
         btn_previous_date_non_recurring_engagements.setOnClickListener {
             displayEndData = displayStartData
             displayStartData = displayStartData.minusDays(7)
             tv_date_display_non_recurring_engagements.text = 
                 "${displayStartData.format(formatter)} - ${displayEndData.format(formatter)}"
-            //loadNonRecurringEngagements
+
+            FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+                dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
+                dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
         }
 
         btn_next_date_non_recurring_engagements.setOnClickListener {
@@ -54,7 +63,10 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
             displayEndData = displayEndData.plusDays(7)
             tv_date_display_non_recurring_engagements.text =
                 "${displayStartData.format(formatter)} - ${displayEndData.format(formatter)}"
-            //loadNonRecurringEngagements
+
+            FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+                dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
+                dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
         }
 
         fab_create_non_recurring_engagement.setOnClickListener {
@@ -69,7 +81,10 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK && requestCode == ADD_NON_RECURRING_ENGAGEMENT_CODE
             || resultCode == Activity.RESULT_OK && requestCode == EDIT_NON_RECURRING_ENGAGEMENT_CODE){
-            //loadNonRecurringEngagements
+
+            FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+                dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
+                dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
         }
     }
 
@@ -124,7 +139,8 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
 
         adapter.setOnLongClickListener(object: NonRecurringEngagementsAdapter.OnLongClickListener{
             override fun onLongClick(position: Int, model: NonRecurringEngagement) {
-                speakOut(model.name, model.startDate, model.startTime, model.endDate, model.endTime)
+                speakOut(model.name, dateFormatter.format(model.startDate), model.startTime,
+                    dateFormatter.format(model.endDate), model.endTime)
             }
 
         })
@@ -133,10 +149,10 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
     private fun speakOut(nameOfEngagement: String, startDate: String, startTime: String,
                          endDate: String, endTime: String){
         tts?.speak(nameOfEngagement, TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("Start date: $startDate", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("Start time: $startTime", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("End date: $endDate", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("End time: $endTime", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.start_date)}: $startDate", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.start_time)}: $startTime", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.end_date)}: $endDate", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.end_time)}: $endTime", TextToSpeech.QUEUE_ADD, null, "")
     }
 
     override fun onDestroy() {

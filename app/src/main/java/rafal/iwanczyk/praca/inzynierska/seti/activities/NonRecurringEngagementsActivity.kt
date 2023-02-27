@@ -130,10 +130,10 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
 
         adapter.setOnClickListener(object: NonRecurringEngagementsAdapter.OnClickListener{
             override fun onClick(position: Int, model: NonRecurringEngagement) {
-                //val intent = Intent(this@NonRecurringEngagementsActivity,
-                //    NonRecurringEngagementDetails::class.java)
-               // intent.putExtra(Constants.NON_RECURRING_ENGAGEMENT, model)
-                //startActivityForResult(intent, EDIT_NON_RECURRING_ENGAGEMENT_CODE)
+                val intent = Intent(this@NonRecurringEngagementsActivity,
+                    NonRecurringEngagementDetailsActivity::class.java)
+                intent.putExtra(Constants.NON_RECURRING_ENGAGEMENT, model)
+                startActivityForResult(intent, EDIT_NON_RECURRING_ENGAGEMENT_CODE)
             }
         })
 

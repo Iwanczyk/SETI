@@ -186,11 +186,26 @@ class FirestoreClass {
     }
     }
 
-    fun deleteNonRecurringEngagement(activity: Activity, documentID: String){
+    fun updateNonRecurringEngagement(activity: NonRecurringEngagementDetailsActivity, documentID: String, changeHashMap: HashMap<String, Any>){
+        mFireStore.collection(Constants.USERS) // Collection Name
+            .document(documentID) // Document ID
+            .update(changeHashMap) // A hashmap of fields which are to be updated.
+            .addOnSuccessListener{
+                activity.nonRecurringEngagementChangeSuccessful()
+            }.addOnFailureListener {
+                activity.nonRecurringEngagementChangeFailed()
+            }
+    }
+
+    fun deleteNonRecurringEngagement(activity: NonRecurringEngagementDetailsActivity, documentID: String){
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
         .document(documentID)
         .delete()
-        //TODO dokończyć
+        .addOnSuccessListener {
+            activity.nonRecurringEngagementChangeSuccessful()
+        }.addOnFailureListener {
+            activity.nonRecurringEngagementChangeFailed()
+        }
     }
 
 }

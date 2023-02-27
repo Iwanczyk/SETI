@@ -31,6 +31,13 @@ object Constants {
     const val START_DATE: String = "startDate"
     const val END_DATE: String = "endDate"
 
+    const val NON_RECURRING_ENGAGEMENT_NAME: String = "name"
+    const val NON_RECURRING_ENGAGEMENT_START_DATE: String = "startDate"
+    const val NON_RECURRING_ENGAGEMENT_START_TIME: String = "startTime"
+    const val NON_RECURRING_ENGAGEMENT_END_DATE: String = "endDate"
+    const val NON_RECURRING_ENGAGEMENT_END_TIME: String = "endTime"
+    const val NON_RECURRING_ENGAGEMENT_NOTE: String = "note"
+
 
 
     fun showImageChooser(activity: Activity){

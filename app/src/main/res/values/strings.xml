@@ -66,6 +66,7 @@
     <string name="delete_regular_engagement">Delete regular engagement</string>
     <string name="day_of_week">Day of week</string>
     <string name="delete_regular_engagement_confirmation">Are you sure you want to delete this regular engagement?</string>
+    <string name="delete_non_recurring_engagement_confirmation">Are you sure you want to delete this non-recurring engagement?</string>
     <string name="title">Title</string>
     <string name="text_to_speech">Text to speech</string>
     <string name="no_non_recurring_activities_available">No non-recurring activities available</string>
@@ -76,6 +77,10 @@
     <string name="end_time">End time</string>
     <string name="end_date">End date</string>
     <string name="add_new_non_recurring_engagement">Add new non-recurring engagement</string>
+    <string name="edit_engagement">Edit engagement</string>
+    <string name="delete_engagement">Delete engagement</string>
+    <string name="delete_non_recurring_engagement">Delete non-recurring engagement</string>
+    <string name="additional_note">Additional note</string>
 
     <string-array name="Languages">
         <item>English</item>

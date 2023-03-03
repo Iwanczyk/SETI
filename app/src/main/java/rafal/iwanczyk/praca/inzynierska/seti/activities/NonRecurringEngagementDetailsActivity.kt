@@ -28,6 +28,7 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
     var endDate: String = ""
     var endTime: String = ""
     var formatterDateTime: DateTimeFormatter? = null
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
 
     private var tts: TextToSpeech? = null
 
@@ -195,9 +196,9 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
     private fun populateNonRecurringEngagementDetailsUI(){
         et_title_of_non_recurring_engagement_edit.setText(mNonRecurringEngagement.name)
         btn_pick_start_date_time_non_recurring_engagement_details.text =""+
-            mNonRecurringEngagement.startDate.toString() + mNonRecurringEngagement.startTime
+            dateFormatter.format(mNonRecurringEngagement.startDate) + mNonRecurringEngagement.startTime
         btn_pick_end_date_time_non_recurring_engagement_details.text =""+
-            mNonRecurringEngagement.endDate.toString() + mNonRecurringEngagement.endTime
+                dateFormatter.format(mNonRecurringEngagement.endDate) + mNonRecurringEngagement.endTime
         et_note_of_non_recurring_engagement_details.setText(mNonRecurringEngagement.note)
     }
 
@@ -243,7 +244,9 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
         tts?.speak("${resources.getString(R.string.start_time)}: ${mNonRecurringEngagement.startTime}", TextToSpeech.QUEUE_ADD, null, "")
         tts?.speak("${resources.getString(R.string.end_date)}: ${mNonRecurringEngagement.endDate}", TextToSpeech.QUEUE_ADD, null, "")
         tts?.speak("${resources.getString(R.string.end_time)}: ${mNonRecurringEngagement.endTime}", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("${resources.getString(R.string.additional_note)}: ${mNonRecurringEngagement.note}", TextToSpeech.QUEUE_ADD, null, "")
+        if(mNonRecurringEngagement.note.isNotBlank()){
+            tts?.speak("${resources.getString(R.string.additional_note)}: ${mNonRecurringEngagement.note}", TextToSpeech.QUEUE_ADD, null, "")
+        }
     }
 
     private fun enableEditingNonRecurringEngagement(){
@@ -304,7 +307,6 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
 
     private fun insertEditedRegularEngagement(){
         val changesHashMap = HashMap<String, Any>()
-        val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
         changesHashMap[Constants.NON_RECURRING_ENGAGEMENT_NAME] = et_title_of_non_recurring_engagement_edit.text.toString()
         changesHashMap[Constants.NON_RECURRING_ENGAGEMENT_START_DATE] = dateFormatter!!.parse(startDate).time
         changesHashMap[Constants.NON_RECURRING_ENGAGEMENT_START_TIME] = startTime
@@ -329,7 +331,6 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
     }
 
     private fun validateDateTime():Boolean{
-        val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
         val timeFormatter = if(Locale.getDefault().displayLanguage == "English") {
             SimpleDateFormat("hh:mm a")
         }else{

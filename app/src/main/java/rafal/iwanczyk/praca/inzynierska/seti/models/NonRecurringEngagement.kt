@@ -24,7 +24,7 @@ data class NonRecurringEngagement (
         parcel.readString()!!,
         parcel.readLong(),
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readString()!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -33,8 +33,8 @@ data class NonRecurringEngagement (
         parcel.writeStringList(assignedTo)
         parcel.writeString(name)
         parcel.writeLong(startDate)
-        parcel.writeLong(endDate)
         parcel.writeString(startTime)
+        parcel.writeLong(endDate)
         parcel.writeString(endTime)
         parcel.writeString(note)
     }

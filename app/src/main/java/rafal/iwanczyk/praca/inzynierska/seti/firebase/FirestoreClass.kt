@@ -187,7 +187,7 @@ class FirestoreClass {
     }
 
     fun updateNonRecurringEngagement(activity: NonRecurringEngagementDetailsActivity, documentID: String, changeHashMap: HashMap<String, Any>){
-        mFireStore.collection(Constants.USERS) // Collection Name
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
             .document(documentID) // Document ID
             .update(changeHashMap) // A hashmap of fields which are to be updated.
             .addOnSuccessListener{

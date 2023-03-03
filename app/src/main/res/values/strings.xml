@@ -73,7 +73,7 @@
     <string name="non_recurring_engagements">Non-recurring Engagements</string>
     <string name="other_engagements">Other Engagements</string>
     <string name="start_date">Start date</string>
-    <string name="start_time">start_time</string>
+    <string name="start_time">Start time</string>
     <string name="end_time">End time</string>
     <string name="end_date">End date</string>
     <string name="add_new_non_recurring_engagement">Add new non-recurring engagement</string>

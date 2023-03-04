@@ -107,6 +107,14 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_assigned_members"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Assigned Members:"
+                android:textStyle="bold"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"

@@ -81,6 +81,10 @@
     <string name="delete_engagement">Delete engagement</string>
     <string name="delete_non_recurring_engagement">Delete non-recurring engagement</string>
     <string name="additional_note">Additional note</string>
+    <string name="assigned_members">Members</string>
+    <string name="selected_user">Selected user</string>
+    <string name="created_by">Created by:</string>
+    <string name="engagement_members">Engagement members:</string>
 
     <string-array name="Languages">
         <item>English</item>

@@ -43,7 +43,7 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
         setupDisplayedDates()
         tts = TextToSpeech(this, this)
 
-        FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+        FirestoreClass().getNonRecurringEngagements(this,
             dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
             dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
 
@@ -53,7 +53,7 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
             tv_date_display_non_recurring_engagements.text = 
                 "${displayStartData.format(formatter)} - ${displayEndData.format(formatter)}"
 
-            FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+            FirestoreClass().getNonRecurringEngagements(this,
                 dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
                 dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
         }
@@ -64,7 +64,7 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
             tv_date_display_non_recurring_engagements.text =
                 "${displayStartData.format(formatter)} - ${displayEndData.format(formatter)}"
 
-            FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+            FirestoreClass().getNonRecurringEngagements(this,
                 dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
                 dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
         }
@@ -82,7 +82,7 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
         if(resultCode == Activity.RESULT_OK && requestCode == ADD_NON_RECURRING_ENGAGEMENT_CODE
             || resultCode == Activity.RESULT_OK && requestCode == EDIT_NON_RECURRING_ENGAGEMENT_CODE){
 
-            FirestoreClass().getNonRecurringEngagements(this, getCurrentUserID(),
+            FirestoreClass().getNonRecurringEngagements(this,
                 dateFormatter.parse(formatter.format(displayStartData).toString())!!.time,
                 dateFormatter.parse(formatter.format(displayEndData).toString())!!.time)
         }

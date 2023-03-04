@@ -3,11 +3,13 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_non_recurring_engagement_details.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
@@ -165,6 +167,13 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
                 day
             )
             dpd.show()
+        }
+
+        tv_assigned_members.setOnClickListener {
+            val intent = Intent(this@NonRecurringEngagementDetailsActivity, NonRecurringEngagementMembersActivity::class.java)
+            intent.putExtra(Constants.NON_RECURRING_ENGAGEMENT, mNonRecurringEngagement)
+            //ActivityResultContracts.StartActivityForResult(intent, ADD_EDIT_TEAM_MEMBERS_CODE)
+            startActivity(intent)
         }
 
         btn_save_edited_non_recurring_engagement.setOnClickListener {

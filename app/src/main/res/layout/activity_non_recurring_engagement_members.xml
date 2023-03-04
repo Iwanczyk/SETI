@@ -1,0 +1,136 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.NonRecurringEngagementMembersActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.SETI.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_members_activity"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.SETI.PopuopOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/members_content_padding">
+
+        <TextView
+            android:id="@+id/tv_created_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/created_by"
+            android:textStyle="bold"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_member_marginBottom"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/item_member_content_padding">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_owner_image"
+                    android:layout_width="@dimen/item_member_member_image_size"
+                    android:layout_height="@dimen/item_member_member_image_size"
+                    android:contentDescription="@string/image_contentDescription"
+                    android:src="@drawable/ic_user_place_holder"
+                    app:civ_border_color="@color/primary_text_color"
+                    app:civ_border_width="@dimen/item_member_image_circular_width_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/item_member_detail_layout_marginStart"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_owner_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="@dimen/item_member_name_text_size"
+                        tools:text="Member Login" />
+
+                    <TextView
+                        android:id="@+id/tv_owner_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="@dimen/item_member_login_text_size"
+                        android:textStyle="italic"
+                        tools:text="Member Name" />
+
+                    <TextView
+                        android:id="@+id/tv_owner_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/secondary_text_color"
+                        android:textSize="@dimen/item_member_email_text_size"
+                        tools:text="Email" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_member_divider_height"
+                android:layout_marginTop="@dimen/item_member_divider_marginTop"
+                android:background="@color/divider_color" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/engagement_members"
+            android:textStyle="bold"
+            />
+
+
+
+
+
+
+
+
+
+
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/members_cv_marginTop"
+            android:background="@android:color/white"
+            android:elevation="@dimen/card_view_elevation"
+            app:cardCornerRadius="@dimen/card_view_corner_radius">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_members_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

@@ -2,19 +2,20 @@ package rafal.iwanczyk.praca.inzynierska.seti.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.*
 import kotlinx.coroutines.tasks.await
 import rafal.iwanczyk.praca.inzynierska.seti.activities.*
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
-import java.time.LocalDate
 
 class FirestoreClass {
 
@@ -164,10 +165,10 @@ class FirestoreClass {
     }
 
 
-    fun getNonRecurringEngagements(activity: NonRecurringEngagementsActivity, ownerID: String, startDate: Long, endDate: Long){
-        val tmpList: ArrayList<NonRecurringEngagement> = ArrayList()
+    fun getNonRecurringEngagements(activity: NonRecurringEngagementsActivity, startDate: Long, endDate: Long){
+        val ownedEngagementsList: ArrayList<NonRecurringEngagement> = ArrayList()
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
-            .whereEqualTo("owner", ownerID)
+            .whereEqualTo("owner", getCurrentUserID())
             .get()
             .addOnSuccessListener {
                     document1 ->
@@ -178,12 +179,35 @@ class FirestoreClass {
                     if((nonRecurringEngagement.startDate in startDate..endDate)
                         || (nonRecurringEngagement.endDate in startDate..endDate)
                         || (nonRecurringEngagement.startDate < startDate && nonRecurringEngagement.endDate > endDate)){
-                        tmpList.add(nonRecurringEngagement)
+                        ownedEngagementsList.add(nonRecurringEngagement)
                     }
                 }
-                tmpList.sortBy { it.startDate }
-                activity.populateNonRecurringEngagementsToUI(tmpList)
+                //tmpList.sortBy { it.startDate }
+                //activity.populateNonRecurringEngagementsToUI(tmpList)
+                getNonRecurringEngagementAssigned(activity, startDate, endDate, ownedEngagementsList)
     }
+    }
+
+    private fun getNonRecurringEngagementAssigned(activity: NonRecurringEngagementsActivity, startDate: Long, endDate: Long, engagementsList: ArrayList<NonRecurringEngagement>){
+
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document1 ->
+                for (i in document1.documents) {
+                    val nonRecurringEngagement = i.toObject(NonRecurringEngagement::class.java)!!
+                    nonRecurringEngagement.documentID = i.id
+
+                    if ((nonRecurringEngagement.startDate in startDate..endDate)
+                        || (nonRecurringEngagement.endDate in startDate..endDate)
+                        || (nonRecurringEngagement.startDate < startDate && nonRecurringEngagement.endDate > endDate)
+                    ) {
+                        engagementsList.add(nonRecurringEngagement)
+                    }
+                }
+                engagementsList.sortBy { it.startDate }
+                activity.populateNonRecurringEngagementsToUI(engagementsList)
+            }
     }
 
     fun updateNonRecurringEngagement(activity: NonRecurringEngagementDetailsActivity, documentID: String, changeHashMap: HashMap<String, Any>){
@@ -206,6 +230,41 @@ class FirestoreClass {
         }.addOnFailureListener {
             activity.nonRecurringEngagementChangeFailed()
         }
+    }
+
+    fun getAssignedMembersListDetails(activity: NonRecurringEngagementMembersActivity, assignedTo: ArrayList<String>) {
+    mFireStore.collection(Constants.USERS)
+        .whereIn(Constants.ID, assignedTo)
+        .get()
+        .addOnSuccessListener {
+            document ->
+            val usersList: ArrayList<User> = ArrayList()
+
+            for(i in document.documents){
+                val assignedUser = i.toObject(User::class.java)!!
+                usersList.add(assignedUser)
+            }
+            activity.setupMembersList(usersList)
+
+        }.addOnFailureListener {
+            activity.hideProgressDialog()
+            activity.showErrorSnackBar("Error while downloading assigned users!")
+        }
+    }
+
+    fun getOwnerOfNonRecurringEngagement(activity: NonRecurringEngagementMembersActivity, ownerID: String){
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.ID, ownerID)
+            .get()
+            .addOnSuccessListener {
+                document ->
+                val owner = document.documents[0].toObject(User::class.java)!!
+                activity.setupOwner(owner)
+            }.addOnFailureListener {
+                activity.showErrorSnackBar("Owner's data downloading failed!")
+                activity.tv_created_by.text = "Created by: - failed to download the data :("
+                activity.ll_owner.visibility = View.GONE
+            }
     }
 
 }

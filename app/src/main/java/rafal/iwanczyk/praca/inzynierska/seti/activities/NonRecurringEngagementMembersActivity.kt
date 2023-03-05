@@ -74,7 +74,11 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.action_add_member -> {
+                if(mNonRecurringEngagement.owner == getCurrentUserID()){
                 dialogSearchMember()
+                }else{
+                    showErrorSnackBar(resources.getString(R.string.user_is_not_owner))
+                }
                 return true
             }
         }
@@ -137,7 +141,11 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
 
         adapter.setOnClickListener(object: MemberListItemsAdapter.OnClickListener{
             override fun onClick(position: Int, model: User) {
+                if(mNonRecurringEngagement.owner == getCurrentUserID()){
                 deleteMemberDialogDisplay(position, model)
+                }else{
+                    showErrorSnackBar(resources.getString(R.string.user_is_not_owner))
+                }
             }
         })
 

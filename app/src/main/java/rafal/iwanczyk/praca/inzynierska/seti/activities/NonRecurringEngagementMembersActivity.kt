@@ -2,6 +2,7 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_regular_engagement_details.*
 import kotlinx.android.synthetic.main.dialog_search_member.*
 import kotlinx.android.synthetic.main.item_member.*
 import kotlinx.android.synthetic.main.item_member.view.*
+import org.json.JSONObject
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.adapters.MemberListItemsAdapter
 import rafal.iwanczyk.praca.inzynierska.seti.adapters.NonRecurringEngagementsAdapter
@@ -24,6 +26,15 @@ import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.IOException
+import java.io.InputStreamReader
+import java.lang.Exception
+import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
+import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -117,6 +128,8 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
         hideProgressDialog()
         mAssignedMembersList.add(user)
         setupMembersList(mAssignedMembersList)
+
+        SendNotificationToUserAsyncTask(mNonRecurringEngagement.name, user.fcmToken, "ADD").execute()
     }
 
     override fun onInit(status: Int) {
@@ -184,6 +197,8 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
 
     fun memberRemovedSuccess(position: Int){
         hideProgressDialog()
+        SendNotificationToUserAsyncTask(mNonRecurringEngagement.name,
+            mAssignedMembersList[position].fcmToken, "DELETE").execute()
         mAssignedMembersList.removeAt(position)
         setupMembersList(mAssignedMembersList)
     }
@@ -217,4 +232,95 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
             tts?.shutdown()
         }
     }
+
+    private inner class SendNotificationToUserAsyncTask(val engagementName: String, val token: String, val actionType: String): AsyncTask<Any, Void, String>(){
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            showProgressDialog()
+        }
+
+        override fun doInBackground(vararg params: Any?): String {
+            var result: String
+            var connection: HttpURLConnection? = null
+            try{
+                val url = URL(Constants.FCM_BASE_URL)
+                connection = url.openConnection() as HttpURLConnection
+                connection.doOutput = true
+                connection.doInput = true
+                connection.instanceFollowRedirects = false
+                connection.requestMethod = "POST"
+
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.setRequestProperty("charset", "utf-8")
+                connection.setRequestProperty("Accept", "application/json")
+
+                connection.setRequestProperty(Constants.FCM_AUTHORIZATION,
+                    "${Constants.FCM_KEY}=${Constants.FCM_SERVER_KEY}")
+
+                connection.useCaches = false
+
+                val wr = DataOutputStream(connection.outputStream)
+                val jsonRequest = JSONObject()
+                val dataObject = JSONObject()
+
+                if(actionType == "ADD"){
+                dataObject.put(Constants.FCM_KEY_TITLE, "Assigned to the engagement ${engagementName}")
+                dataObject.put(Constants.FCM_KEY_MESSAGE,
+                    "You have been assigned to the Engagement by ${mAssignedMembersList[0].login}")
+                }else if(actionType == "DELETE"){
+                    dataObject.put(Constants.FCM_KEY_TITLE, "Removed from the engagement ${engagementName}")
+                    dataObject.put(Constants.FCM_KEY_MESSAGE,
+                        "You have been removed from the Engagement by ${mAssignedMembersList[0].login}")
+                }
+
+                jsonRequest.put(Constants.FCM_KEY_DATA, dataObject)
+                jsonRequest.put(Constants.FCM_KEY_TO, token)
+
+                wr.writeBytes(jsonRequest.toString())
+                wr.flush()
+                wr.close()
+
+                val httpResult: Int = connection.responseCode
+                if(httpResult == HttpURLConnection.HTTP_OK){
+                    val inputStream = connection.inputStream
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+
+                    val sb = StringBuilder()
+                    var line: String?
+                    try{
+                        while(reader.readLine().also { line=it } != null){
+                            sb.append(line+"\n")
+                        }
+                    }catch (e: IOException){
+                        e.printStackTrace()
+                    }finally {
+                        try{
+                            inputStream.close()
+                        }catch (e: IOException){
+                            e.printStackTrace()
+                        }
+                    }
+                    result = sb.toString()
+                }else{
+                    result = connection.responseMessage
+                }
+            }catch (e: SocketTimeoutException){
+                result = "Connection Timeout"
+            }catch (e: Exception){
+                result = "Error : " + e.message
+            }finally {
+                connection?.disconnect()
+            }
+
+            return result
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            hideProgressDialog()
+        }
+
+    }
+
 }

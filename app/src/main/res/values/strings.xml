@@ -94,6 +94,8 @@
     <string name="user_is_not_owner">Only owner can edit assigned members!</string>
     <string name="user_cant_delete_itself">You can\'t delete yourself!</string>
 
+    <string name="default_notification_channel_id">seti_notification_channel_id</string>
+
     <string-array name="Languages">
         <item>English</item>
         <item>Polish</item>

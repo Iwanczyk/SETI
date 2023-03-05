@@ -1,7 +1,9 @@
 package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -14,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.main_content.*
@@ -46,6 +49,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private val currentDay = calendar.get(Calendar.DAY_OF_WEEK)
     lateinit var mWeekPlan: WeekEngagements
     private var mSelectedDay: String = ""
+    private lateinit var mSharedPreferences: SharedPreferences
 
     private var tts: TextToSpeech? = null
 
@@ -56,6 +60,40 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupActionBar()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        mSharedPreferences = this.getSharedPreferences(Constants.SETI_PREFERENCES, Context.MODE_PRIVATE)
+
+        val tokenUpdated = mSharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
+
+        if(tokenUpdated){
+            showProgressDialog()
+            FirestoreClass().loadUserData(this, true)
+        }else{
+            //Jeśli nie zadziała to spróbować  public void onSuccess(InstanceIdResult instanceIdResult) {
+            //           String newToken = instanceIdResult.getToken();
+            //           Log.e("newToken",newToken);
+            //
+            //     }
+
+            /* OLD:
+            FirebaseInstanceId.getInstance()
+                .instanceId.addOnSuccessListener(this@MainActivity) { instanceIdResult ->
+                    updateFCMToken(instanceIdResult.token)
+            }
+            //290 11:24
+             */
+            FirebaseMessaging.getInstance()
+                .token.addOnSuccessListener(this@MainActivity) { instanceIdResult ->
+                    updateFCMToken(instanceIdResult)
+                }
+            /*
+            FirebaseMessaging.getInstance()
+                .token.addOnSuccessListener(this@MainActivity) { instanceIdResult ->
+                    updateFCMToken(instanceIdResult)
+                }
+
+             */
+        }
 
         FirestoreClass().loadUserData(this, true)
 
@@ -137,6 +175,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.nav_sign_out -> {
                 FirebaseAuth.getInstance().signOut()
 
+                mSharedPreferences.edit().clear().apply()
+
                 val intent = Intent(this, IntroActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -166,7 +206,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User, readWeekPlanRegularEngagements: Boolean){
-
+        hideProgressDialog()
         Glide
             .with(this@MainActivity)
             .load(user.image)
@@ -518,6 +558,26 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if(buildingNumber.isNotBlank()){
             tts?.speak("Lecture building number: $buildingNumber", TextToSpeech.QUEUE_ADD, null, "")
         }
+    }
+
+    fun tokenUpdateSuccess(){
+        hideProgressDialog()
+
+        val editor: SharedPreferences.Editor = mSharedPreferences.edit()
+        editor.putBoolean(Constants.FCM_TOKEN_UPDATED, true)
+        editor.apply()
+
+        showProgressDialog()
+        FirestoreClass().loadUserData(this@MainActivity, true)
+    }
+
+    private fun updateFCMToken(token: String) {
+
+        val userHashMap = HashMap<String, Any>()
+        userHashMap[Constants.FCM_TOKEN] = token
+
+        showProgressDialog()
+        FirestoreClass().updateUserProfileData(this@MainActivity, userHashMap)
     }
 
     override fun onDestroy() {

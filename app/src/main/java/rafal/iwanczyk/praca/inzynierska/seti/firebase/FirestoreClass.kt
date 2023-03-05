@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.*
 import kotlinx.coroutines.tasks.await
 import rafal.iwanczyk.praca.inzynierska.seti.activities.*
+import rafal.iwanczyk.praca.inzynierska.seti.adapters.NonRecurringEngagementsAdapter
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
@@ -267,7 +268,7 @@ class FirestoreClass {
         }
     }
 
-    fun getAssignedMembersListDetails(activity: NonRecurringEngagementMembersActivity, assignedTo: ArrayList<String>) {
+    fun getAssignedMembersListDetails(activity: Activity, assignedTo: ArrayList<String>) {
     mFireStore.collection(Constants.USERS)
         .whereIn(Constants.ID, assignedTo)
         .get()
@@ -279,11 +280,19 @@ class FirestoreClass {
                 val assignedUser = i.toObject(User::class.java)!!
                 usersList.add(assignedUser)
             }
-            activity.setupMembersList(usersList)
-
+            if(activity is NonRecurringEngagementMembersActivity){
+                activity.setupMembersList(usersList)
+            }else if(activity is NonRecurringEngagementDetailsActivity){
+                activity.setupMembersToUI(usersList)
+            }
         }.addOnFailureListener {
-            activity.hideProgressDialog()
-            activity.showErrorSnackBar("Error while downloading assigned users!")
+            if(activity is NonRecurringEngagementMembersActivity) {
+                activity.hideProgressDialog()
+                activity.showErrorSnackBar("Error while downloading assigned users!")
+            }else if(activity is NonRecurringEngagementDetailsActivity){
+                activity.hideProgressDialog()
+                activity.showErrorSnackBar("Error while downloading assigned users!")
+            }
         }
     }
 

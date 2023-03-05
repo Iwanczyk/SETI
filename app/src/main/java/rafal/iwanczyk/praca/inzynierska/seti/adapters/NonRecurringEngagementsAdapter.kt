@@ -37,7 +37,6 @@ open class NonRecurringEngagementsAdapter (private val context: Context,
             holder.itemView.tv_item_non_recurring_engagement_start_date.text = formatter.format(model.startDate)
             holder.itemView.tv_item_non_recurring_engagement_start_time.text = model.startTime
             holder.itemView.tv_item_non_recurring_engagement_title.text = model.name
-            //TODO assignedTo
             holder.itemView.tv_item_non_recurring_engagement_end_date.text = formatter.format(model.endDate)
             holder.itemView.tv_item_non_recurring_engagement_end_time.text = model.endTime
 

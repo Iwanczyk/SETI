@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_non_recurring_engagement_details.
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
+import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
@@ -209,6 +210,16 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
         btn_pick_end_date_time_non_recurring_engagement_details.text =""+
                 dateFormatter.format(mNonRecurringEngagement.endDate) + mNonRecurringEngagement.endTime
         et_note_of_non_recurring_engagement_details.setText(mNonRecurringEngagement.note)
+
+        FirestoreClass().getAssignedMembersListDetails(this, mNonRecurringEngagement.assignedTo)
+    }
+
+    fun setupMembersToUI(membersList: ArrayList<User>){
+        var assignedLogins: String = ""
+        for(i in membersList){
+            assignedLogins = i.login + ", " + assignedLogins
+        }
+        tv_assigned_members_logins.text = assignedLogins
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -267,7 +278,6 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
         et_note_of_non_recurring_engagement_details.isEnabled = true
         btn_save_edited_non_recurring_engagement.visibility = View.VISIBLE
         tv_cancel_edition_non_recurring_engagement.visibility = View.VISIBLE
-        //TODO add team members
     }
 
     private fun cancelEditingNonRecurringEngagement(){
@@ -279,7 +289,6 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
         et_note_of_non_recurring_engagement_details.isEnabled = false
         btn_save_edited_non_recurring_engagement.visibility = View.GONE
         tv_cancel_edition_non_recurring_engagement.visibility = View.GONE
-        //TODO add team members
         populateNonRecurringEngagementDetailsUI()
 
     }

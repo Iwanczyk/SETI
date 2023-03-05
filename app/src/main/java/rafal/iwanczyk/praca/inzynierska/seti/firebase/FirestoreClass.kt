@@ -165,6 +165,30 @@ class FirestoreClass {
             }
     }
 
+    fun getNonRecurringEngagements(activity: NonRecurringEngagementsActivity, startDate: Long, endDate: Long){
+        val engagementsList: ArrayList<NonRecurringEngagement> = ArrayList()
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document1 ->
+                for (i in document1.documents) {
+                    val nonRecurringEngagement = i.toObject(NonRecurringEngagement::class.java)!!
+                    nonRecurringEngagement.documentID = i.id
+
+                    if ((nonRecurringEngagement.startDate in startDate..endDate)
+                        || (nonRecurringEngagement.endDate in startDate..endDate)
+                        || (nonRecurringEngagement.startDate < startDate && nonRecurringEngagement.endDate > endDate)
+                    ) {
+                        engagementsList.add(nonRecurringEngagement)
+                    }
+                }
+                engagementsList.sortBy { it.startDate }
+                activity.populateNonRecurringEngagementsToUI(engagementsList)
+            }
+    }
+
+    //Previous approach
+  /*
 
     fun getNonRecurringEngagements(activity: NonRecurringEngagementsActivity, startDate: Long, endDate: Long){
         val ownedEngagementsList: ArrayList<NonRecurringEngagement> = ArrayList()
@@ -210,6 +234,8 @@ class FirestoreClass {
                 activity.populateNonRecurringEngagementsToUI(engagementsList)
             }
     }
+
+   */
 
     fun getMemberDetails(activity: NonRecurringEngagementMembersActivity, email: String){
         mFireStore.collection(Constants.USERS)

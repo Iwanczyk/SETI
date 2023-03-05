@@ -141,7 +141,9 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
 
         adapter.setOnClickListener(object: MemberListItemsAdapter.OnClickListener{
             override fun onClick(position: Int, model: User) {
-                if(mNonRecurringEngagement.owner == getCurrentUserID()){
+                if(mNonRecurringEngagement.owner == getCurrentUserID() && model.id == getCurrentUserID()){
+                    showErrorSnackBar(resources.getString(R.string.user_cant_delete_itself))
+                }else if(mNonRecurringEngagement.owner == getCurrentUserID()){
                 deleteMemberDialogDisplay(position, model)
                 }else{
                     showErrorSnackBar(resources.getString(R.string.user_is_not_owner))

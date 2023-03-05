@@ -210,6 +210,41 @@ class FirestoreClass {
             }
     }
 
+    fun getMemberDetails(activity: NonRecurringEngagementMembersActivity, email: String){
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.EMAIL, email)
+            .get()
+            .addOnSuccessListener {
+                document ->
+                if(document.documents.size>0){
+                    val user = document.documents[0].toObject(User::class.java)!!
+                    activity.memberDetails(user)
+                }else{
+                    activity.hideProgressDialog()
+                    activity.showErrorSnackBar("No such member found!")
+                }
+            }.addOnFailureListener {
+                activity.hideProgressDialog()
+                activity.showErrorSnackBar("Database error!")
+            }
+    }
+
+    fun assignMemberToNonRecurringEngagement(activity: NonRecurringEngagementMembersActivity,
+                                             engagement: NonRecurringEngagement, user: User){
+        val assignedToHashMap = HashMap<String, Any>()
+        assignedToHashMap[Constants.ASSIGNED_TO] = engagement.assignedTo
+
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+            .document(engagement.documentID)
+            .update(assignedToHashMap)
+            .addOnSuccessListener {
+                activity.memberAssignSuccess(user)
+            }.addOnFailureListener {
+                activity.hideProgressDialog()
+                activity.showErrorSnackBar("Error while updating members!")
+            }
+    }
+
     fun updateNonRecurringEngagement(activity: NonRecurringEngagementDetailsActivity, documentID: String, changeHashMap: HashMap<String, Any>){
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
             .document(documentID) // Document ID

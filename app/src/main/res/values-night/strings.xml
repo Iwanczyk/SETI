@@ -69,4 +69,6 @@
     <string name="selected_user">Selected user</string>
     <string name="created_by">Created by:</string>
     <string name="engagement_members">Engagement members:</string>
+    <string name="add_member">Add Member</string>
+    <string name="please_enter_users_email">Please enter user\'s email adrress</string>
 </resources>

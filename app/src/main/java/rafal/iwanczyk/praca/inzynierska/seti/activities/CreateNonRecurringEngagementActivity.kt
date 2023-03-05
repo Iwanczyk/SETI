@@ -221,12 +221,14 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
 
     private fun addNonRecurringEngagement(){
         val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+        val assignedToInitialList: ArrayList<String> = ArrayList()
+        assignedToInitialList.add(getCurrentUserID())
 
 
         val newEngagement = NonRecurringEngagement(
         "",
         getCurrentUserID(),
-        ArrayList<String>(),
+        assignedToInitialList,
         et_title_of_non_recurring_engagement.text.toString(),
         dateFormatter.parse(startDate)!!.time,
         startTime,

@@ -1,13 +1,18 @@
 package rafal.iwanczyk.praca.inzynierska.seti.activities
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.*
 import kotlinx.android.synthetic.main.activity_regular_engagement_details.*
+import kotlinx.android.synthetic.main.dialog_search_member.*
 import kotlinx.android.synthetic.main.item_member.view.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.adapters.MemberListItemsAdapter
@@ -37,7 +42,6 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
         setupActionBar()
         tts = TextToSpeech(this, this)
 
-        showProgressDialog()
         FirestoreClass().getAssignedMembersListDetails(this, mNonRecurringEngagement.assignedTo)
         FirestoreClass().getOwnerOfNonRecurringEngagement(this, mNonRecurringEngagement.owner)
         hideProgressDialog()
@@ -52,6 +56,55 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
             actionBar.title = resources.getString(R.string.assigned_members)
         }
         toolbar_members_activity.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.members_options, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_add_member -> {
+                dialogSearchMember()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun dialogSearchMember(){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_search_member)
+        dialog.tv_add.setOnClickListener {
+            val email = dialog.et_email_search_member.text.toString()
+
+            if(email.isNotEmpty()){
+                dialog.dismiss()
+                showProgressDialog()
+                FirestoreClass().getMemberDetails(this, email)
+            }else{
+                showToast(this, resources.getString(R.string.please_enter_users_email))
+            }
+
+        }
+        dialog.tv_cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    fun memberDetails(user: User){
+        mNonRecurringEngagement.assignedTo.add(user.id)
+        FirestoreClass().assignMemberToNonRecurringEngagement(
+            this@NonRecurringEngagementMembersActivity, mNonRecurringEngagement, user)
+    }
+
+    fun memberAssignSuccess(user: User){
+        hideProgressDialog()
+        mAssignedMembersList.add(user)
+        setupMembersList(mAssignedMembersList)
     }
 
     override fun onInit(status: Int) {

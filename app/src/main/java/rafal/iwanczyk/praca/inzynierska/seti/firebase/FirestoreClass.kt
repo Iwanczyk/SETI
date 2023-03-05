@@ -246,6 +246,22 @@ class FirestoreClass {
             }
     }
 
+    fun removeMemberFromNonRecurringEngagement(activity: NonRecurringEngagementMembersActivity,
+                                             engagement: NonRecurringEngagement, position: Int){
+        val assignedToHashMap = HashMap<String, Any>()
+        assignedToHashMap[Constants.ASSIGNED_TO] = engagement.assignedTo
+
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+            .document(engagement.documentID)
+            .update(assignedToHashMap)
+            .addOnSuccessListener {
+                activity.memberRemovedSuccess(position)
+            }.addOnFailureListener {
+                activity.hideProgressDialog()
+                activity.showErrorSnackBar("Error while updating members!")
+            }
+    }
+
     fun updateNonRecurringEngagement(activity: NonRecurringEngagementDetailsActivity, documentID: String, changeHashMap: HashMap<String, Any>){
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
             .document(documentID) // Document ID

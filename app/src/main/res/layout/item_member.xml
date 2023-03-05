@@ -55,8 +55,6 @@
                 android:textSize="@dimen/item_member_email_text_size"
                 tools:text="Email" />
         </LinearLayout>
-
-
     </LinearLayout>
 
     <View

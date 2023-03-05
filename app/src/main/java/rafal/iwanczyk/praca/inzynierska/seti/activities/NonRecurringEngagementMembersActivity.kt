@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.*
 import kotlinx.android.synthetic.main.activity_regular_engagement_details.*
 import kotlinx.android.synthetic.main.dialog_search_member.*
+import kotlinx.android.synthetic.main.item_member.*
 import kotlinx.android.synthetic.main.item_member.view.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.adapters.MemberListItemsAdapter
@@ -28,7 +31,6 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
 
     private lateinit var mNonRecurringEngagement: NonRecurringEngagement
     private lateinit var mAssignedMembersList: ArrayList<User>
-    private var anyChangeMade: Boolean = false
     private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +57,13 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
             actionBar.setHomeAsUpIndicator(R.drawable.ic_back_icon_24dp)
             actionBar.title = resources.getString(R.string.assigned_members)
         }
-        toolbar_members_activity.setNavigationOnClickListener { onBackPressed() }
+        toolbar_members_activity.setNavigationOnClickListener {
+            //onBackPressed()
+            val intentToSendBack = Intent()
+            intentToSendBack.putExtra(Constants.NON_RECURRING_ENGAGEMENT, mNonRecurringEngagement)
+            setResult(RESULT_OK, intentToSendBack)
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -129,7 +137,7 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
 
         adapter.setOnClickListener(object: MemberListItemsAdapter.OnClickListener{
             override fun onClick(position: Int, model: User) {
-                //TODO dodać opcję usuwania
+                deleteMemberDialogDisplay(position, model)
             }
         })
 
@@ -138,6 +146,36 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
                 speakOut(model.login, model.name, model.email)
             }
         })
+    }
+
+    private fun deleteMemberDialogDisplay(position: Int, selectedUser: User){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.delete_member) + " ${selectedUser.login} (${selectedUser.email})")
+        builder.setMessage(resources.getString(R.string.delete_member_confirmation))
+        builder.setIcon(R.drawable.ic_alert_dialog)
+
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialogInterface, which ->
+            dialogInterface.dismiss()
+            deleteNonMemberFromEngagement(position)
+        }
+        builder.setNegativeButton(resources.getString(R.string.cancel)){ dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun deleteNonMemberFromEngagement(position: Int){
+        mNonRecurringEngagement.assignedTo.removeAt(position)
+        FirestoreClass().removeMemberFromNonRecurringEngagement(this, mNonRecurringEngagement, position)
+    }
+
+    fun memberRemovedSuccess(position: Int){
+        hideProgressDialog()
+        mAssignedMembersList.removeAt(position)
+        setupMembersList(mAssignedMembersList)
     }
 
     fun setupOwner(owner: User){

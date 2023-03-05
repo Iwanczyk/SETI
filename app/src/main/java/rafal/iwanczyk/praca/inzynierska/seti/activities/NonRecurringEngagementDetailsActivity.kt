@@ -24,6 +24,10 @@ import kotlin.collections.HashMap
 
 class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnInitListener {
 
+    companion object{
+        const val ADD_EDIT_TEAM_MEMBERS_CODE: Int = 16
+    }
+
     private lateinit var mNonRecurringEngagement: NonRecurringEngagement
     val c = Calendar.getInstance()
     var startDate: String = ""
@@ -173,8 +177,8 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
         tv_assigned_members.setOnClickListener {
             val intent = Intent(this@NonRecurringEngagementDetailsActivity, NonRecurringEngagementMembersActivity::class.java)
             intent.putExtra(Constants.NON_RECURRING_ENGAGEMENT, mNonRecurringEngagement)
-            //ActivityResultContracts.StartActivityForResult(intent, ADD_EDIT_TEAM_MEMBERS_CODE)
-            startActivity(intent)
+            startActivityForResult(intent, ADD_EDIT_TEAM_MEMBERS_CODE)
+            //startActivity(intent)
         }
 
         btn_save_edited_non_recurring_engagement.setOnClickListener {
@@ -184,6 +188,19 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
         tv_cancel_edition_non_recurring_engagement.setOnClickListener {
             cancelEditingNonRecurringEngagement()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        populateNonRecurringEngagementDetailsUI()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == ADD_EDIT_TEAM_MEMBERS_CODE){
+            mNonRecurringEngagement = data!!.getParcelableExtra<NonRecurringEngagement>(Constants.NON_RECURRING_ENGAGEMENT)!!
+            }
     }
 
     private fun getIntentData(){

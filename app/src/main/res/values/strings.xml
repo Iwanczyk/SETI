@@ -89,6 +89,8 @@
     <string name="add">ADD</string>
     <string name="search_member">Search Member</string>
     <string name="please_enter_users_email">Please enter user\'s email adrress</string>
+    <string name="delete_member">Delete member</string>
+    <string name="delete_member_confirmation">Are you sure you want to delete this member from your engagement?</string>
 
     <string-array name="Languages">
         <item>English</item>

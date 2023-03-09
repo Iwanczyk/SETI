@@ -69,30 +69,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             showProgressDialog()
             FirestoreClass().loadUserData(this, true)
         }else{
-            //Jeśli nie zadziała to spróbować  public void onSuccess(InstanceIdResult instanceIdResult) {
-            //           String newToken = instanceIdResult.getToken();
-            //           Log.e("newToken",newToken);
-            //
-            //     }
-
-            /* OLD:
-            FirebaseInstanceId.getInstance()
-                .instanceId.addOnSuccessListener(this@MainActivity) { instanceIdResult ->
-                    updateFCMToken(instanceIdResult.token)
-            }
-            //290 11:24
-             */
             FirebaseMessaging.getInstance()
                 .token.addOnSuccessListener(this@MainActivity) { instanceIdResult ->
                     updateFCMToken(instanceIdResult)
                 }
-            /*
-            FirebaseMessaging.getInstance()
-                .token.addOnSuccessListener(this@MainActivity) { instanceIdResult ->
-                    updateFCMToken(instanceIdResult)
-                }
-
-             */
         }
 
         FirestoreClass().loadUserData(this, true)
@@ -184,6 +164,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             R.id.nav_non_recurring_engagements -> {
                 startActivity(Intent(this, NonRecurringEngagementsActivity::class.java))
+            }
+            R.id.nav_statistics ->{
+                startActivity(Intent(this, StatisticsActivity::class.java))
             }
 
         }

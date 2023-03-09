@@ -367,4 +367,174 @@ class FirestoreClass {
             }
     }
 
+
+    fun getNonRecurringEngagementStats(activity: StatisticsActivity, startDate: Long, endDate: Long){
+        var assignedEngagementNumber: Int = 0
+        var ownedEngagementsNumber: Int = 0
+        val nonRecurringStatsList: ArrayList<Int> = ArrayList()
+
+        mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
+            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document1 ->
+                for (i in document1.documents) {
+                    val nonRecurringEngagement = i.toObject(NonRecurringEngagement::class.java)!!
+                    nonRecurringEngagement.documentID = i.id
+
+                    if ((nonRecurringEngagement.startDate in startDate..endDate)
+                        || (nonRecurringEngagement.endDate in startDate..endDate)
+                        || (nonRecurringEngagement.startDate < startDate && nonRecurringEngagement.endDate > endDate)
+                    ) {
+                        if(nonRecurringEngagement.owner == getCurrentUserID()){
+                            ownedEngagementsNumber++
+                        }else{
+                            assignedEngagementNumber++
+                        }
+                    }
+                }
+                nonRecurringStatsList.add(0, ownedEngagementsNumber)
+                nonRecurringStatsList.add(1, assignedEngagementNumber)
+                activity.getNonRecurringEngagementStats(nonRecurringStatsList)
+            }
+    }
+/*
+    fun getRegularEngagementStats(activity: StatisticsActivity){
+        var tmpStudyTime: Long = 0
+        var tmpWorkTime: Long = 0
+        var tmpOtherTime: Long = 0
+        val studyTimeList: ArrayList<Long> = ArrayList()
+        val workTimeList: ArrayList<Long> = ArrayList()
+        val otherTimeList: ArrayList<Long> = ArrayList()
+
+
+        mFireStore.collection(Constants.WEEKPLAN).whereEqualTo(Constants.ASSIGNED_TO,getCurrentUserID())
+            .get().addOnSuccessListener {
+                    document -> Log.i(activity.javaClass.simpleName,document.documents.toString())
+                val weekPlan: WeekEngagements = document.documents[0].toObject(WeekEngagements::class.java)!!
+                weekPlan.documentID = document.documents[0].id
+
+                for(i in weekPlan.mondayEngagements){
+                    if(i.typeOfEngagement == "Study") {
+                        tmpStudyTime += (i.endTime - i.startTime)
+                    }else if(i.typeOfEngagement == "Work"){
+                        tmpWorkTime += (i.endTime - i.startTime)
+                    }else{
+                        tmpOtherTime += (i.endTime - i.startTime)
+                    }
+                    studyTimeList[0] = tmpStudyTime
+                    workTimeList[0] = tmpWorkTime
+                    otherTimeList[0] = tmpOtherTime
+                }
+
+                for(i in weekPlan.tuesdayEngagements){
+                    tmpStudyTime = 0
+                    tmpWorkTime = 0
+                    tmpOtherTime = 0
+
+                    if(i.typeOfEngagement == "Study") {
+                        tmpStudyTime += (i.endTime - i.startTime)
+                    }else if(i.typeOfEngagement == "Work"){
+                        tmpWorkTime += (i.endTime - i.startTime)
+                    }else{
+                        tmpOtherTime += (i.endTime - i.startTime)
+                    }
+                    studyTimeList[1] = tmpStudyTime
+                    workTimeList[1] = tmpWorkTime
+                    otherTimeList[1] = tmpOtherTime
+                }
+
+                for(i in weekPlan.wednesdayEngagements){
+                    tmpStudyTime = 0
+                    tmpWorkTime = 0
+                    tmpOtherTime = 0
+
+                    if(i.typeOfEngagement == "Study") {
+                        tmpStudyTime += (i.endTime - i.startTime)
+                    }else if(i.typeOfEngagement == "Work"){
+                        tmpWorkTime += (i.endTime - i.startTime)
+                    }else{
+                        tmpOtherTime += (i.endTime - i.startTime)
+                    }
+                    studyTimeList[2] = tmpStudyTime
+                    workTimeList[2] = tmpWorkTime
+                    otherTimeList[2] = tmpOtherTime
+                }
+
+                for(i in weekPlan.thursdayEngagements){
+                    tmpStudyTime = 0
+                    tmpWorkTime = 0
+                    tmpOtherTime = 0
+
+                    if(i.typeOfEngagement == "Study") {
+                        tmpStudyTime += (i.endTime - i.startTime)
+                    }else if(i.typeOfEngagement == "Work"){
+                        tmpWorkTime += (i.endTime - i.startTime)
+                    }else{
+                        tmpOtherTime += (i.endTime - i.startTime)
+                    }
+                    studyTimeList[3] = tmpStudyTime
+                    workTimeList[3] = tmpWorkTime
+                    otherTimeList[3] = tmpOtherTime
+                }
+
+                for(i in weekPlan.fridayEngagements){
+                    tmpStudyTime = 0
+                    tmpWorkTime = 0
+                    tmpOtherTime = 0
+
+                    if(i.typeOfEngagement == "Study") {
+                        tmpStudyTime += (i.endTime - i.startTime)
+                    }else if(i.typeOfEngagement == "Work"){
+                        tmpWorkTime += (i.endTime - i.startTime)
+                    }else{
+                        tmpOtherTime += (i.endTime - i.startTime)
+                    }
+                    studyTimeList[4] = tmpStudyTime
+                    workTimeList[4] = tmpWorkTime
+                    otherTimeList[4] = tmpOtherTime
+                }
+
+                for(i in weekPlan.saturdayEngagements){
+                    tmpStudyTime = 0
+                    tmpWorkTime = 0
+                    tmpOtherTime = 0
+
+                    if(i.typeOfEngagement == "Study") {
+                        tmpStudyTime += (i.endTime - i.startTime)
+                    }else if(i.typeOfEngagement == "Work"){
+                        tmpWorkTime += (i.endTime - i.startTime)
+                    }else{
+                        tmpOtherTime += (i.endTime - i.startTime)
+                    }
+                    studyTimeList[5] = tmpStudyTime
+                    workTimeList[5] = tmpWorkTime
+                    otherTimeList[5] = tmpOtherTime
+                }
+
+                for(i in weekPlan.sundayEngagements){
+                    tmpStudyTime = 0
+                    tmpWorkTime = 0
+                    tmpOtherTime = 0
+
+                    if(i.typeOfEngagement == "Study") {
+                        tmpStudyTime += (i.endTime - i.startTime)
+                    }else if(i.typeOfEngagement == "Work"){
+                        tmpWorkTime += (i.endTime - i.startTime)
+                    }else{
+                        tmpOtherTime += (i.endTime - i.startTime)
+                    }
+                    studyTimeList[6] = tmpStudyTime
+                    workTimeList[6] = tmpWorkTime
+                    otherTimeList[6] = tmpOtherTime
+                }
+
+                //activity.getRecurringEngagementsStats()
+
+            }.addOnFailureListener {
+                Log.e(activity.javaClass.simpleName,"Error while downloading statistics!")
+            }
+    }
+
+     */
+
 }

@@ -95,6 +95,19 @@
     <string name="user_cant_delete_itself">You can\'t delete yourself!</string>
 
     <string name="default_notification_channel_id">seti_notification_channel_id</string>
+    <string name="study_capital">STUDY</string>
+    <string name="work_capital">WORK</string>
+    <string name="other_capital">OTHER</string>
+    <string name="statistics">Statistics</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="number_of_owned_non_recurring_engagements">Number of non-recurring engagements:</string>
+    <string name="number_of_assigned_non_recurring_engagements">Number of non-recurring engagements assigned to:</string>
 
     <string-array name="Languages">
         <item>English</item>
@@ -115,5 +128,10 @@
         <item>Study</item>
         <item>Work</item>
         <item>Other</item>
+    </string-array>
+
+    <string-array name="StatsType">
+        <item>Recurring Engagements Statistics</item>
+        <item>Non-recurring Engagements Statistics</item>
     </string-array>
 </resources>

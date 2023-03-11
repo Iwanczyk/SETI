@@ -88,6 +88,7 @@ class StatisticsActivity : BaseActivity() {
             displayedData = displayedData.plusMonths(1)
             monthStartDate = "01/${displayedData.format(startMonthFormatter)}"
             monthEndDate = displayedData.plusMonths(1).minusDays((displayedData.dayOfMonth).toLong()).format(endMonthFormatter).toString()
+            tv_stats_non_recurring_engagement_month.text = displayedData.format(displayMonthFormatter).toString()
 
             FirestoreClass().getNonRecurringEngagementStats(this,
                 dateFormatter.parse(monthStartDate)!!.time, dateFormatter.parse(monthEndDate)!!.time)

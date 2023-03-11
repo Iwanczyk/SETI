@@ -10,9 +10,9 @@ data class NonRecurringEngagement (
     val assignedTo: ArrayList<String> = ArrayList(),
     val name: String = "",
     val startDate: Long = 0,
-    val startTime: String = "",
+    val startTime: Long = 0,
     val endDate: Long = 0,
-    val endTime: String = "",
+    val endTime: Long = 0,
     val note: String = "",
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -21,9 +21,9 @@ data class NonRecurringEngagement (
         parcel.createStringArrayList()!!,
         parcel.readString()!!,
         parcel.readLong(),
-        parcel.readString()!!,
         parcel.readLong(),
-        parcel.readString()!!,
+        parcel.readLong(),
+        parcel.readLong(),
         parcel.readString()!!
     )
 
@@ -33,9 +33,9 @@ data class NonRecurringEngagement (
         parcel.writeStringList(assignedTo)
         parcel.writeString(name)
         parcel.writeLong(startDate)
-        parcel.writeString(startTime)
+        parcel.writeLong(startTime)
         parcel.writeLong(endDate)
-        parcel.writeString(endTime)
+        parcel.writeLong(endTime)
         parcel.writeString(note)
     }
 

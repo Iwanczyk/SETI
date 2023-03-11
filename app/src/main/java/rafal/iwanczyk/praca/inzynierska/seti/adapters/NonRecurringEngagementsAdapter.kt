@@ -12,6 +12,8 @@ import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class NonRecurringEngagementsAdapter (private val context: Context,
                                            private var list: ArrayList<NonRecurringEngagement>)
@@ -21,6 +23,11 @@ open class NonRecurringEngagementsAdapter (private val context: Context,
     private var onLongClickListener: NonRecurringEngagementsAdapter.OnLongClickListener? = null
 
     private val formatter = SimpleDateFormat("dd/MM")
+    private val formatterTime = if(Locale.getDefault().displayLanguage == "English"){
+        SimpleDateFormat("HH:mm a")
+    }else{
+        SimpleDateFormat("HH:mm")
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -35,10 +42,10 @@ open class NonRecurringEngagementsAdapter (private val context: Context,
 
         if(holder is MyViewHolder){
             holder.itemView.tv_item_non_recurring_engagement_start_date.text = formatter.format(model.startDate)
-            holder.itemView.tv_item_non_recurring_engagement_start_time.text = model.startTime
+            holder.itemView.tv_item_non_recurring_engagement_start_time.text = formatterTime.format(model.startTime)
             holder.itemView.tv_item_non_recurring_engagement_title.text = model.name
             holder.itemView.tv_item_non_recurring_engagement_end_date.text = formatter.format(model.endDate)
-            holder.itemView.tv_item_non_recurring_engagement_end_time.text = model.endTime
+            holder.itemView.tv_item_non_recurring_engagement_end_time.text = formatterTime.format(model.endTime)
 
             holder.itemView.setOnClickListener {
                 if(onClickListener != null){

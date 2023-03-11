@@ -36,6 +36,11 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
     var endTime: String = ""
     var formatterDateTime: DateTimeFormatter? = null
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+    private val timeFormatter = if(Locale.getDefault().displayLanguage == "English") {
+        SimpleDateFormat("hh:mm a")
+    }else{
+        SimpleDateFormat("HH:mm")
+    }
 
     private var tts: TextToSpeech? = null
 
@@ -222,10 +227,10 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
 
     private fun populateNonRecurringEngagementDetailsUI(){
         et_title_of_non_recurring_engagement_edit.setText(mNonRecurringEngagement.name)
-        btn_pick_start_date_time_non_recurring_engagement_details.text =""+
-            dateFormatter.format(mNonRecurringEngagement.startDate) + mNonRecurringEngagement.startTime
-        btn_pick_end_date_time_non_recurring_engagement_details.text =""+
-                dateFormatter.format(mNonRecurringEngagement.endDate) + mNonRecurringEngagement.endTime
+        btn_pick_start_date_time_non_recurring_engagement_details.text = "" +
+                "${dateFormatter.format(mNonRecurringEngagement.startDate)} \n${timeFormatter.format(mNonRecurringEngagement.startTime)}"
+        btn_pick_end_date_time_non_recurring_engagement_details.text ="" +
+                "${dateFormatter.format(mNonRecurringEngagement.endDate)} \n${timeFormatter.format(mNonRecurringEngagement.endTime)}"
         et_note_of_non_recurring_engagement_details.setText(mNonRecurringEngagement.note)
 
         FirestoreClass().getAssignedMembersListDetails(this, mNonRecurringEngagement.assignedTo)
@@ -277,10 +282,10 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
 
     private fun speakOut(){
         tts?.speak(mNonRecurringEngagement.name, TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("${resources.getString(R.string.start_date)}: ${mNonRecurringEngagement.startDate}", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("${resources.getString(R.string.start_time)}: ${mNonRecurringEngagement.startTime}", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("${resources.getString(R.string.end_date)}: ${mNonRecurringEngagement.endDate}", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("${resources.getString(R.string.end_time)}: ${mNonRecurringEngagement.endTime}", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.start_date)}: ${dateFormatter.format(mNonRecurringEngagement.startDate)}", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.start_time)}: ${timeFormatter.format(mNonRecurringEngagement.startTime)}", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.end_date)}: ${dateFormatter.format(mNonRecurringEngagement.endDate)}", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.end_time)}: ${timeFormatter.format(mNonRecurringEngagement.endTime)}", TextToSpeech.QUEUE_ADD, null, "")
         if(mNonRecurringEngagement.note.isNotBlank()){
             tts?.speak("${resources.getString(R.string.additional_note)}: ${mNonRecurringEngagement.note}", TextToSpeech.QUEUE_ADD, null, "")
         }

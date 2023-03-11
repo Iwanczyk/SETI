@@ -29,6 +29,11 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
 
     private val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+    private val timeFormatter = if(Locale.getDefault().displayLanguage == "English") {
+        SimpleDateFormat("hh:mm a")
+    }else{
+        SimpleDateFormat("HH:mm")
+    }
     private lateinit var displayStartData: LocalDate
     private lateinit var displayEndData: LocalDate
     private var mEngagementsList: ArrayList<NonRecurringEngagement> = ArrayList()
@@ -139,8 +144,8 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
 
         adapter.setOnLongClickListener(object: NonRecurringEngagementsAdapter.OnLongClickListener{
             override fun onLongClick(position: Int, model: NonRecurringEngagement) {
-                speakOut(model.name, dateFormatter.format(model.startDate), model.startTime,
-                    dateFormatter.format(model.endDate), model.endTime)
+                speakOut(model.name, dateFormatter.format(model.startDate), timeFormatter.format(model.startTime),
+                    dateFormatter.format(model.endDate), timeFormatter.format(model.endTime))
             }
 
         })

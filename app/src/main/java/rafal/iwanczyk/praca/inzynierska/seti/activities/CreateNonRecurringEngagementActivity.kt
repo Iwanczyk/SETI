@@ -23,27 +23,22 @@ import kotlin.collections.ArrayList
 class CreateNonRecurringEngagementActivity : BaseActivity() {
 
     val c = Calendar.getInstance()
-    var startDate: String = ""
-    var startTime: String = ""
-    var endDate: String = ""
-    var endTime: String = ""
-    //var startDateTime: Date? = null
-    //var endDateTime: Date? = null
-    //var formatterDateTime: SimpleDateFormat? = null
-    var formatterDateTime:DateTimeFormatter? = null
+    private var startDate: String = ""
+    private var startTime: String = ""
+    private var endDate: String = ""
+    private var endTime: String = ""
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+    private val timeFormatter = if(Locale.getDefault().displayLanguage == "English") {
+        SimpleDateFormat("hh:mm a")
+    }else{
+        SimpleDateFormat("HH:mm")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_non_recurring_engagement)
 
         setupActionBar()
-
-        formatterDateTime = if(Locale.getDefault().displayLanguage == "English")
-        {
-            DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a")
-        }else{
-            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-        }
 
         //START DATE TIME BUTTON
         btn_pick_start_date_time_non_recurring_engagement.setOnClickListener {
@@ -197,13 +192,6 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
     }
 
     private fun validateDateTime(): Boolean{
-        val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-        val timeFormatter = if(Locale.getDefault().displayLanguage == "English") {
-            SimpleDateFormat("hh:mm a")
-        }else{
-            SimpleDateFormat("HH:mm")
-        }
-
         return if(dateFormatter.parse(startDate)!!.before(dateFormatter.parse(endDate))){
             true
         }else if(startDate == endDate){
@@ -220,7 +208,6 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
     }
 
     private fun addNonRecurringEngagement(){
-        val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
         val assignedToInitialList: ArrayList<String> = ArrayList()
         assignedToInitialList.add(getCurrentUserID())
 
@@ -231,9 +218,9 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
         assignedToInitialList,
         et_title_of_non_recurring_engagement.text.toString(),
         dateFormatter.parse(startDate)!!.time,
-        startTime,
+        timeFormatter.parse(startTime)!!.time,
         dateFormatter.parse(endDate)!!.time,
-        endTime,
+            timeFormatter.parse(endTime)!!.time,
         et_note_of_non_recurring_engagement.text.toString(),
         )
 

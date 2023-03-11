@@ -23,6 +23,8 @@ class StatisticsActivity : BaseActivity() {
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
     private var monthStartDate: String = ""
     private var monthEndDate: String = ""
+    private var longestEngagementTitle: String = ""
+    private var shortestEngagementTitle: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,9 +109,13 @@ class StatisticsActivity : BaseActivity() {
     private fun showNonRecurringEngagementsStats(){
         tv_stats_non_recurring_engagements.text = "" +
                 "${resources.getString(R.string.number_of_owned_non_recurring_engagements)}\n" +
-                "${nonRecurringEngagementsStatsList[0]}\n" +
+                "${nonRecurringEngagementsStatsList[0]}\n\n" +
                 "${resources.getString(R.string.number_of_assigned_non_recurring_engagements)}\n" +
-                "${nonRecurringEngagementsStatsList[1]}"
+                "${nonRecurringEngagementsStatsList[1]}\n\n" +
+                "${resources.getString(R.string.longest_non_recurring_engagement_title)}\n" +
+                "$longestEngagementTitle\n\n" +
+                "${resources.getString(R.string.shortest_non_recurring_engagement_title)}\n" +
+                "$shortestEngagementTitle"
     }
 
     private fun showStudyStats(){
@@ -179,8 +185,10 @@ class StatisticsActivity : BaseActivity() {
 
     }
 
-    fun getNonRecurringEngagementStats(list: ArrayList<Int>){
+    fun getNonRecurringEngagementStats(list: ArrayList<Int>, longestEngagement: String, shortestEngagement: String){
         nonRecurringEngagementsStatsList = list
+        longestEngagementTitle = longestEngagement
+        shortestEngagementTitle = shortestEngagement
         showNonRecurringEngagementsStats()
     }
 

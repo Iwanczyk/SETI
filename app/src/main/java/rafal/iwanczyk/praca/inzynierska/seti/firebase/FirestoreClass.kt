@@ -12,7 +12,6 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.*
 import kotlinx.coroutines.tasks.await
 import rafal.iwanczyk.praca.inzynierska.seti.activities.*
-import rafal.iwanczyk.praca.inzynierska.seti.adapters.NonRecurringEngagementsAdapter
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
@@ -372,6 +371,9 @@ class FirestoreClass {
         var assignedEngagementNumber: Int = 0
         var ownedEngagementsNumber: Int = 0
         val nonRecurringStatsList: ArrayList<Int> = ArrayList()
+        var tmpNonRecurringEngagement: NonRecurringEngagement? = null
+        var longestEngagementTitle: String = ""
+        var shortestEngagementTitle: String = ""
 
         mFireStore.collection(Constants.NON_RECURRING_ENGAGEMENTS)
             .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserID())
@@ -390,11 +392,50 @@ class FirestoreClass {
                         }else{
                             assignedEngagementNumber++
                         }
+
+                        if(tmpNonRecurringEngagement != null){
+                            longestEngagementTitle = if((nonRecurringEngagement.endDate - nonRecurringEngagement.startDate)
+                                > (tmpNonRecurringEngagement!!.endDate - tmpNonRecurringEngagement!!.startDate)) {
+                                nonRecurringEngagement.name
+                            }else if((nonRecurringEngagement.endDate - nonRecurringEngagement.startDate)
+                                == (tmpNonRecurringEngagement!!.endDate - tmpNonRecurringEngagement!!.startDate)
+                                && (nonRecurringEngagement.endTime - nonRecurringEngagement.startTime)
+                                > (tmpNonRecurringEngagement!!.endTime - tmpNonRecurringEngagement!!.startTime)){
+                                nonRecurringEngagement.name
+                            }else if((nonRecurringEngagement.endDate - nonRecurringEngagement.startDate)
+                                == (tmpNonRecurringEngagement!!.endDate - tmpNonRecurringEngagement!!.startDate)
+                                && (nonRecurringEngagement.endTime - nonRecurringEngagement.startTime)
+                                == (tmpNonRecurringEngagement!!.endTime - tmpNonRecurringEngagement!!.startTime)){
+                                nonRecurringEngagement.name + ", " + tmpNonRecurringEngagement!!.name
+                            }
+                            else{
+                                tmpNonRecurringEngagement!!.name
+                            }
+
+                            shortestEngagementTitle = if((nonRecurringEngagement.endDate - nonRecurringEngagement.startDate)
+                                < (tmpNonRecurringEngagement!!.endDate - tmpNonRecurringEngagement!!.startDate)) {
+                                nonRecurringEngagement.name
+                            }else if((nonRecurringEngagement.endDate - nonRecurringEngagement.startDate)
+                                == (tmpNonRecurringEngagement!!.endDate - tmpNonRecurringEngagement!!.startDate)
+                                && (nonRecurringEngagement.endTime - nonRecurringEngagement.startTime)
+                                < (tmpNonRecurringEngagement!!.endTime - tmpNonRecurringEngagement!!.startTime)){
+                                nonRecurringEngagement.name
+                            }else if((nonRecurringEngagement.endDate - nonRecurringEngagement.startDate)
+                                == (tmpNonRecurringEngagement!!.endDate - tmpNonRecurringEngagement!!.startDate)
+                                && (nonRecurringEngagement.endTime - nonRecurringEngagement.startTime)
+                                == (tmpNonRecurringEngagement!!.endTime - tmpNonRecurringEngagement!!.startTime)){
+                                nonRecurringEngagement.name + ", " + tmpNonRecurringEngagement!!.name
+                            }
+                            else{
+                                tmpNonRecurringEngagement!!.name
+                            }
+                        }
                     }
+                    tmpNonRecurringEngagement = nonRecurringEngagement
                 }
                 nonRecurringStatsList.add(0, ownedEngagementsNumber)
                 nonRecurringStatsList.add(1, assignedEngagementNumber)
-                activity.getNonRecurringEngagementStats(nonRecurringStatsList)
+                activity.getNonRecurringEngagementStats(nonRecurringStatsList, longestEngagementTitle, shortestEngagementTitle)
             }
     }
 /*

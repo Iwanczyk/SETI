@@ -108,6 +108,8 @@
     <string name="sunday">Sunday</string>
     <string name="number_of_owned_non_recurring_engagements">Number of non-recurring engagements:</string>
     <string name="number_of_assigned_non_recurring_engagements">Number of non-recurring engagements assigned to:</string>
+    <string name="longest_non_recurring_engagement_title">The longest engagement in this month:</string>
+    <string name="shortest_non_recurring_engagement_title">The shortest engagement in this month:</string>
 
     <string-array name="Languages">
         <item>English</item>

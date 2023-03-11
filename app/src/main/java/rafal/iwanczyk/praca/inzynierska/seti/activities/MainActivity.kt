@@ -28,6 +28,7 @@ import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -50,6 +51,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     lateinit var mWeekPlan: WeekEngagements
     private var mSelectedDay: String = ""
     private lateinit var mSharedPreferences: SharedPreferences
+    val timeFormatter = if(Locale.getDefault().displayLanguage == "English") {
+        SimpleDateFormat("hh:mm a")
+    }else{
+        SimpleDateFormat("HH:mm")
+    }
 
     private var tts: TextToSpeech? = null
 
@@ -268,51 +274,37 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         rv_regular_engagements_list.layoutManager = LinearLayoutManager(this)
         rv_regular_engagements_list.setHasFixedSize(true)
 
-        val formatter = if(Locale.getDefault().displayLanguage == "English"){
-            DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
-        }else{
-            DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
-        }
-
-        try{
             when(currentDay){
                 Calendar.MONDAY -> {
-                    mWeekPlan.mondayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.mondayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, weekPlan.mondayEngagements)
                 }
                 Calendar.TUESDAY -> {
-                    mWeekPlan.tuesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.tuesdayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, weekPlan.tuesdayEngagements)
                 }
                 Calendar.WEDNESDAY -> {
-                    mWeekPlan.wednesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.wednesdayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, weekPlan.wednesdayEngagements)
                 }
                 Calendar.THURSDAY -> {
-                    mWeekPlan.thursdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.thursdayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, weekPlan.thursdayEngagements)
                 }
                 Calendar.FRIDAY -> {
-                    mWeekPlan.fridayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.fridayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, weekPlan.fridayEngagements)
                 }
                 Calendar.SATURDAY -> {
-                    mWeekPlan.saturdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.saturdayEngagements.sortBy { timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, weekPlan.saturdayEngagements)
                 }
                 Calendar.SUNDAY -> {
-                    mWeekPlan.sundayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.sundayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, weekPlan.sundayEngagements)
                 }
             }
-            }catch (e :Exception){
-                if(Locale.getDefault().displayLanguage == "English"){
-                    convertFrom24hFormatTo12h()
-                }else{
-                    convertFrom12hFormatTo24h()
-                }
-            populateWeekPlanToUI(mWeekPlan)
-            }
+
         rv_regular_engagements_list.adapter = adapter
 
         adapter.setOnClickListener(object: RegularEngagementsAdapter.OnClickListener{
@@ -328,7 +320,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         adapter.setOnLongClickListener(object: RegularEngagementsAdapter.OnLongClickListener{
             override fun onLongClick(position: Int, model: RegularEngagement) {
-                speakOut(model.name, model.startTime, model.endTime, model.lectureRoom, model.buildingNumber)
+                speakOut(model.name, timeFormatter.format(model.startTime), timeFormatter.format(model.endTime), model.lectureRoom, model.buildingNumber)
             }
 
         })
@@ -338,51 +330,35 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         rv_regular_engagements_list.layoutManager = LinearLayoutManager(this)
         rv_regular_engagements_list.setHasFixedSize(true)
 
-        val formatter = if(Locale.getDefault().displayLanguage == "English"){
-            DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
-        }else{
-            DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
-        }
-
-        try{
             when(checkedId){
                 R.id.rb_monday -> {
-                    mWeekPlan.mondayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.mondayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.mondayEngagements)}
                 R.id.rb_tuesday -> {
-                    mWeekPlan.tuesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.tuesdayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.tuesdayEngagements)
                 }
                 R.id.rb_wednesday -> {
-                    mWeekPlan.wednesdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.wednesdayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.wednesdayEngagements)
                 }
                 R.id.rb_thursday -> {
-                    mWeekPlan.thursdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.thursdayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.thursdayEngagements)
                 }
                 R.id.rb_friday -> {
-                    mWeekPlan.fridayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.fridayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.fridayEngagements)
                 }
                 R.id.rb_saturday -> {
-                    mWeekPlan.saturdayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.saturdayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.saturdayEngagements)
                 }
                 R.id.rb_sunday -> {
-                    mWeekPlan.sundayEngagements.sortBy { LocalTime.parse(it.startTime, formatter) }
+                    mWeekPlan.sundayEngagements.sortBy {timeFormatter.format(it.startTime)}
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.sundayEngagements)
                 }
             }
-        }catch (e: Exception){
-            if(Locale.getDefault().displayLanguage == "English"){
-                convertFrom24hFormatTo12h()
-            }else{
-                convertFrom12hFormatTo24h()
-            }
-            changeDaysOfWeekAdapter(checkedId)
-        }
-
 
         rv_regular_engagements_list.adapter = adapter
 
@@ -399,147 +375,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         
         adapter.setOnLongClickListener(object: RegularEngagementsAdapter.OnLongClickListener{
             override fun onLongClick(position: Int, model: RegularEngagement) {
-                speakOut(model.name, model.startTime, model.endTime, model.lectureRoom, model.buildingNumber)
+                speakOut(model.name, timeFormatter.format(model.startTime), timeFormatter.format(model.endTime), model.lectureRoom, model.buildingNumber)
             }
 
         })
     }
 
-    private fun convertFrom12hFormatTo24h(){
-        val formatter12H = DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
-        val formatter24H = DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
-        for (i in mWeekPlan.mondayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekPlan.tuesdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekPlan.wednesdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekPlan.thursdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekPlan.fridayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekPlan.saturdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekPlan.sundayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        //populateWeekPlanToUI(mWeekPlan)
-    }
-
-    private fun convertFrom24hFormatTo12h(){
-        val formatter12H = DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
-        val formatter24H = DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
-        for (i in mWeekPlan.mondayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekPlan.tuesdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekPlan.wednesdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekPlan.thursdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekPlan.fridayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekPlan.saturdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekPlan.sundayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        //populateWeekPlanToUI(mWeekPlan)
-    }
-
     private fun speakOut(nameOfEngagement: String, startTime: String, endTime: String,
                          lectureRoomNumber: String, buildingNumber: String){
         tts?.speak(nameOfEngagement, TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("Start time: $startTime", TextToSpeech.QUEUE_ADD, null, "")
-        tts?.speak("End time: $endTime", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.start_time)}: $startTime", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.end_time)}: $endTime", TextToSpeech.QUEUE_ADD, null, "")
 
         if(lectureRoomNumber.isNotBlank()){
-            tts?.speak("Lecture room: $lectureRoomNumber", TextToSpeech.QUEUE_ADD, null, "")
+            tts?.speak("${resources.getString(R.string.lecture_room_number)}: $lectureRoomNumber", TextToSpeech.QUEUE_ADD, null, "")
         }
         if(buildingNumber.isNotBlank()){
-            tts?.speak("Lecture building number: $buildingNumber", TextToSpeech.QUEUE_ADD, null, "")
+            tts?.speak("${resources.getString(R.string.lecture_building_number)}: $buildingNumber", TextToSpeech.QUEUE_ADD, null, "")
         }
     }
 

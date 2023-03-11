@@ -92,6 +92,8 @@
     <string name="number_of_assigned_non_recurring_engagements">Number of non-recurring engagements assigned to:</string>
     <string name="longest_non_recurring_engagement_title">The longest engagement in this month:</string>
     <string name="shortest_non_recurring_engagement_title">The shortest engagement in this month:</string>
+    <string name="lecture_room_number">Lecture room number</string>
+    <string name="lecture_building_number">Lecture building number</string>
 
 
     <string-array name="StatsType">

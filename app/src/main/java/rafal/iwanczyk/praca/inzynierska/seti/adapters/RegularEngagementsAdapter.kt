@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_regular_engagement.view.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.models.RegularEngagement
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class RegularEngagementsAdapter (private val context: Context,
                                       private var list: ArrayList<RegularEngagement>)
@@ -17,7 +20,11 @@ open class RegularEngagementsAdapter (private val context: Context,
 
     private var onClickListener: OnClickListener? = null
     private var onLongClickListener: OnLongClickListener? = null
-
+    private val timeFormatter = if(Locale.getDefault().displayLanguage == "English") {
+        SimpleDateFormat("hh:mm a")
+    }else{
+        SimpleDateFormat("HH:mm")
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -30,8 +37,8 @@ open class RegularEngagementsAdapter (private val context: Context,
         val model = list[position]
 
         if(holder is MyViewHolder){
-            holder.itemView.tv_item_regular_engagement_start_time.text = model.startTime
-            holder.itemView.tv_item_regular_engagement_end_time.text = model.endTime
+            holder.itemView.tv_item_regular_engagement_start_time.text = timeFormatter.format(model.startTime)
+            holder.itemView.tv_item_regular_engagement_end_time.text = timeFormatter.format(model.endTime)
             holder.itemView.tv_item_regular_engagement_title.text = model.name
             if(model.typeOfEngagement == context.getString(R.string.study)){
                 holder.itemView.tv_item_regular_engagement_room.text = model.lectureRoom

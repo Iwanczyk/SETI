@@ -7,8 +7,8 @@ data class RegularEngagement (
     val assignedTo: String = "",
     var name: String = "",
     var day: String = "",
-    var startTime: String = "",
-    var endTime: String = "",
+    var startTime: Long = 0,
+    var endTime: Long = 0,
     var note: String = "",
     var typeOfEngagement: String = "",
     var lectureRoom: String = "",
@@ -18,8 +18,8 @@ data class RegularEngagement (
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readLong(),
+        parcel.readLong(),
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -30,8 +30,8 @@ data class RegularEngagement (
         parcel.writeString(assignedTo)
         parcel.writeString(name)
         parcel.writeString(day)
-        parcel.writeString(startTime)
-        parcel.writeString(endTime)
+        parcel.writeLong(startTime)
+        parcel.writeLong(endTime)
         parcel.writeString(note)
         parcel.writeString(typeOfEngagement)
         parcel.writeString(lectureRoom)

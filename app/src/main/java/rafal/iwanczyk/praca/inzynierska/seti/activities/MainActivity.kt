@@ -17,8 +17,10 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.android.synthetic.main.activity_create_regual_engagement.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.item_regular_engagement.view.*
 import kotlinx.android.synthetic.main.main_content.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
@@ -324,6 +326,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
 
         })
+
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
     }
 
     private fun changeDaysOfWeekAdapter(checkedId: Int) {
@@ -359,7 +363,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     adapter = RegularEngagementsAdapter(this, mWeekPlan.sundayEngagements)
                 }
             }
-
         rv_regular_engagements_list.adapter = adapter
 
         adapter.setOnClickListener(object: RegularEngagementsAdapter.OnClickListener{
@@ -379,6 +382,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
 
         })
+
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
     }
 
     private fun speakOut(nameOfEngagement: String, startTime: String, endTime: String,
@@ -420,6 +425,31 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if(tts != null){
             tts?.stop()
             tts?.shutdown()
+        }
+    }
+
+    fun displayHighContrastTheme(){
+        rv_regular_engagements_list.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        ll_main_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        rb_monday.setTextColor(resources.getColor(R.color.text_color_disability))
+        rb_tuesday.setTextColor(resources.getColor(R.color.text_color_disability))
+        rb_wednesday.setTextColor(resources.getColor(R.color.text_color_disability))
+        rb_thursday.setTextColor(resources.getColor(R.color.text_color_disability))
+        rb_friday.setTextColor(resources.getColor(R.color.text_color_disability))
+        rb_saturday.setTextColor(resources.getColor(R.color.text_color_disability))
+        rb_sunday.setTextColor(resources.getColor(R.color.text_color_disability))
+
+        val itemCount = rv_regular_engagements_list.adapter!!.itemCount
+
+        for (i in 0 until itemCount){
+            val holder = rv_regular_engagements_list.findViewHolderForAdapterPosition(i)
+            if (holder != null){
+                holder.itemView.tv_item_regular_engagement_start_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_regular_engagement_title.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_regular_engagement_room.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_regular_engagement_building.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_regular_engagement_end_time.setTextColor(resources.getColor(R.color.text_color_disability))
+            }
         }
     }
 }

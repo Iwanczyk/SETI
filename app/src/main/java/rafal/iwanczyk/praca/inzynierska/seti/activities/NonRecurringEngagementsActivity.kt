@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.*
 import kotlinx.android.synthetic.main.activity_non_recurring_engagements.*
+import kotlinx.android.synthetic.main.item_member.view.*
+import kotlinx.android.synthetic.main.item_non_recurring_engagement.view.*
 import kotlinx.android.synthetic.main.main_content.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.adapters.NonRecurringEngagementsAdapter
@@ -149,6 +152,8 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
             }
 
         })
+
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
     }
 
     private fun speakOut(nameOfEngagement: String, startDate: String, startTime: String,
@@ -165,6 +170,27 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
         if(tts != null){
             tts?.stop()
             tts?.shutdown()
+        }
+    }
+
+    fun displayHighContrastTheme(){
+        ll_non_recurring_engagements_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        cv_non_recurring_engagements_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        btn_previous_date_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_date_display_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_next_date_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+
+        val itemCount = rv_non_recurring_engagements_list.adapter!!.itemCount
+
+        for (i in 0 until itemCount){
+            val holder = rv_non_recurring_engagements_list.findViewHolderForAdapterPosition(i)
+            if (holder != null){
+                holder.itemView.tv_item_non_recurring_engagement_start_date.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_non_recurring_engagement_start_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_non_recurring_engagement_title.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_non_recurring_engagement_end_date.setTextColor(resources.getColor(R.color.text_color_disability))
+                holder.itemView.tv_item_non_recurring_engagement_end_time.setTextColor(resources.getColor(R.color.text_color_disability))
+            }
         }
     }
 }

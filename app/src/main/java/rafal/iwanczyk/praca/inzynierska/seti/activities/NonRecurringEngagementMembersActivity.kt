@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_regular_engagement_details.*
 import kotlinx.android.synthetic.main.dialog_search_member.*
 import kotlinx.android.synthetic.main.item_member.*
 import kotlinx.android.synthetic.main.item_member.view.*
+import kotlinx.android.synthetic.main.item_regular_engagement.view.*
+import kotlinx.android.synthetic.main.main_content.*
 import org.json.JSONObject
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.adapters.MemberListItemsAdapter
@@ -169,6 +171,8 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
                 speakOut(model.login, model.name, model.email)
             }
         })
+
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
     }
 
     private fun deleteMemberDialogDisplay(position: Int, selectedUser: User){
@@ -321,6 +325,26 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
             hideProgressDialog()
         }
 
+    }
+
+    fun displayHighContrastTheme(){
+        ll_non_recurring_engagement_members.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        tv_created_by.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_owner_login.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_owner_name.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_owner_email.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_engagement_members.setTextColor(resources.getColor(R.color.text_color_disability))
+
+        val itemCount = rv_members_list.adapter!!.itemCount
+
+        for (i in 0 until itemCount){
+            val holder = rv_members_list.findViewHolderForAdapterPosition(i)
+            if (holder != null){
+                holder.itemView.tv_member_login
+                holder.itemView.tv_member_name
+                holder.itemView.tv_member_email
+            }
+        }
     }
 
 }

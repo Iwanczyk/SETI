@@ -17,6 +17,7 @@ object Constants {
     const val IMAGE: String = "image"
     const val BACKGROUND: String = "background"
     const val EMAIL: String = "email"
+    const val HIGH_CONTRAST: String = "xDD"
 
     const val WEEKPLAN: String = "weekPlan"
     const val REGULAR_ENGAGEMENT = "regularEngagement"

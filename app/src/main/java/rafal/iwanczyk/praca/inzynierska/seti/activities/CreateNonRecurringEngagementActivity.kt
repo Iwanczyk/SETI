@@ -165,6 +165,8 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
                 addNonRecurringEngagement()
             }
         }
+
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
     }
 
     private fun setupActionBar(){
@@ -237,5 +239,17 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
     fun addNonRecurringEngagementFailed(){
         hideProgressDialog()
         showErrorSnackBar("Creating non-recurring engagement failed!")
+    }
+
+    fun displayHighContrastTheme(){
+        ll_create_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        cv_create_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        et_title_of_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_start_date_create_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_pick_start_date_time_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_end_date_create_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_pick_end_date_time_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_title_of_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_add_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
     }
 }

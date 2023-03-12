@@ -8,6 +8,7 @@
     >
 
     <LinearLayout
+        android:id="@+id/ll_non_recurring_engagements_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -66,6 +67,7 @@
     </LinearLayout>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_non_recurring_engagements_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"

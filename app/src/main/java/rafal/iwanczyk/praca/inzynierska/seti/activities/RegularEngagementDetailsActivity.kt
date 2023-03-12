@@ -183,6 +183,8 @@ class RegularEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnInitList
             et_lecture_room_number_of_engagement_details.visibility = View.GONE
             et_building_number_of_engagement_details.visibility = View.GONE
         }
+
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -503,5 +505,21 @@ class RegularEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnInitList
             tts?.stop()
             tts?.shutdown()
         }
+    }
+
+    fun displayHighContrastTheme(){
+        ll_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        cv_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        et_title_of_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_day_of_week_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_start_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_start_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_end_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_end_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_note_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_type_of_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_lecture_room_number_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_building_number_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_save_edited_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
     }
 }

@@ -7,6 +7,7 @@
     android:layout_width="match_parent">
 
     <LinearLayout
+        android:id="@+id/ll_my_profile_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -31,6 +32,7 @@
             android:backgroundTint="@color/secondary_color">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cv_my_profile_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/my_profile_screen_content_marginStartEnd"
@@ -84,6 +86,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
+                        android:id="@+id/tv_background_info_my_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/my_profile_et_email_marginTop"
@@ -101,6 +104,12 @@
                         android:layout_marginTop="12dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/nav_header_main_background" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/sw_select_high_contrast_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="High contrast mode"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

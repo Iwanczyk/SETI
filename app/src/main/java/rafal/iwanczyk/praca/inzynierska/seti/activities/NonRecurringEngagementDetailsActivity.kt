@@ -234,6 +234,7 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
         et_note_of_non_recurring_engagement_details.setText(mNonRecurringEngagement.note)
 
         FirestoreClass().getAssignedMembersListDetails(this, mNonRecurringEngagement.assignedTo)
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
     }
 
     fun setupMembersToUI(membersList: ArrayList<User>){
@@ -402,6 +403,20 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
     fun nonRecurringEngagementChangeFailed(){
         hideProgressDialog()
         showErrorSnackBar("Creating non-recurring engagement failed!")
+    }
+
+    fun displayHighContrastTheme(){
+        ll_non_recurring_engagement_details2.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        ll_non_recurring_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        cv_non_recurring_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        et_title_of_non_recurring_engagement_edit.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_start_date_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_end_date_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_pick_start_date_time_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_pick_end_date_time_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_assigned_members_logins.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_note_of_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_save_edited_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
     }
 
 }

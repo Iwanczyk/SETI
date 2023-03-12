@@ -317,6 +317,12 @@ class MyProfileActivity : BaseActivity() {
                 anyChangesMade = true
             }
 
+            //High contrast mode
+            if(sw_select_high_contrast_mode.isChecked){
+                userHashMap[Constants.HIGH_CONTRAST] = 1
+                anyChangesMade = true
+            }
+
             //TODO ADD EMAIL EDIT AND PASSWORD EDIT + RESETTING PASSWORD IN SING IN ACTIVITY
 
             if(anyChangesMade) {
@@ -391,6 +397,10 @@ class MyProfileActivity : BaseActivity() {
             .placeholder(R.drawable.nav_header_main_background)
             .into(my_profile_iv_user_background_image)
 
+        sw_select_high_contrast_mode.isChecked = user.xDD == 1
+
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
+
         hideProgressDialog()
     }
 
@@ -414,5 +424,22 @@ class MyProfileActivity : BaseActivity() {
         }
 
         dialog.show()
+    }
+
+    fun displayHighContrastTheme(){
+        cv_my_profile_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        ll_my_profile_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        my_profile_et_login.setTextColor(resources.getColor(R.color.text_color_disability))
+        my_profile_et_name.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_background_info_my_profile.setTextColor(resources.getColor(R.color.text_color_disability))
+        sw_select_high_contrast_mode.setTextColor(resources.getColor(R.color.text_color_disability))
+        sw_my_profile_edit_email.setTextColor(resources.getColor(R.color.text_color_disability))
+        sw_my_profile_edit_password.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_my_profile_edit_sensitive_data.setTextColor(resources.getColor(R.color.text_color_disability))
+        my_profile_et_email.setTextColor(resources.getColor(R.color.text_color_disability))
+        my_profile_et_new_password.setTextColor(resources.getColor(R.color.text_color_disability))
+        my_profile_et_repeat_new_password.setTextColor(resources.getColor(R.color.text_color_disability))
+        my_profile_et_current_password.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_update.setTextColor(resources.getColor(R.color.text_color_disability))
     }
 }

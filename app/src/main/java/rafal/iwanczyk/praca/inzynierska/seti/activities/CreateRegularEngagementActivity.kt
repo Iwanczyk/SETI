@@ -45,6 +45,8 @@ class CreateRegularEngagementActivity : BaseActivity() {
             mWeekEngagements = intent.getParcelableExtra<WeekEngagements>(Constants.WEEKPLAN)!!
         }
 
+        FirestoreClass().checkIfUserNeedsHighContrastTheme(this)
+
         //Day list dropdown
         val dayList: MutableList<String> = resources.getStringArray(R.array.DaysOfWeek).toMutableList()
         val dayListAdapter: ArrayAdapter<String> = ArrayAdapter(this,
@@ -128,33 +130,6 @@ class CreateRegularEngagementActivity : BaseActivity() {
             if(validateFields() && validateTime() && validateCollisionWithOtherRegularEngagements()){
                 addRegularEngagement()
             }
-            /*
-            if(Locale.getDefault().displayLanguage == "English"){
-                try{
-                    if(validateAddingNewRegularEngagementEN()){
-                        addRegularEngagement()
-                    }
-                }catch (e: Exception){
-                    convertFrom24hFormatTo12h()
-                }finally {
-                    if(validateAddingNewRegularEngagementEN()){
-                        addRegularEngagement()
-                    }
-                }
-            }else{
-                try{
-                if(validateAddingNewRegularEngagement()){
-                    addRegularEngagement()
-                }
-                }catch (e: Exception){
-                    convertFrom12hFormatTo24h()
-                }finally {
-                    if(validateAddingNewRegularEngagement()){
-                        addRegularEngagement()
-                    }
-                }
-            }
-            */
         }
     }
 
@@ -226,90 +201,6 @@ class CreateRegularEngagementActivity : BaseActivity() {
         return true
     }
 
-    /*
-    private fun validateAddingNewRegularEngagement(): Boolean{
-        return validateRequiredFields()
-                && validateStartEndTimeFilledProperly()
-                && validateStartEndTimeWithOtherEngagements()
-    }
-
-    private fun validateAddingNewRegularEngagementEN(): Boolean{
-        return validateRequiredFieldsEN()
-                && validateStartEndTimeFilledProperlyEN()
-                && validateStartEndTimeWithOtherEngagementsEN()
-    }
-
-    private fun validateRequiredFields(): Boolean{
-        return if(et_title_of_engagement.text!!.isNotBlank()
-            && btn_pick_start_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))
-            && btn_pick_end_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9]"))){
-            true
-        }else{
-            showErrorSnackBar(resources.getString(R.string.fill_required_fields_alert))
-            false
-        }
-    }
-
-    private fun validateStartEndTimeFilledProperly(): Boolean{
-        val startTimeArray = btn_pick_start_time_regular_engagement.text.toString().split(":")
-        val endTimeArray = btn_pick_end_time_regular_engagement.text.toString().split(":")
-
-        if(btn_pick_start_time_regular_engagement.text.toString()
-            == btn_pick_end_time_regular_engagement.text.toString()){
-            showErrorSnackBar(resources.getString(R.string.start_time_and_end_time_the_same_alert))
-            return false
-        }else if(btn_pick_end_time_regular_engagement.text.toString() == "00:00"){
-            showErrorSnackBar(resources.getString(R.string.engagement_ends_at_midnight_alert))
-            return false
-        }else if((btn_pick_start_time_regular_engagement.text.toString() == "00:00"
-                    && btn_pick_end_time_regular_engagement.text.toString() != "00:00")){
-            return true
-        }else if((endTimeArray[0].toInt() * 60 + endTimeArray[1].toInt()) -
-            (startTimeArray[0].toInt() * 60 + startTimeArray[1].toInt()) <= 0){
-            showErrorSnackBar(resources.getString(R.string.end_time_before_start_time_alert))
-            return false
-        }else{
-            return true
-        }
-    }
-
-    private fun validateStartEndTimeWithOtherEngagements(): Boolean{
-
-        when(mSelectedDay){
-            "Monday" -> tmpListRegularEngagements = mWeekEngagements.mondayEngagements
-            "Tuesday" -> tmpListRegularEngagements = mWeekEngagements.tuesdayEngagements
-            "Wednesday" -> tmpListRegularEngagements = mWeekEngagements.wednesdayEngagements
-            "Thursday" -> tmpListRegularEngagements = mWeekEngagements.thursdayEngagements
-            "Friday" -> tmpListRegularEngagements = mWeekEngagements.fridayEngagements
-            "Saturday" -> tmpListRegularEngagements = mWeekEngagements.saturdayEngagements
-            "Sunday" -> tmpListRegularEngagements = mWeekEngagements.sundayEngagements
-        }
-
-        val startTimeArray = btn_pick_start_time_regular_engagement.text.toString().split(":")
-        val endTimeArray = btn_pick_end_time_regular_engagement.text.toString().split(":")
-
-        val startTime = startTimeArray[0].toInt() * 60 + startTimeArray[1].toInt()
-        val endTime = endTimeArray[0].toInt() * 60 + endTimeArray[1].toInt()
-
-        for(i in tmpListRegularEngagements){
-            if(startTime >= (i.startTime.substring(0,2).toInt() * 60 + i.startTime.substring(3,5).toInt())
-                && startTime <= (i.endTime.substring(0,2).toInt() * 60 + i.endTime.substring(3,5).toInt())){
-                showErrorSnackBar("Start time interrupts regular engagement ${i.name}!")
-                return false
-            }else if(endTime >= (i.startTime.substring(0,2).toInt() * 60 + i.startTime.substring(3,5).toInt())
-                && endTime <= (i.endTime.substring(0,2).toInt() * 60 + i.endTime.substring(3,5).toInt())){
-                showErrorSnackBar("End time interrupts regular engagement ${i.name}")
-                return false
-            }else if(i.startTime.substring(0,2).toInt() * 60 + i.startTime.substring(3,5).toInt() in startTime..endTime){
-                showErrorSnackBar("Regular engagement duration interrupts with ${i.name}")
-                return false
-            }
-        }
-
-        return true
-    }
-
-     */
 
     private fun addRegularEngagement(){
         val newRegularEngagement = RegularEngagement(
@@ -336,163 +227,6 @@ class CreateRegularEngagementActivity : BaseActivity() {
 
         FirestoreClass().createUpdateRegularEngagement(this, mWeekEngagements)
     }
-    /*
-
-    private fun validateRequiredFieldsEN(): Boolean{
-        return if(et_title_of_engagement.text!!.isNotBlank()
-            && btn_pick_start_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9] [A-Z][A-Z]"))
-            && btn_pick_end_time_regular_engagement.text.contains(Regex("[0-9][0-9]:[0-9][0-9] [A-Z][A-Z]"))){
-            true
-        }else{
-            showErrorSnackBar(resources.getString(R.string.fill_required_fields_alert))
-            false
-        }
-    }
-
-    private fun validateStartEndTimeFilledProperlyEN(): Boolean{
-
-        var additionalStartAMPMvalue = 0
-        var additionalEndAMPMvalue = 0
-
-        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) != "12"
-            && btn_pick_start_time_regular_engagement.text.toString().substring(6) == "PM"){
-            additionalStartAMPMvalue = 12
-        }
-
-        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) != "12"
-            && btn_pick_end_time_regular_engagement.text.toString().substring(6) == "PM"){
-            additionalEndAMPMvalue = 12
-        }
-
-        var startTime = 0
-
-        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) == "12"
-            &&  btn_pick_start_time_regular_engagement.text.toString().substring(6) == "AM"){
-            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
-        }else{
-            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
-            btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt() +
-            additionalStartAMPMvalue*60
-
-        }
-
-        var endTime = 0
-
-        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) == "12"
-            &&  btn_pick_end_time_regular_engagement.text.toString().substring(6) == "AM"){
-            endTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
-        }else{
-            endTime = btn_pick_end_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
-            btn_pick_end_time_regular_engagement.text.toString().substring(3,5).toInt() + additionalEndAMPMvalue*60
-        }
-
-        return if(startTime == endTime){
-            showErrorSnackBar(resources.getString(R.string.start_time_and_end_time_the_same_alert))
-            false
-        }else if(endTime - startTime <= 0){
-            showErrorSnackBar(resources.getString(R.string.end_time_before_start_time_alert))
-            false
-        }else{
-            true
-        }
-    }
-
-    private fun validateStartEndTimeWithOtherEngagementsEN(): Boolean{
-
-        var additionalStartAMPMvalue = 0
-        var additionalEndAMPMvalue = 0
-
-        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) != "12"
-            && btn_pick_start_time_regular_engagement.text.toString().substring(6) == "PM"){
-            additionalStartAMPMvalue = 12
-        }
-
-        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) != "12"
-            && btn_pick_end_time_regular_engagement.text.toString().substring(6) == "PM"){
-            additionalEndAMPMvalue = 12
-        }
-
-        var startTime = 0
-
-        if(btn_pick_start_time_regular_engagement.text.toString().substring(0,2) == "12"
-            &&  btn_pick_start_time_regular_engagement.text.toString().substring(6) == "AM"){
-            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
-        }else{
-            startTime = btn_pick_start_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
-                    btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt() +
-                    additionalStartAMPMvalue*60
-        }
-
-        var endTime = 0
-
-        if(btn_pick_end_time_regular_engagement.text.toString().substring(0,2) == "12"
-            &&  btn_pick_end_time_regular_engagement.text.toString().substring(6) == "AM"){
-            endTime = btn_pick_start_time_regular_engagement.text.toString().substring(3,5).toInt()
-        }else{
-           endTime = btn_pick_end_time_regular_engagement.text.toString().substring(0,2).toInt()*60 +
-                    btn_pick_end_time_regular_engagement.text.toString().substring(3,5).toInt() + additionalEndAMPMvalue*60
-        }
-
-        when(mSelectedDay){
-            resources.getStringArray(R.array.DaysOfWeek)[0] -> tmpListRegularEngagements = mWeekEngagements.mondayEngagements
-            resources.getStringArray(R.array.DaysOfWeek)[1] -> tmpListRegularEngagements = mWeekEngagements.tuesdayEngagements
-            resources.getStringArray(R.array.DaysOfWeek)[2] -> tmpListRegularEngagements = mWeekEngagements.wednesdayEngagements
-            resources.getStringArray(R.array.DaysOfWeek)[3] -> tmpListRegularEngagements = mWeekEngagements.thursdayEngagements
-            resources.getStringArray(R.array.DaysOfWeek)[4] -> tmpListRegularEngagements = mWeekEngagements.fridayEngagements
-            resources.getStringArray(R.array.DaysOfWeek)[5] -> tmpListRegularEngagements = mWeekEngagements.saturdayEngagements
-            resources.getStringArray(R.array.DaysOfWeek)[6] -> tmpListRegularEngagements = mWeekEngagements.sundayEngagements
-        }
-
-        for(i in tmpListRegularEngagements){
-            var tmpAdditionalAMPMstartTime = 0
-            var tmpAdditionalAMPMendTime = 0
-            var tmpStartTime = 0
-            var tmpEndTime = 0
-
-            if(i.startTime.substring(0,2) != "12"
-                && i.startTime.substring(6) == "PM"){
-                tmpAdditionalAMPMstartTime = 12
-            }
-
-            if(i.endTime.substring(0,2) != "12"
-                && i.endTime.substring(6) == "PM"){
-                tmpAdditionalAMPMendTime = 12
-            }
-
-            if(i.startTime.substring(0,2) == "12"
-                &&  i.startTime.substring(6) == "AM"){
-                tmpStartTime = i.startTime.substring(3,5).toInt()
-            }else{
-                tmpStartTime = i.startTime.substring(0,2).toInt()*60 +
-                        i.startTime.substring(3,5).toInt() +
-                        tmpAdditionalAMPMstartTime*60
-            }
-
-            if(i.endTime.substring(0,2) == "12"
-                &&  i.endTime.substring(6) == "AM"){
-                tmpEndTime = i.endTime.substring(3,5).toInt()
-            }else{
-                tmpEndTime = i.endTime.substring(0,2).toInt()*60 +
-                        i.endTime.substring(3,5).toInt() + tmpAdditionalAMPMendTime*60
-            }
-
-            if(startTime >= (tmpStartTime)
-                && startTime <= (tmpEndTime)){
-                showErrorSnackBar(resources.getString(R.string.start_time_interrupts_another_engagement_alert)+i.name)
-                return false
-            }else if(endTime >= (tmpStartTime)
-                && endTime <= (tmpEndTime)){
-                showErrorSnackBar(resources.getString(R.string.end_time_interrupts_another_engagement_alert)+i.name)
-                return false
-            }else if(tmpStartTime in startTime..endTime){
-                showErrorSnackBar(resources.getString(R.string.regular_engagement_duration_interrupts_alert)+i.name)
-                return false
-            }
-        }
-        return true
-    }
-
-     */
 
     fun regularEngagementCreatedSuccessfully(){
         hideProgressDialog()
@@ -500,128 +234,18 @@ class CreateRegularEngagementActivity : BaseActivity() {
         finish()
     }
 
-    /*
-    private fun convertFrom12hFormatTo24h(){
-        val formatter12H = DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
-        val formatter24H = DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
-        for (i in mWeekEngagements.mondayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.tuesdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.wednesdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.thursdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.fridayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.saturdayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.sundayEngagements){
-            if(i.startTime.length == 8){
-                i.startTime = formatter24H.format(LocalTime.parse(i.startTime, formatter12H)).toString()
-            }
-            if(i.endTime.length == 8){
-                i.endTime = formatter24H.format(LocalTime.parse(i.endTime, formatter12H)).toString()
-            }
-        }
+    fun displayHighContrastTheme(){
+        ll_create_regular_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        cv_create_regular_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+        et_title_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_start_time_create_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_pick_start_time_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        tv_end_time_create_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_pick_end_time_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_note_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_lecture_room_number_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        et_building_number_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        btn_add_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
     }
 
-    private fun convertFrom24hFormatTo12h(){
-        val formatter12H = DateTimeFormatterBuilder().appendPattern("hh:mm a").toFormatter(Locale.ENGLISH)
-        val formatter24H = DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter()
-        for (i in mWeekEngagements.mondayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.tuesdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.wednesdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.thursdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.fridayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.saturdayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-        for (i in mWeekEngagements.sundayEngagements){
-            if(i.startTime.length == 5){
-                i.startTime = formatter12H.format(LocalTime.parse(i.startTime, formatter24H)).toString()
-            }
-            if(i.endTime.length == 5){
-                i.endTime = formatter12H.format(LocalTime.parse(i.endTime, formatter24H)).toString()
-            }
-        }
-    }
-
-     */
 }

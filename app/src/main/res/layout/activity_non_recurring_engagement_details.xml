@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_non_recurring_engagement_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.NonRecurringEngagementDetailsActivity"
@@ -21,6 +22,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_non_recurring_engagement_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
@@ -29,6 +31,7 @@
         android:backgroundTint="@color/background_color">
 
         <LinearLayout
+            android:id="@+id/ll_non_recurring_engagement_details2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -67,6 +70,7 @@
                     android:layout_weight="1">
 
                     <TextView
+                        android:id="@+id/tv_start_date_non_recurring_engagement_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/start_date"
@@ -93,6 +97,7 @@
                     android:layout_weight="1">
 
                     <TextView
+                        android:id="@+id/tv_end_date_non_recurring_engagement_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/end_date"

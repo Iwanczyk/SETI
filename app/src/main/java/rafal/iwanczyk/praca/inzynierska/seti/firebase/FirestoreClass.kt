@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.
 import kotlinx.coroutines.tasks.await
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.activities.*
+import rafal.iwanczyk.praca.inzynierska.seti.adapters.RegularEngagementsAdapter
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
@@ -64,7 +65,7 @@ class FirestoreClass {
             .addOnSuccessListener {
                 document ->
                 val loggedInUser = document.toObject(User::class.java)!!
-
+                println("USER DATA: ${loggedInUser.xDD}")
                 when(activity){
                     is SignInActivity -> {
                         activity.signInSuccess(loggedInUser)
@@ -584,6 +585,46 @@ class FirestoreClass {
 
             }.addOnFailureListener {
                 Log.e(activity.javaClass.simpleName,"Error while downloading statistics!")
+            }
+    }
+
+    fun checkIfUserNeedsHighContrastTheme(activity: Activity){
+        mFireStore.collection(Constants.USERS).document(getCurrentUserID())
+            .get()
+            .addOnSuccessListener {
+                    document ->
+                val loggedInUser = document.toObject(User::class.java)!!
+                if(loggedInUser.xDD == 1) {
+                    when (activity) {
+                        is MainActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                        is MyProfileActivity -> {
+                           activity.displayHighContrastTheme()
+                        }
+                        is CreateRegularEngagementActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                        is CreateNonRecurringEngagementActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                        is RegularEngagementDetailsActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                        is NonRecurringEngagementDetailsActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                        is NonRecurringEngagementMembersActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                        is NonRecurringEngagementsActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                        is StatisticsActivity -> {
+                            activity.displayHighContrastTheme()
+                        }
+                    }
+                }
             }
     }
 

@@ -105,6 +105,9 @@
     <string name="lecture_room_create_regular_engagement">Lecture room</string>
     <string name="lecture_buildingcreate_regular_engagement">Lecture building</string>
     <string name="add_new_engagement">ADD NEW ENGAGEMENT</string>
+    <string name="type_of_the_engagement">Type of the engagement</string>
+    <string name="save_edited_engagement">SAVE EDITED ENGAGEMENT</string>
+    <string name="cancel_capital">CANCEL</string>
 
 
     <string-array name="StatsType">

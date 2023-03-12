@@ -23,9 +23,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
         android:elevation="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        android:background="@color/background_color">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,15 +36,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_title_of_regular_engagement_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/title"
+                    android:hint="@string/regular_engagement_title"
                     android:inputType="text"
                     android:textSize="@dimen/et_text_size"
                     tools:text="Activity 1"
@@ -55,8 +54,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:gravity="center">
 
                 <androidx.appcompat.widget.AppCompatEditText
@@ -66,7 +64,7 @@
                     android:hint="@string/day_of_week"
                     android:inputType="text"
                     android:textSize="@dimen/et_text_size"
-                    tools:text="Activity 1"
+                    tools:text="Monday"
                     android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,18 +84,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_gravity="start">
+                    android:gravity="center"
+                    android:layout_weight="1">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start time"
+                        android:text="@string/start_time"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         />
@@ -108,6 +108,7 @@
                         android:layout_height="wrap_content"
                         android:enabled="false"
                         android:clickable="false"
+                        android:drawableLeft="@drawable/ic_clock"
                         tools:text="Pick Time"
                         />
                 </LinearLayout>
@@ -116,12 +117,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="end">
+                    android:gravity="center"
+                    android:layout_weight="1">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="End time"
+                        android:text="@string/end_time"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         />
@@ -132,6 +134,7 @@
                         android:layout_height="wrap_content"
                         android:enabled="false"
                         android:clickable="false"
+                        android:drawableLeft="@drawable/ic_clock"
                         tools:text="Pick Time"
                         />
                 </LinearLayout>
@@ -140,24 +143,24 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="12dp">
+                android:layout_height="wrap_content"
+                android:minHeight="86dp">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_note_of_engagement_details"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Additional note"
-                    android:inputType="text"
+                    android:hint="@string/additional_note_optional"
+                    android:inputType="textMultiLine"
                     android:textSize="@dimen/et_text_size"
-                    tools:text="Activity 1"
-                    android:enabled="false"/>
+                    tools:text="Some additional note"
+                    android:enabled="false"
+                    android:minHeight="86dp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
                 android:gravity="center">
 
@@ -165,10 +168,10 @@
                     android:id="@+id/et_type_of_regular_engagement_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/day_of_week"
+                    android:hint="@string/type_of_the_engagement"
                     android:inputType="text"
                     android:textSize="@dimen/et_text_size"
-                    tools:text="Activity 1"
+                    tools:text="Study"
                     android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -195,36 +198,38 @@
                 android:gravity="center">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:padding="16dp">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_lecture_room_number_of_engagement_details"
-                        android:layout_width="160dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Lecture room number"
+                        android:hint="@string/lecture_room_create_regular_engagement"
                         android:inputType="text"
                         android:textSize="@dimen/et_text_size"
-                        tools:text="Activity 1"
+                        tools:text="166"
                         android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:padding="16dp">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_building_number_of_engagement_details"
-                        android:layout_width="160dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Building number"
+                        android:hint="@string/lecture_buildingcreate_regular_engagement"
                         android:inputType="text"
                         android:textSize="@dimen/et_text_size"
-                        tools:text="Activity 1"
+                        tools:text="B21"
                         android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -235,9 +240,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:text="@string/save_edited_engagement"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/ic_save"
+                android:backgroundTint="@color/add_new_engagement"
+                android:minHeight="68dp"
+                android:minWidth="64dp"
                 android:visibility="gone"
                 tools:visibility="visible"
-                android:text="SAVE ENGAGEMENT"
                 />
 
             <TextView
@@ -245,7 +255,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="CANCEL"
+                android:text="@string/cancel_capital"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#c40000"

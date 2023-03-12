@@ -13,7 +13,13 @@
     <color name="accent_color">#532791</color>
     <color name="primary_text_color">#040000</color>
     <color name="secondary_text_color">#1C070A</color>
+    <color name="title_color">#0d0436</color>
+    <!-- <color name="title_color">#06021a</color> -->
 
     <color name="snackbar_error_color">#F72400</color>
     <color name="divider_color">#E7E5E5</color>
+
+    <color name="background_disability_color">#000000</color>
+    <color name="background_secondary_disability_color">#393939</color>
+    <color name="text_color_disability">#fff000</color>
 </resources>

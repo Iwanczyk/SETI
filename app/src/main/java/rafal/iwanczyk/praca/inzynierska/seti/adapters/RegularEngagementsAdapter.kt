@@ -41,13 +41,11 @@ open class RegularEngagementsAdapter (private val context: Context,
             holder.itemView.tv_item_regular_engagement_end_time.text = timeFormatter.format(model.endTime)
             holder.itemView.tv_item_regular_engagement_title.text = model.name
             if(model.typeOfEngagement == context.getString(R.string.study)){
+                holder.itemView.ll_lecture_room_and_building_number.visibility = View.VISIBLE
                 holder.itemView.tv_item_regular_engagement_room.text = model.lectureRoom
                 holder.itemView.tv_item_regular_engagement_building.text = model.buildingNumber
-                holder.itemView.room_building_separator.visibility = View.VISIBLE
             }else{
-                holder.itemView.tv_item_regular_engagement_room.visibility = View.GONE
-                holder.itemView.tv_item_regular_engagement_building.visibility = View.GONE
-                holder.itemView.room_building_separator.visibility = View.GONE
+                holder.itemView.ll_lecture_room_and_building_number.visibility = View.GONE
             }
 
             holder.itemView.setOnClickListener {

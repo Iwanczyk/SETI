@@ -19,5 +19,8 @@
 
     <color name="divider_color">#444444</color>
 
+    <color name="background_disability_color">#000000</color>
+    <color name="background_secondary_disability_color">#393939</color>
+    <color name="text_color_disability">#fff000</color>
 
 </resources>

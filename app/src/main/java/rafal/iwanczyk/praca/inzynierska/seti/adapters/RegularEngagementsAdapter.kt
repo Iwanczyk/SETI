@@ -58,7 +58,7 @@ open class RegularEngagementsAdapter (private val context: Context,
                    onLongClickListener!!.onLongClick(position, model)
                    holder.itemView.setBackgroundColor(Color.parseColor("#4cfc22"))
                    Handler().postDelayed({
-                       holder.itemView.setBackgroundColor(context.resources.getColor(R.color.accent_color))
+                       holder.itemView.setBackgroundColor(context.resources.getColor(R.color.background_color))
                                          }, 3500)
                    return@setOnLongClickListener true
                }

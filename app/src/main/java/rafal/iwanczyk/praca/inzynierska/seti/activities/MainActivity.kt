@@ -107,6 +107,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onResume() {
         FirestoreClass().getWeekPlan(this)
+        daysOfWeekButtonsSetup()
         super.onResume()
 
     }

@@ -97,6 +97,14 @@
     <string name="man_week">Work week</string>
     <string name="weekend">Weekend</string>
     <string name="full_week">Full week</string>
+    <string name="regular_engagement_title">Regular engagement title</string>
+    <string name="start_time_create_regular_engagement">Start time</string>
+    <string name="end_time_create_regular_engagement">End time</string>
+    <string name="pick_time">Pick Time</string>
+    <string name="additional_note_optional">Additional note (Optional)</string>
+    <string name="lecture_room_create_regular_engagement">Lecture room</string>
+    <string name="lecture_buildingcreate_regular_engagement">Lecture building</string>
+    <string name="add_new_engagement">ADD NEW ENGAGEMENT</string>
 
 
     <string-array name="StatsType">

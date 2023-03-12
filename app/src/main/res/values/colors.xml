@@ -16,6 +16,7 @@
     <color name="background_color">#FFFFFF</color>
     <color name="title_color">#0d0436</color>
     <!-- <color name="title_color">#06021a</color> -->
+    <color name="add_new_engagement">#03dac5</color>
 
     <color name="snackbar_error_color">#F72400</color>
     <color name="divider_color">#E7E5E5</color>

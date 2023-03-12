@@ -112,6 +112,9 @@
     <string name="shortest_non_recurring_engagement_title">The shortest engagement in this month:</string>
     <string name="lecture_room_number">Lecture room number</string>
     <string name="lecture_building_number">Lecture building number</string>
+    <string name="man_week">Work week</string>
+    <string name="weekend">Weekend</string>
+    <string name="full_week">Full week</string>
 
     <string-array name="Languages">
         <item>English</item>

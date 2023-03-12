@@ -1,6 +1,7 @@
 package rafal.iwanczyk.praca.inzynierska.seti.firebase
 
 import android.app.Activity
+import android.content.res.Resources
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -9,13 +10,19 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import io.grpc.Context
 import kotlinx.android.synthetic.main.activity_non_recurring_engagement_members.*
 import kotlinx.coroutines.tasks.await
+import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.activities.*
 import rafal.iwanczyk.praca.inzynierska.seti.models.NonRecurringEngagement
 import rafal.iwanczyk.praca.inzynierska.seti.models.User
 import rafal.iwanczyk.praca.inzynierska.seti.models.WeekEngagements
 import rafal.iwanczyk.praca.inzynierska.seti.utils.Constants
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class FirestoreClass {
 
@@ -438,15 +445,25 @@ class FirestoreClass {
                 activity.getNonRecurringEngagementStats(nonRecurringStatsList, longestEngagementTitle, shortestEngagementTitle)
             }
     }
-/*
+
+
     fun getRegularEngagementStats(activity: StatisticsActivity){
         var tmpStudyTime: Long = 0
         var tmpWorkTime: Long = 0
         var tmpOtherTime: Long = 0
-        val studyTimeList: ArrayList<Long> = ArrayList()
-        val workTimeList: ArrayList<Long> = ArrayList()
-        val otherTimeList: ArrayList<Long> = ArrayList()
-
+        val studyTimeList: ArrayList<Long> = ArrayList(7)
+        val workTimeList: ArrayList<Long> = ArrayList(7)
+        val otherTimeList: ArrayList<Long> = ArrayList(7)
+        val studyString: String = if(Locale.getDefault().displayLanguage == "English") {
+           "Study"
+        }else{
+            "Studia"
+        }
+        val workString: String = if(Locale.getDefault().displayLanguage == "English") {
+            "Work"
+        }else{
+            "Praca"
+        }
 
         mFireStore.collection(Constants.WEEKPLAN).whereEqualTo(Constants.ASSIGNED_TO,getCurrentUserID())
             .get().addOnSuccessListener {
@@ -455,127 +472,119 @@ class FirestoreClass {
                 weekPlan.documentID = document.documents[0].id
 
                 for(i in weekPlan.mondayEngagements){
-                    if(i.typeOfEngagement == "Study") {
+                    if(i.typeOfEngagement == studyString) {
                         tmpStudyTime += (i.endTime - i.startTime)
-                    }else if(i.typeOfEngagement == "Work"){
+                    }else if(i.typeOfEngagement == workString){
                         tmpWorkTime += (i.endTime - i.startTime)
                     }else{
                         tmpOtherTime += (i.endTime - i.startTime)
                     }
-                    studyTimeList[0] = tmpStudyTime
-                    workTimeList[0] = tmpWorkTime
-                    otherTimeList[0] = tmpOtherTime
                 }
+                studyTimeList.add(0, tmpStudyTime)
+                workTimeList.add(0, tmpWorkTime)
+                otherTimeList.add(0, tmpOtherTime)
+                tmpStudyTime = 0
+                tmpWorkTime = 0
+                tmpOtherTime = 0
 
                 for(i in weekPlan.tuesdayEngagements){
-                    tmpStudyTime = 0
-                    tmpWorkTime = 0
-                    tmpOtherTime = 0
-
-                    if(i.typeOfEngagement == "Study") {
+                    if(i.typeOfEngagement == studyString) {
                         tmpStudyTime += (i.endTime - i.startTime)
-                    }else if(i.typeOfEngagement == "Work"){
+                    }else if(i.typeOfEngagement == workString){
                         tmpWorkTime += (i.endTime - i.startTime)
                     }else{
                         tmpOtherTime += (i.endTime - i.startTime)
                     }
-                    studyTimeList[1] = tmpStudyTime
-                    workTimeList[1] = tmpWorkTime
-                    otherTimeList[1] = tmpOtherTime
                 }
+                studyTimeList.add(1, tmpStudyTime)
+                workTimeList.add(1, tmpWorkTime)
+                otherTimeList.add(1, tmpOtherTime)
+                tmpStudyTime = 0
+                tmpWorkTime = 0
+                tmpOtherTime = 0
 
                 for(i in weekPlan.wednesdayEngagements){
-                    tmpStudyTime = 0
-                    tmpWorkTime = 0
-                    tmpOtherTime = 0
-
-                    if(i.typeOfEngagement == "Study") {
+                    if(i.typeOfEngagement == studyString) {
                         tmpStudyTime += (i.endTime - i.startTime)
-                    }else if(i.typeOfEngagement == "Work"){
+                    }else if(i.typeOfEngagement == workString){
                         tmpWorkTime += (i.endTime - i.startTime)
                     }else{
                         tmpOtherTime += (i.endTime - i.startTime)
                     }
-                    studyTimeList[2] = tmpStudyTime
-                    workTimeList[2] = tmpWorkTime
-                    otherTimeList[2] = tmpOtherTime
                 }
+                studyTimeList.add(2, tmpStudyTime)
+                workTimeList.add(2, tmpWorkTime)
+                otherTimeList.add(2, tmpOtherTime)
+                tmpStudyTime = 0
+                tmpWorkTime = 0
+                tmpOtherTime = 0
 
                 for(i in weekPlan.thursdayEngagements){
-                    tmpStudyTime = 0
-                    tmpWorkTime = 0
-                    tmpOtherTime = 0
-
-                    if(i.typeOfEngagement == "Study") {
+                    if(i.typeOfEngagement == studyString) {
                         tmpStudyTime += (i.endTime - i.startTime)
-                    }else if(i.typeOfEngagement == "Work"){
+                    }else if(i.typeOfEngagement == workString){
                         tmpWorkTime += (i.endTime - i.startTime)
                     }else{
                         tmpOtherTime += (i.endTime - i.startTime)
                     }
-                    studyTimeList[3] = tmpStudyTime
-                    workTimeList[3] = tmpWorkTime
-                    otherTimeList[3] = tmpOtherTime
                 }
+                studyTimeList.add(3, tmpStudyTime)
+                workTimeList.add(3, tmpWorkTime)
+                otherTimeList.add(3, tmpOtherTime)
+                tmpStudyTime = 0
+                tmpWorkTime = 0
+                tmpOtherTime = 0
 
                 for(i in weekPlan.fridayEngagements){
-                    tmpStudyTime = 0
-                    tmpWorkTime = 0
-                    tmpOtherTime = 0
-
-                    if(i.typeOfEngagement == "Study") {
+                    if(i.typeOfEngagement == studyString) {
                         tmpStudyTime += (i.endTime - i.startTime)
-                    }else if(i.typeOfEngagement == "Work"){
+                    }else if(i.typeOfEngagement == workString){
                         tmpWorkTime += (i.endTime - i.startTime)
                     }else{
                         tmpOtherTime += (i.endTime - i.startTime)
                     }
-                    studyTimeList[4] = tmpStudyTime
-                    workTimeList[4] = tmpWorkTime
-                    otherTimeList[4] = tmpOtherTime
                 }
+                studyTimeList.add(4, tmpStudyTime)
+                workTimeList.add(4, tmpWorkTime)
+                otherTimeList.add(4, tmpOtherTime)
+                tmpStudyTime = 0
+                tmpWorkTime = 0
+                tmpOtherTime = 0
 
                 for(i in weekPlan.saturdayEngagements){
-                    tmpStudyTime = 0
-                    tmpWorkTime = 0
-                    tmpOtherTime = 0
-
-                    if(i.typeOfEngagement == "Study") {
+                    if(i.typeOfEngagement == studyString) {
                         tmpStudyTime += (i.endTime - i.startTime)
-                    }else if(i.typeOfEngagement == "Work"){
+                    }else if(i.typeOfEngagement == workString){
                         tmpWorkTime += (i.endTime - i.startTime)
                     }else{
                         tmpOtherTime += (i.endTime - i.startTime)
                     }
-                    studyTimeList[5] = tmpStudyTime
-                    workTimeList[5] = tmpWorkTime
-                    otherTimeList[5] = tmpOtherTime
                 }
+                studyTimeList.add(5, tmpStudyTime)
+                workTimeList.add(5, tmpWorkTime)
+                otherTimeList.add(5, tmpOtherTime)
+                tmpStudyTime = 0
+                tmpWorkTime = 0
+                tmpOtherTime = 0
 
                 for(i in weekPlan.sundayEngagements){
-                    tmpStudyTime = 0
-                    tmpWorkTime = 0
-                    tmpOtherTime = 0
-
-                    if(i.typeOfEngagement == "Study") {
+                    if(i.typeOfEngagement == studyString) {
                         tmpStudyTime += (i.endTime - i.startTime)
-                    }else if(i.typeOfEngagement == "Work"){
+                    }else if(i.typeOfEngagement == workString){
                         tmpWorkTime += (i.endTime - i.startTime)
                     }else{
                         tmpOtherTime += (i.endTime - i.startTime)
                     }
-                    studyTimeList[6] = tmpStudyTime
-                    workTimeList[6] = tmpWorkTime
-                    otherTimeList[6] = tmpOtherTime
                 }
+                studyTimeList.add(6, tmpStudyTime)
+                workTimeList.add(6, tmpWorkTime)
+                otherTimeList.add(6, tmpOtherTime)
 
-                //activity.getRecurringEngagementsStats()
+                activity.getRecurringEngagementStats(studyTimeList, workTimeList, otherTimeList)
 
             }.addOnFailureListener {
                 Log.e(activity.javaClass.simpleName,"Error while downloading statistics!")
             }
     }
-
-     */
 
 }

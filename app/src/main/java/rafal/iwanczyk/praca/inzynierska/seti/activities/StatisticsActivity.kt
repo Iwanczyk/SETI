@@ -7,7 +7,10 @@ import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_statistics.*
 import rafal.iwanczyk.praca.inzynierska.seti.R
 import rafal.iwanczyk.praca.inzynierska.seti.firebase.FirestoreClass
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -32,8 +35,8 @@ class StatisticsActivity : BaseActivity() {
 
         setupActionBar()
 
-        getUserStatistics()
-        setupDisplayDate()
+        getRegularEngagementStatistics() //Get regular engagements statistics
+        setupDisplayDate() //Setup current month displayed & get non-recurring engagement statistics
 
         val statTypeList: MutableList<String> = resources.getStringArray(R.array.StatsType).toMutableList()
         val statTypeListAdapter: ArrayAdapter<String> = ArrayAdapter(this,
@@ -46,7 +49,6 @@ class StatisticsActivity : BaseActivity() {
                     ll_stats_regular_engagements.visibility = View.VISIBLE
                     ll_stats_non_recurring_engagements.visibility = View.GONE
 
-                    rb_stats_regular_engagements_study.isChecked = true
                 }else{
                     ll_stats_non_recurring_engagements.visibility = View.VISIBLE
                     ll_stats_regular_engagements.visibility = View.GONE
@@ -62,16 +64,13 @@ class StatisticsActivity : BaseActivity() {
         rg_stats_regular_engagements.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
                 R.id.rb_stats_regular_engagements_study -> {
-                    showToast(this, "STUDY")
-                    //showStudyStats()
+                    showStudyStats()
                 }
                 R.id.rb_stats_regular_engagements_work -> {
-                    showToast(this,"WORK")
-                    //showWorkStats()
+                    showWorkStats()
                 }
                 R.id.rb_stats_regular_engagements_other -> {
-                    showToast(this, "OTHER")
-                    //showOtherRegularEngagementsStats()
+                    showOtherRegularEngagementsStats()
                 }
             }
         }
@@ -119,54 +118,81 @@ class StatisticsActivity : BaseActivity() {
     }
 
     private fun showStudyStats(){
+        val manWeekTime = studyTimeList[0]+studyTimeList[1]+studyTimeList[2]+studyTimeList[3]+studyTimeList[4]
+        val weekendTime = studyTimeList[5]+studyTimeList[6]
+
         tv_stats_regular_engagements.text = "${resources.getString(R.string.monday)}:\n" +
-                "${studyTimeList[0]/60000} min (${studyTimeList[0]/360000} h)" +
+                "${studyTimeList[0]/60000/60} h ${(studyTimeList[0]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.tuesday)}:\n" +
-                "${studyTimeList[1]/60000} min (${studyTimeList[1]/360000} h)" +
+                "${studyTimeList[1]/60000/60} h ${(studyTimeList[1]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.wednesday)}:\n" +
-                "${studyTimeList[2]/60000} min (${studyTimeList[2]/360000} h)" +
+                "${studyTimeList[2]/60000/60} h ${(studyTimeList[2]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.thursday)}:\n" +
-                "${studyTimeList[3]/60000} min (${studyTimeList[3]/360000} h)" +
+                "${studyTimeList[3]/60000/60} h ${(studyTimeList[3]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.friday)}:\n" +
-                "${studyTimeList[4]/60000} min (${studyTimeList[4]/360000} h)" +
+                "${studyTimeList[4]/60000/60} h ${(studyTimeList[4]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.saturday)}:\n" +
-                "${studyTimeList[5]/60000} min (${studyTimeList[5]/360000} h)" +
+                "${studyTimeList[5]/60000/60} h ${(studyTimeList[5]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.sunday)}:\n" +
-                "${studyTimeList[6]/60000} min (${studyTimeList[6]/360000} h)"
+                "${studyTimeList[6]/60000/60} h ${(studyTimeList[6]/60000)%60} min\n\n" +
+                "${resources.getString(R.string.man_week)}:\n" +
+                "${manWeekTime/60000/60} h ${(manWeekTime/60000)%60} min\n\n" +
+                "${resources.getString(R.string.weekend)}:\n" +
+                "${weekendTime/60000/60} h ${(weekendTime/60000)%60} min\n\n" +
+                "${resources.getString(R.string.full_week)}:\n" +
+                "${(manWeekTime + weekendTime)/60000/60} h ${((manWeekTime + weekendTime)/60000)%60} min"
     }
 
     private fun showWorkStats(){
+        val manWeekTime = workTimeList[0]+workTimeList[1]+workTimeList[2]+workTimeList[3]+workTimeList[4]
+        val weekendTime = workTimeList[5]+workTimeList[6]
+
         tv_stats_regular_engagements.text = "${resources.getString(R.string.monday)}:\n" +
-                "${workTimeList[0]/60000} min (${workTimeList[0]/360000} h)" +
+                "${workTimeList[0]/60000/60} h ${(workTimeList[0]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.tuesday)}:\n" +
-                "${workTimeList[1]/60000} min (${workTimeList[1]/360000} h)" +
+                "${workTimeList[1]/60000/60} h ${(workTimeList[1]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.wednesday)}:\n" +
-                "${workTimeList[2]/60000} min (${workTimeList[2]/360000} h)" +
+                "${workTimeList[2]/60000/60} h ${(workTimeList[2]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.thursday)}:\n" +
-                "${workTimeList[3]/60000} min (${workTimeList[3]/360000} h)" +
+                "${workTimeList[3]/60000/60} h ${(workTimeList[3]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.friday)}:\n" +
-                "${workTimeList[4]/60000} min (${workTimeList[4]/360000} h)" +
+                "${workTimeList[4]/60000/60} h ${(workTimeList[4]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.saturday)}:\n" +
-                "${workTimeList[5]/60000} min (${workTimeList[5]/360000} h)" +
+                "${workTimeList[5]/60000/60} h ${(workTimeList[5]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.sunday)}:\n" +
-                "${workTimeList[6]/60000} min (${workTimeList[6]/360000} h)"
+                "${workTimeList[6]/60000/60} h ${(workTimeList[6]/60000)%60} min\n\n" +
+                "${resources.getString(R.string.man_week)}:\n" +
+                "${manWeekTime/60000/60} h ${(manWeekTime/60000)%60} min\n\n" +
+                "${resources.getString(R.string.weekend)}:\n" +
+                "${weekendTime/60000/60} h ${(weekendTime/60000)%60} min\n\n" +
+                "${resources.getString(R.string.full_week)}:\n" +
+                "${(manWeekTime + weekendTime)/60000/60} h ${((manWeekTime + weekendTime)/60000)%60} min"
     }
 
     private fun showOtherRegularEngagementsStats(){
+        val manWeekTime = otherRecurringEngagementsTimeList[0]+otherRecurringEngagementsTimeList[1]+otherRecurringEngagementsTimeList[2]+otherRecurringEngagementsTimeList[3]+otherRecurringEngagementsTimeList[4]
+        val weekendTime = otherRecurringEngagementsTimeList[5]+otherRecurringEngagementsTimeList[6]
+
         tv_stats_regular_engagements.text = "${resources.getString(R.string.monday)}:\n" +
-                "${workTimeList[0]/60000} min (${otherRecurringEngagementsTimeList[0]/360000} h)" +
+                "${otherRecurringEngagementsTimeList[0]/60000/60} h ${(otherRecurringEngagementsTimeList[0]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.tuesday)}:\n" +
-                "${otherRecurringEngagementsTimeList[1]/60000} min (${otherRecurringEngagementsTimeList[1]/360000} h)" +
+                "${otherRecurringEngagementsTimeList[1]/60000/60} h ${(otherRecurringEngagementsTimeList[1]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.wednesday)}:\n" +
-                "${otherRecurringEngagementsTimeList[2]/60000} min (${otherRecurringEngagementsTimeList[2]/360000} h)" +
+                "${otherRecurringEngagementsTimeList[2]/60000/60} h ${(otherRecurringEngagementsTimeList[2]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.thursday)}:\n" +
-                "${otherRecurringEngagementsTimeList[3]/60000} min (${otherRecurringEngagementsTimeList[3]/360000} h)" +
+                "${otherRecurringEngagementsTimeList[3]/60000/60} h ${(otherRecurringEngagementsTimeList[3]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.friday)}:\n" +
-                "${otherRecurringEngagementsTimeList[4]/60000} min (${otherRecurringEngagementsTimeList[4]/360000} h)" +
+                "${otherRecurringEngagementsTimeList[4]/60000/60} h ${(otherRecurringEngagementsTimeList[4]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.saturday)}:\n" +
-                "${otherRecurringEngagementsTimeList[5]/60000} min (${otherRecurringEngagementsTimeList[5]/360000} h)" +
+                "${otherRecurringEngagementsTimeList[5]/60000/60} h ${(otherRecurringEngagementsTimeList[5]/60000)%60} min\n\n" +
                 "${resources.getString(R.string.sunday)}:\n" +
-                "${otherRecurringEngagementsTimeList[6]/60000} min (${otherRecurringEngagementsTimeList[6]/360000} h)"
+                "${otherRecurringEngagementsTimeList[6]/60000/60} h ${(otherRecurringEngagementsTimeList[6]/60000)%60} min\n\n" +
+                "${resources.getString(R.string.man_week)}:\n" +
+                "${manWeekTime/60000/60} h ${(manWeekTime/60000)%60} min\n\n" +
+                "${resources.getString(R.string.weekend)}:\n" +
+                "${weekendTime/60000/60} h ${(weekendTime/60000)%60} min\n\n" +
+                "${resources.getString(R.string.full_week)}:\n" +
+                "${(manWeekTime + weekendTime)/60000/60} h ${((manWeekTime + weekendTime)/60000)%60} min"
     }
 
     private fun setupActionBar(){
@@ -181,8 +207,8 @@ class StatisticsActivity : BaseActivity() {
         toolbar_statistics.setNavigationOnClickListener { onBackPressed() }
     }
 
-    private fun getUserStatistics(){
-
+    private fun getRegularEngagementStatistics(){
+        FirestoreClass().getRegularEngagementStats(this)
     }
 
     fun getNonRecurringEngagementStats(list: ArrayList<Int>, longestEngagement: String, shortestEngagement: String){
@@ -192,15 +218,11 @@ class StatisticsActivity : BaseActivity() {
         showNonRecurringEngagementsStats()
     }
 
-    fun getRecurringEngagementStatsStudy(list: ArrayList<Long>){
-        studyTimeList = list
+    fun getRecurringEngagementStats(studyList: ArrayList<Long>, workList: ArrayList<Long>, otherList: ArrayList<Long>)
+    {
+        studyTimeList = studyList
+        workTimeList = workList
+        otherRecurringEngagementsTimeList = otherList
     }
 
-    fun getRecurringEngagementStatsWork(list: ArrayList<Long>){
-        workTimeList = list
-    }
-
-    fun getRecurringEngagementStatsOther(list: ArrayList<Long>){
-        otherRecurringEngagementsTimeList = list
-    }
 }

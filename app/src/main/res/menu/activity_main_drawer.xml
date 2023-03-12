@@ -11,7 +11,7 @@
             android:title="@string/other_engagements"/>
 
         <item android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_non_recurring_engagements"
+            android:icon="@drawable/ic_statistics"
             android:title="@string/statistics"/>
 
         <item android:id="@+id/nav_settings"

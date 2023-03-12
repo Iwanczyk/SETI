@@ -110,6 +110,7 @@
     <string name="cancel_capital">CANCEL</string>
     <string name="non_recurring_engagement_title">Non-recurring engagement title</string>
     <string name="pick_date">PICK DATE</string>
+    <string name="assigned_members_details_screen"><u>Assigned Members</u></string>
 
 
     <string-array name="StatsType">

@@ -25,7 +25,8 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
         android:elevation="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="@color/background_color">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,18 +56,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_gravity="start">
+                    android:gravity="center"
+                    android:layout_weight="1">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start Date and Time"
+                        android:text="@string/start_date"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         />
@@ -75,7 +78,8 @@
                         android:id="@+id/btn_pick_start_date_time_non_recurring_engagement_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pick Time"
+                        android:text="@string/pick_date"
+                        android:drawableLeft="@drawable/ic_calendar"
                         android:clickable="false"
                         android:enabled="false"
                         />
@@ -85,12 +89,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="end">
+                    android:gravity="center"
+                    android:layout_weight="1">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="End Date and Time"
+                        android:text="@string/end_date"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         />
@@ -99,7 +104,8 @@
                         android:id="@+id/btn_pick_end_date_time_non_recurring_engagement_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pick Time"
+                        android:text="@string/pick_date"
+                        android:drawableLeft="@drawable/ic_calendar"
                         android:clickable="false"
                         android:enabled="false"
                         />
@@ -111,31 +117,35 @@
                 android:id="@+id/tv_assigned_members"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Assigned Members:"
+                android:text="@string/assigned_members_details_screen"
                 android:textColor="@color/accent_color"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_assigned_members_logins"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textSize="14sp"
+                tools:text="User1, User2, User3"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
+                android:minHeight="86dp"
                 android:layout_marginTop="12dp">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_note_of_non_recurring_engagement_details"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:hint="Title"
-                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/additional_note_optional"
+                    android:inputType="textMultiLine"
                     android:textSize="@dimen/et_text_size"
-                    tools:text="Activity 1"
+                    tools:text="Some additional note"
+                    android:minHeight="86dp"
                     android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,7 +154,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="SAVE EDITED ENGAGEMENT"
+                android:backgroundTint="@color/add_new_engagement"
+                android:drawableLeft="@drawable/ic_save"
+                android:text="@string/save_edited_engagement"
                 android:visibility="gone"
                 tools:visibility="visible"
                 />

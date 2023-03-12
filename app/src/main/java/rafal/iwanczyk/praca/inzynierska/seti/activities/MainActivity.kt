@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -105,8 +106,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onResume() {
-        super.onResume()
         FirestoreClass().getWeekPlan(this)
+        super.onResume()
+
     }
 
     //Text to speech language initialization
@@ -429,26 +431,34 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun displayHighContrastTheme(){
-        rv_regular_engagements_list.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        ll_main_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        rb_monday.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_tuesday.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_wednesday.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_thursday.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_friday.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_saturday.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_sunday.setTextColor(resources.getColor(R.color.text_color_disability))
 
-        val itemCount = rv_regular_engagements_list.adapter!!.itemCount
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                rv_regular_engagements_list.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                ll_main_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                rb_monday.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_tuesday.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_wednesday.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_thursday.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_friday.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_saturday.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_sunday.setTextColor(resources.getColor(R.color.text_color_disability))
 
-        for (i in 0 until itemCount){
-            val holder = rv_regular_engagements_list.findViewHolderForAdapterPosition(i)
-            if (holder != null){
-                holder.itemView.tv_item_regular_engagement_start_time.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_regular_engagement_title.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_regular_engagement_room.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_regular_engagement_building.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_regular_engagement_end_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                val itemCount = rv_regular_engagements_list.adapter!!.itemCount
+
+                for (i in 0 until itemCount){
+                    val holder = rv_regular_engagements_list.findViewHolderForAdapterPosition(i)
+                    if (holder != null){
+                        holder.itemView.tv_item_regular_engagement_start_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_regular_engagement_title.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_regular_engagement_room.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_regular_engagement_building.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_regular_engagement_end_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                    }
+                }
             }
         }
     }

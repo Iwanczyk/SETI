@@ -2,6 +2,7 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -328,23 +329,33 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
     }
 
     fun displayHighContrastTheme(){
-        ll_non_recurring_engagement_members.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        tv_created_by.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_owner_login.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_owner_name.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_owner_email.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_engagement_members.setTextColor(resources.getColor(R.color.text_color_disability))
 
-        val itemCount = rv_members_list.adapter!!.itemCount
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                ll_non_recurring_engagement_members.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                tv_created_by.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_owner_login.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_owner_name.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_owner_email.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_engagement_members.setTextColor(resources.getColor(R.color.text_color_disability))
 
-        for (i in 0 until itemCount){
-            val holder = rv_members_list.findViewHolderForAdapterPosition(i)
-            if (holder != null){
-                holder.itemView.tv_member_login
-                holder.itemView.tv_member_name
-                holder.itemView.tv_member_email
+                val itemCount = rv_members_list.adapter!!.itemCount
+
+                for (i in 0 until itemCount){
+                    val holder = rv_members_list.findViewHolderForAdapterPosition(i)
+                    if (holder != null){
+                        holder.itemView.tv_member_login
+                        holder.itemView.tv_member_name
+                        holder.itemView.tv_member_email
+                    }
+                }
             }
         }
+
+
     }
 
 }

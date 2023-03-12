@@ -2,6 +2,7 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -174,23 +175,33 @@ class NonRecurringEngagementsActivity : BaseActivity(), TextToSpeech.OnInitListe
     }
 
     fun displayHighContrastTheme(){
-        ll_non_recurring_engagements_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        cv_non_recurring_engagements_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        btn_previous_date_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_date_display_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_next_date_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
 
-        val itemCount = rv_non_recurring_engagements_list.adapter!!.itemCount
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                ll_non_recurring_engagements_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                cv_non_recurring_engagements_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                btn_previous_date_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_date_display_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_next_date_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
 
-        for (i in 0 until itemCount){
-            val holder = rv_non_recurring_engagements_list.findViewHolderForAdapterPosition(i)
-            if (holder != null){
-                holder.itemView.tv_item_non_recurring_engagement_start_date.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_non_recurring_engagement_start_time.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_non_recurring_engagement_title.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_non_recurring_engagement_end_date.setTextColor(resources.getColor(R.color.text_color_disability))
-                holder.itemView.tv_item_non_recurring_engagement_end_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                val itemCount = rv_non_recurring_engagements_list.adapter!!.itemCount
+
+                for (i in 0 until itemCount){
+                    val holder = rv_non_recurring_engagements_list.findViewHolderForAdapterPosition(i)
+                    if (holder != null){
+                        holder.itemView.tv_item_non_recurring_engagement_start_date.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_non_recurring_engagement_start_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_non_recurring_engagement_title.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_non_recurring_engagement_end_date.setTextColor(resources.getColor(R.color.text_color_disability))
+                        holder.itemView.tv_item_non_recurring_engagement_end_time.setTextColor(resources.getColor(R.color.text_color_disability))
+                    }
+                }
             }
         }
+
+
     }
 }

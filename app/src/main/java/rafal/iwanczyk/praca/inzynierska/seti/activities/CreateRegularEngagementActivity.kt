@@ -2,6 +2,7 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.app.Activity
 import android.app.TimePickerDialog
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -235,17 +236,26 @@ class CreateRegularEngagementActivity : BaseActivity() {
     }
 
     fun displayHighContrastTheme(){
-        ll_create_regular_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        cv_create_regular_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        et_title_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_start_time_create_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_pick_start_time_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_end_time_create_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_pick_end_time_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_note_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_lecture_room_number_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_building_number_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_add_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                ll_create_regular_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                cv_create_regular_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                et_title_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_start_time_create_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_pick_start_time_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_end_time_create_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_pick_end_time_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_note_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_lecture_room_number_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_building_number_of_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_add_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+            }
+        }
+
+
     }
 
 }

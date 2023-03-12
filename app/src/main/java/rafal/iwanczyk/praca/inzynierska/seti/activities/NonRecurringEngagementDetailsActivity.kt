@@ -4,8 +4,11 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -247,6 +250,17 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.non_recurring_engagement_details_options, menu)
+
+        val menuSize = menu!!.size()
+        for (i in 0 until menuSize){
+            val holder = menu.getItem(i)
+            val spannable = SpannableString(
+                menu.getItem(i).title.toString()
+            )
+            spannable.setSpan(ForegroundColorSpan(resources.getColor(R.color.primary_text_color)),0,spannable.length,0)
+            holder.title = spannable
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -406,17 +420,27 @@ class NonRecurringEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnIni
     }
 
     fun displayHighContrastTheme(){
-        ll_non_recurring_engagement_details2.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        ll_non_recurring_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        cv_non_recurring_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        et_title_of_non_recurring_engagement_edit.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_start_date_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_end_date_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_pick_start_date_time_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_pick_end_date_time_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_assigned_members_logins.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_note_of_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_save_edited_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-    }
+
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                ll_non_recurring_engagement_details2.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                ll_non_recurring_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                cv_non_recurring_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                et_title_of_non_recurring_engagement_edit.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_start_date_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_end_date_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_pick_start_date_time_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_pick_end_date_time_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_assigned_members_logins.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_note_of_non_recurring_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_save_edited_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+
+            }
+        }
+
+        }
 
 }

@@ -1,5 +1,6 @@
 package rafal.iwanczyk.praca.inzynierska.seti.activities
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -228,17 +229,27 @@ class StatisticsActivity : BaseActivity() {
     }
 
     fun displayHighContrastTheme(){
-        ll_statistics.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        ll_stats_regular_engagements.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        ll_stats_non_recurring_engagements.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        rb_stats_regular_engagements_study.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_stats_regular_engagements_work.setTextColor(resources.getColor(R.color.text_color_disability))
-        rb_stats_regular_engagements_other.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_stats_regular_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_stats_previous_month.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_stats_non_recurring_engagement_month.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_stats_next_month.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_stats_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                ll_statistics.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                ll_stats_regular_engagements.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                ll_stats_non_recurring_engagements.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                rb_stats_regular_engagements_study.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_stats_regular_engagements_work.setTextColor(resources.getColor(R.color.text_color_disability))
+                rb_stats_regular_engagements_other.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_stats_regular_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_stats_previous_month.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_stats_non_recurring_engagement_month.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_stats_next_month.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_stats_non_recurring_engagements.setTextColor(resources.getColor(R.color.text_color_disability))
+            }
+        }
+
+
     }
 
 }

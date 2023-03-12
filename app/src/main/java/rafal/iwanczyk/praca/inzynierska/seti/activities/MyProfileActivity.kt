@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -321,9 +322,10 @@ class MyProfileActivity : BaseActivity() {
             if(sw_select_high_contrast_mode.isChecked){
                 userHashMap[Constants.HIGH_CONTRAST] = 1
                 anyChangesMade = true
+            }else if(!sw_select_high_contrast_mode.isChecked){
+                userHashMap[Constants.HIGH_CONTRAST] = 0
+                anyChangesMade = true
             }
-
-            //TODO ADD EMAIL EDIT AND PASSWORD EDIT + RESETTING PASSWORD IN SING IN ACTIVITY
 
             if(anyChangesMade) {
                 FirestoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
@@ -427,19 +429,28 @@ class MyProfileActivity : BaseActivity() {
     }
 
     fun displayHighContrastTheme(){
-        cv_my_profile_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        ll_my_profile_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        my_profile_et_login.setTextColor(resources.getColor(R.color.text_color_disability))
-        my_profile_et_name.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_background_info_my_profile.setTextColor(resources.getColor(R.color.text_color_disability))
-        sw_select_high_contrast_mode.setTextColor(resources.getColor(R.color.text_color_disability))
-        sw_my_profile_edit_email.setTextColor(resources.getColor(R.color.text_color_disability))
-        sw_my_profile_edit_password.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_my_profile_edit_sensitive_data.setTextColor(resources.getColor(R.color.text_color_disability))
-        my_profile_et_email.setTextColor(resources.getColor(R.color.text_color_disability))
-        my_profile_et_new_password.setTextColor(resources.getColor(R.color.text_color_disability))
-        my_profile_et_repeat_new_password.setTextColor(resources.getColor(R.color.text_color_disability))
-        my_profile_et_current_password.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_update.setTextColor(resources.getColor(R.color.text_color_disability))
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                cv_my_profile_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                ll_my_profile_activity.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                my_profile_et_login.setTextColor(resources.getColor(R.color.text_color_disability))
+                my_profile_et_name.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_background_info_my_profile.setTextColor(resources.getColor(R.color.text_color_disability))
+                sw_select_high_contrast_mode.setTextColor(resources.getColor(R.color.text_color_disability))
+                sw_my_profile_edit_email.setTextColor(resources.getColor(R.color.text_color_disability))
+                sw_my_profile_edit_password.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_my_profile_edit_sensitive_data.setTextColor(resources.getColor(R.color.text_color_disability))
+                my_profile_et_email.setTextColor(resources.getColor(R.color.text_color_disability))
+                my_profile_et_new_password.setTextColor(resources.getColor(R.color.text_color_disability))
+                my_profile_et_repeat_new_password.setTextColor(resources.getColor(R.color.text_color_disability))
+                my_profile_et_current_password.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_update.setTextColor(resources.getColor(R.color.text_color_disability))
+            }
+        }
+
+
     }
 }

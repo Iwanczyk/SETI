@@ -3,6 +3,7 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TimePicker
@@ -242,14 +243,29 @@ class CreateNonRecurringEngagementActivity : BaseActivity() {
     }
 
     fun displayHighContrastTheme(){
-        ll_create_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        cv_create_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        et_title_of_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_start_date_create_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_pick_start_date_time_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_end_date_create_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_pick_end_date_time_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_title_of_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_add_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
-    }
+
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                ll_create_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                cv_create_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                et_title_of_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_start_date_create_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_pick_start_date_time_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_end_date_create_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_pick_end_date_time_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_title_of_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_add_non_recurring_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+
+                et_title_of_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_fields_disability_color))
+                btn_pick_start_date_time_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_button_disability_color))
+                btn_pick_end_date_time_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_button_disability_color))
+                et_note_of_non_recurring_engagement.setBackgroundColor(resources.getColor(R.color.background_fields_disability_color))
+
+            }
+        }
+
+        }
 }

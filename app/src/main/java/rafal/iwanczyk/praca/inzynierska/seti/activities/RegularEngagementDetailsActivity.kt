@@ -2,9 +2,13 @@ package rafal.iwanczyk.praca.inzynierska.seti.activities
 
 import android.app.Activity
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +16,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TimePicker
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_create_regual_engagement.*
 import kotlinx.android.synthetic.main.activity_regular_engagement_details.*
 import kotlinx.android.synthetic.main.activity_regular_engagement_details.et_building_number_of_engagement_details
@@ -189,6 +194,17 @@ class RegularEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnInitList
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.regular_engagement_details_options, menu)
+
+        val menuSize = menu!!.size()
+        for (i in 0 until menuSize){
+            val holder = menu.getItem(i)
+            val spannable = SpannableString(
+                menu.getItem(i).title.toString()
+            )
+            spannable.setSpan(ForegroundColorSpan(resources.getColor(R.color.primary_text_color)),0,spannable.length,0)
+            holder.title = spannable
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -508,18 +524,28 @@ class RegularEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnInitList
     }
 
     fun displayHighContrastTheme(){
-        ll_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        cv_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
-        et_title_of_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_day_of_week_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_start_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_start_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        tv_end_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_end_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_note_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_type_of_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_lecture_room_number_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        et_building_number_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
-        btn_save_edited_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+
+        when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
+            Configuration.UI_MODE_NIGHT_NO ->{
+                showToast(this, "For high contrast mode please turn on dark mode on the device")
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                ll_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                cv_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_disability_color))
+                et_title_of_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_day_of_week_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_start_time_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_button_disability_color))
+                btn_end_time_regular_engagement_details.setBackgroundColor(resources.getColor(R.color.background_button_disability_color))
+                tv_start_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_start_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                tv_end_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_end_time_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_note_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_type_of_regular_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_lecture_room_number_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                et_building_number_of_engagement_details.setTextColor(resources.getColor(R.color.text_color_disability))
+                btn_save_edited_regular_engagement.setTextColor(resources.getColor(R.color.text_color_disability))
+            }
+        }
     }
 }

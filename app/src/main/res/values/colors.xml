@@ -13,6 +13,7 @@
     <color name="accent_color">#532791</color>
     <color name="primary_text_color">#040000</color>
     <color name="secondary_text_color">#1C070A</color>
+    <color name="background_color">#FFFFFF</color>
     <color name="title_color">#0d0436</color>
     <!-- <color name="title_color">#06021a</color> -->
 

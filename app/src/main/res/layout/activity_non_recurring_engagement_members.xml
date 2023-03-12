@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.NonRecurringEngagementMembersActivity">
+    tools:context=".activities.NonRecurringEngagementMembersActivity"
+    android:background="@color/background_color">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -22,7 +23,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_background"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/members_content_padding">
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:text="@string/created_by"
             android:textStyle="bold"
+            android:textSize="16sp"
             />
 
         <LinearLayout
@@ -56,7 +57,7 @@
                     android:contentDescription="@string/image_contentDescription"
                     android:src="@drawable/ic_user_place_holder"
                     app:civ_border_color="@color/primary_text_color"
-                    app:civ_border_width="@dimen/item_member_image_circular_width_size" />
+                    app:civ_border_width="1dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -98,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/item_member_divider_height"
                 android:layout_marginTop="@dimen/item_member_divider_marginTop"
-                android:background="@color/divider_color" />
+                android:background="@color/secondary_color" />
         </LinearLayout>
 
         <TextView
@@ -106,24 +107,15 @@
             android:layout_height="wrap_content"
             android:text="@string/engagement_members"
             android:textStyle="bold"
+            android:textSize="16sp"
             />
-
-
-
-
-
-
-
-
-
-
 
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/members_cv_marginTop"
-            android:background="@android:color/white"
+            android:background="@color/background_color"
             android:elevation="@dimen/card_view_elevation"
             app:cardCornerRadius="@dimen/card_view_corner_radius">
 

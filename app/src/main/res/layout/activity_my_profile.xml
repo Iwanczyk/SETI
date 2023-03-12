@@ -51,8 +51,9 @@
                         android:id="@+id/my_profile_iv_user_image"
                         android:layout_width="@dimen/my_profile_user_image_size"
                         android:layout_height="@dimen/my_profile_user_image_size"
-                        android:contentDescription="@string/image_contentDescription"
-                        android:src="@drawable/ic_user_place_holder" />
+                        android:src="@drawable/ic_user_place_holder"
+                        app:civ_border_color="@color/primary_text_color"
+                        app:civ_border_width="1dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -82,11 +83,22 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/my_profile_et_email_marginTop"
+                        android:gravity="center"
+                        android:text="@string/here_you_can_customize_application_background"
+                        android:textSize="14sp"
+                        android:textStyle="italic"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
                     <ImageView
                         android:id="@+id/my_profile_iv_user_background_image"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:layout_marginTop="@dimen/my_profile_et_email_marginTop"
+                        android:layout_marginTop="12dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/nav_header_main_background" />
 

@@ -43,7 +43,7 @@
                     android:id="@+id/et_title_of_non_recurring_engagement"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Title"
+                    android:hint="@string/non_recurring_engagement_title"
                     android:inputType="text"
                     android:textSize="@dimen/et_text_size"
                     tools:text="Activity 1" />
@@ -53,18 +53,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_gravity="start">
+                    android:gravity="center"
+                    android:layout_weight="1">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start Date and Time"
+                        android:text="@string/start_date"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         />
@@ -73,7 +75,8 @@
                         android:id="@+id/btn_pick_start_date_time_non_recurring_engagement"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pick Time"
+                        android:text="@string/pick_date"
+                        android:drawableLeft="@drawable/ic_calendar"
                         />
                 </LinearLayout>
 
@@ -81,12 +84,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="end">
+                    android:gravity="center"
+                    android:layout_weight="1">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="End Date and Time"
+                        android:text="@string/end_date"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         />
@@ -95,7 +99,8 @@
                         android:id="@+id/btn_pick_end_date_time_non_recurring_engagement"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pick Time"
+                        android:text="@string/pick_date"
+                        android:drawableLeft="@drawable/ic_calendar"
                         />
                 </LinearLayout>
 
@@ -103,17 +108,18 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="12dp">
+                android:layout_height="wrap_content"
+                android:minHeight="86dp">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_note_of_non_recurring_engagement"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:hint="Title"
-                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/additional_note_optional"
+                    android:inputType="textMultiLine"
                     android:textSize="@dimen/et_text_size"
-                    tools:text="Activity 1" />
+                    tools:text="Some additional note"
+                    android:minHeight="86dp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -121,7 +127,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="ADD NEW ENGAGEMENT"
+                android:backgroundTint="@color/add_new_engagement"
+                android:drawableLeft="@drawable/ic_add_regular_engagement"
+                android:text="@string/add_new_engagement"
                 />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

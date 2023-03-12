@@ -126,6 +126,8 @@
     <string name="type_of_the_engagement">Type of the engagement</string>
     <string name="save_edited_engagement">SAVE EDITED ENGAGEMENT</string>
     <string name="cancel_capital">CANCEL</string>
+    <string name="non_recurring_engagement_title">Non-recurring engagement title</string>
+    <string name="pick_date">PICK DATE</string>
 
     <string-array name="Languages">
         <item>English</item>

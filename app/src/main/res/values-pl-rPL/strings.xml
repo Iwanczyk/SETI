@@ -131,7 +131,9 @@
     <string name="assigned_members_details_screen"><u>Przypisani użytkownicy</u></string>
     <string name="here_you_can_customize_application_background">Tutaj możesz personalizować tło aplikacji</string>
     <string name="none">Brak</string>
-
+    <string name="high_contrast_mode_only_on_darkmode">Tryb wysokiego kontrastu wymaga włączonego ciemnego motywu</string>
+    <string name="start_time_must_be_before_end_time_alert">Start time must be before end time! </string>
+    <string name="high_contrast_mode">Tryb wysokiego kontrastu</string>
     <string-array name="Languages">
         <item>Angielski</item>
         <item>Polski</item>

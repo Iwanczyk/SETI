@@ -332,7 +332,7 @@ class NonRecurringEngagementMembersActivity : BaseActivity(), TextToSpeech.OnIni
 
         when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
             Configuration.UI_MODE_NIGHT_NO ->{
-                showToast(this, "For high contrast mode please turn on dark mode on the device")
+                showToast(this, resources.getString(R.string.high_contrast_mode_only_on_darkmode))
             }
             Configuration.UI_MODE_NIGHT_YES -> {
                 ll_non_recurring_engagement_members.setBackgroundColor(resources.getColor(R.color.background_disability_color))

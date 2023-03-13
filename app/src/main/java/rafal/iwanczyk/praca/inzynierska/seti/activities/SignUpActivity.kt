@@ -119,14 +119,14 @@ class SignUpActivity : BaseActivity() {
             showErrorSnackBar(resources.getString(R.string.login_already_used))
             false
         }
-
-        return false
     }
 
     fun userRegisteredSuccess(){
         showToast(this@SignUpActivity, resources.getString(R.string.registration_success))
         println("Register success!")
+        FirebaseAuth.getInstance().signOut()
         hideProgressDialog()
+        finish()
     }
 
 }

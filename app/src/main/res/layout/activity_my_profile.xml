@@ -109,7 +109,7 @@
                         android:id="@+id/sw_select_high_contrast_mode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="High contrast mode"/>
+                        android:text="@string/high_contrast_mode"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

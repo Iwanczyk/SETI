@@ -72,7 +72,6 @@ class CreateRegularEngagementActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 mSelectedTypeOfEngagement = dropdown_list_chose_type_of_engagement.getItemAtPosition(position).toString()
-
                 if(dropdown_list_chose_type_of_engagement.getItemAtPosition(position).toString()
                     == resources.getString(R.string.study)){
                     et_lecture_room_number_of_engagement.visibility = View.VISIBLE
@@ -161,7 +160,7 @@ class CreateRegularEngagementActivity : BaseActivity() {
         return if(timeFormatter.parse(startTime)!!.before(timeFormatter.parse(endTime)!!)){
             true
         }else{
-            showErrorSnackBar("Start Time must be before End Time!")
+            showErrorSnackBar(resources.getString(R.string.start_time_must_be_before_end_time_alert))
             false
         }
     }
@@ -189,13 +188,13 @@ class CreateRegularEngagementActivity : BaseActivity() {
 
         for(i in tmpListRegularEngagements){
             if(startTimeLong >= i.startTime && startTimeLong <= i.endTime){
-                showErrorSnackBar("Start Time interrupts regular engagement: ${i.name}")
+                showErrorSnackBar("${resources.getString(R.string.start_time_interrupts_another_engagement_alert)}: ${i.name}")
                 return false
             }else if(endTimeLong >= i.startTime && endTimeLong <= i.endTime){
-                showErrorSnackBar("End Time interrupts regular engagement: ${i.name}")
+                showErrorSnackBar("${resources.getString(R.string.end_time_interrupts_another_engagement_alert)}: ${i.name}")
                 return false
             }else if(i.startTime in startTimeLong..endTimeLong){
-                showErrorSnackBar("Engagement duration interrupts with: ${i.name}")
+                showErrorSnackBar("${resources.getString(R.string.regular_engagement_duration_interrupts_alert)}: ${i.name}")
                 return false
             }
         }
@@ -217,13 +216,13 @@ class CreateRegularEngagementActivity : BaseActivity() {
         )
 
         when(mSelectedDay){
-            "Monday" -> mWeekEngagements.mondayEngagements.add(newRegularEngagement)
-            "Tuesday" -> mWeekEngagements.tuesdayEngagements.add(newRegularEngagement)
-            "Wednesday" -> mWeekEngagements.wednesdayEngagements.add(newRegularEngagement)
-            "Thursday" -> mWeekEngagements.thursdayEngagements.add(newRegularEngagement)
-            "Friday" -> mWeekEngagements.fridayEngagements.add(newRegularEngagement)
-            "Saturday" -> mWeekEngagements.saturdayEngagements.add(newRegularEngagement)
-            "Sunday" -> mWeekEngagements.sundayEngagements.add(newRegularEngagement)
+            resources.getStringArray(R.array.DaysOfWeek)[0] -> mWeekEngagements.mondayEngagements.add(newRegularEngagement)
+            resources.getStringArray(R.array.DaysOfWeek)[1] -> mWeekEngagements.tuesdayEngagements.add(newRegularEngagement)
+            resources.getStringArray(R.array.DaysOfWeek)[2] -> mWeekEngagements.wednesdayEngagements.add(newRegularEngagement)
+            resources.getStringArray(R.array.DaysOfWeek)[3] -> mWeekEngagements.thursdayEngagements.add(newRegularEngagement)
+            resources.getStringArray(R.array.DaysOfWeek)[4] -> mWeekEngagements.fridayEngagements.add(newRegularEngagement)
+            resources.getStringArray(R.array.DaysOfWeek)[5] -> mWeekEngagements.saturdayEngagements.add(newRegularEngagement)
+            resources.getStringArray(R.array.DaysOfWeek)[6] -> mWeekEngagements.sundayEngagements.add(newRegularEngagement)
         }
 
         FirestoreClass().createUpdateRegularEngagement(this, mWeekEngagements)
@@ -238,7 +237,7 @@ class CreateRegularEngagementActivity : BaseActivity() {
     fun displayHighContrastTheme(){
         when(resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)){
             Configuration.UI_MODE_NIGHT_NO ->{
-                showToast(this, "For high contrast mode please turn on dark mode on the device")
+                showToast(this, resources.getString(R.string.high_contrast_mode_only_on_darkmode))
             }
             Configuration.UI_MODE_NIGHT_YES -> {
                 ll_create_regular_engagement.setBackgroundColor(resources.getColor(R.color.background_disability_color))

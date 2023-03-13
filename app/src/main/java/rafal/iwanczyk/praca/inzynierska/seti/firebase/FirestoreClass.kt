@@ -33,8 +33,8 @@ class FirestoreClass {
         mFireStore.collection(Constants.USERS).document(getCurrentUserID())
             .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
-                activity.userRegisteredSuccess()
                 createWeekPlan(WeekEngagements(getCurrentUserID()))
+                activity.userRegisteredSuccess()
             }.addOnFailureListener {
                 Log.e("Registration", "Error while registering")
             }
@@ -138,8 +138,6 @@ class FirestoreClass {
         mFireStore.collection(Constants.WEEKPLAN).document(weekEngagements.documentID)
             .set(weekEngagements)
             .addOnSuccessListener {
-                Toast.makeText(activity, "Regular engagement added successfully!", Toast.LENGTH_SHORT).show()
-
                 when(activity){
                     is CreateRegularEngagementActivity ->{
                         activity.regularEngagementCreatedSuccessfully()
@@ -401,7 +399,10 @@ class FirestoreClass {
                             assignedEngagementNumber++
                         }
 
-                        if(tmpNonRecurringEngagement != null){
+                        if(tmpNonRecurringEngagement == null){
+                            longestEngagementTitle = nonRecurringEngagement.name
+                            shortestEngagementTitle = nonRecurringEngagement.name
+                        }else if(tmpNonRecurringEngagement != null){
                             longestEngagementTitle = if((nonRecurringEngagement.endDate - nonRecurringEngagement.startDate)
                                 > (tmpNonRecurringEngagement!!.endDate - tmpNonRecurringEngagement!!.startDate)) {
                                 nonRecurringEngagement.name

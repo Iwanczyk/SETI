@@ -112,6 +112,7 @@
     <string name="pick_date">PICK DATE</string>
     <string name="assigned_members_details_screen"><u>Assigned Members</u></string>
     <string name="here_you_can_customize_application_background">Here you can customize application background</string>
+    <string name="none">None</string>
 
 
     <string-array name="StatsType">

@@ -1,0 +1,160 @@
+<resources>
+    <string name="app_name" translatable="false">SETI</string>
+    <string name="image_contentDescription">Obraz zegara</string>
+    <string name="let_s_get_started_text">Zaczynajmy!</string>
+    <string name="intro_text_description">Zarządzaj swoim czasem lepiej z SETI</string>
+    <string name="sign_in">ZALOGUJ SIĘ</string>
+    <string name="sign_up">ZAREJESTRUJ SIĘ</string>
+    <string name="sign_up_description_text">Wprowadź login, adres email i hasło w celu rejestracji</string>
+    <string name="name">Imię</string>
+    <string name="email">Email</string>
+    <string name="password">Hasło</string>
+    <string name="sign_in_description_text">Wprowadź email i hasło w celu zalogowania</string>
+    <string name="please_wait">Proszę czekać…</string>
+
+    <string name="please_enter_your_name">Proszę podaj swoje imię</string>
+    <string name="please_enter_your_email">Proszę podaj swój email</string>
+    <string name="please_enter_your_password">Proszę podaj swoje hasło</string>
+    <string name="authentication_failed">Błąd autoryzacji</string>
+    <string name="registration_success">Zarejestrowano pomyślnie!</string>
+    <string name="login">Login</string>
+    <string name="please_enter_your_login">Proszę podaj swój login</string>
+    <string name="repeat_password">Powtórz hasło</string>
+    <string name="passwords_not_matching">Podane hasła nie są identyczne!</string>
+    <string name="please_repeat_your_password">Proszę powtórz hasło</string>
+
+    <string name="nav_my_profile">Mój Profil</string>
+    <string name="nav_my_settings">Ustawienia</string>
+    <string name="nav_sign_out">Wyloguj</string>
+    <string name="update">ZAKTUALIZUJ</string>
+    <string name="delete_account">USUŃ KONTO</string>
+    <string name="permission_denied">Odrzuciłeś zgodę na dostęp do plików!</string>
+    <string name="login_already_used">Login jest już zajęty</string>
+    <string name="delete_account_confirmation">Czy na pewno chcesz usunąć swoje konto?</string>
+    <string name="yes">TAK</string>
+    <string name="cancel">ANULUJ</string>
+    <string name="edit_email">Edytuj email</string>
+    <string name="edit_password">Edytuj hasło</string>
+    <string name="current_password">Aktualne hasło</string>
+    <string name="new_password">Nowe hasło</string>
+    <string name="repeat_new_password">Powtórz nowe hasło</string>
+    <string name="editing_sensitive_data_requires_confirmation_with_password">Edycja wrażliwych danych wymaga potwierdzenia hasłem</string>
+    <string name="forgot_password">Zapomniałeś hasła?</string>
+    <string name="reset_your_password">Resetuj swoje hasło</string>
+    <string name="enter_email_address">Wprowadź email</string>
+    <string name="send">WYŚLIJ</string>
+
+    <string name="add_new_regular_engagement">Dodaj nowe zajęcie</string>
+    <string name="study">Studia</string>
+    <string name="work">Praca</string>
+    <string name="other">Inne</string>
+    <string name="fill_required_fields_alert">Proszę wypełnij wymagane pola (Nazwa, Czas Rozpoczęcia, Czas Zakończenia)</string>
+    <string name="start_time_and_end_time_the_same_alert">Godzina rozpoczęcia i zakończenia nie może być taka sama!</string>
+    <string name="engagement_ends_at_midnight_alert">Zajęcia nie mogą kończyć się o północy!</string>
+    <string name="end_time_before_start_time_alert">Godzina zakończenia nie może być przed godziną rozpoczęcia!</string>
+    <string name="start_time_interrupts_another_engagement_alert">Godzina rozpoczęcia koliduje z zajęciem </string>
+    <string name="end_time_interrupts_another_engagement_alert">Godzina zakończenia koliduje z zajęciem </string>
+    <string name="regular_engagement_duration_interrupts_alert">Czas trwania zajęcia koliduje z </string>
+    <string name="mon">Pon</string>
+    <string name="tue">Wt</string>
+    <string name="wed">Śr</string>
+    <string name="thu">Czw</string>
+    <string name="fri">Pia</string>
+    <string name="sat">Sob</string>
+    <string name="sun">Niedz</string>
+    <string name="edit_regular_engagement">Edytuj zajęcie</string>
+    <string name="delete_regular_engagement">Usuń zajęcie</string>
+    <string name="day_of_week">Dzień tygodnia</string>
+    <string name="delete_regular_engagement_confirmation">Czy jesteś pewnien, że chcesz usunąć to zajęcie?</string>
+    <string name="delete_non_recurring_engagement_confirmation">Czy jesteś pewnien, że chcesz usunąć to wydarzenie?</string>
+    <string name="title">Tytuł</string>
+    <string name="text_to_speech">Text to speech</string>
+    <string name="no_non_recurring_activities_available">Brak dostępnych wydarzeń</string>
+    <string name="non_recurring_engagements">Wydarzenia</string>
+    <string name="other_engagements">Inne zajęcia</string>
+    <string name="start_date">Data rozpoczęcia</string>
+    <string name="start_time">Godzina rozpoczęcia</string>
+    <string name="end_time">Godzina zakończenia</string>
+    <string name="end_date">Data zakończenia</string>
+    <string name="add_new_non_recurring_engagement">Dodaj nowe wydarzenie</string>
+    <string name="edit_engagement">Edytuj zajęcie</string>
+    <string name="delete_engagement">Usuń zajęcie</string>
+    <string name="delete_non_recurring_engagement">Usuń wydarzenie</string>
+    <string name="additional_note">Dodatkowa notatka</string>
+    <string name="assigned_members">Członkowie</string>
+    <string name="selected_user">Wybrany użytkownik</string>
+    <string name="created_by">Stworzone przez:</string>
+    <string name="engagement_members">Przypisani użytkownicy:</string>
+    <string name="add_member">Dodaj użytkownika</string>
+    <string name="add">DODAJ</string>
+    <string name="search_member">Szukaj użytkownika</string>
+    <string name="please_enter_users_email">Proszę podaj email wybranego użytkownika</string>
+    <string name="delete_member">Usuń użytkownika</string>
+    <string name="delete_member_confirmation">Czy na pewno chcesz usunąć tego użytkownika z wydarzenia?</string>
+    <string name="user_is_not_owner">Tylko autor może edytować przypisanych członków!</string>
+    <string name="user_cant_delete_itself">Nie możesz się usunąć!</string>
+
+    <string name="default_notification_channel_id">seti_notification_channel_id</string>
+    <string name="study_capital">STUDIA</string>
+    <string name="work_capital">PRACA</string>
+    <string name="other_capital">INNE</string>
+    <string name="statistics">Statystyki</string>
+    <string name="monday"><b>Poniedziałek</b></string>
+    <string name="tuesday"><b>Wtorek</b></string>
+    <string name="wednesday"><b>Środa</b></string>
+    <string name="thursday"><b>Czwartek</b></string>
+    <string name="friday"><b>Piątek</b></string>
+    <string name="saturday"><b>Sobota</b></string>
+    <string name="sunday"><b>Niedziela</b></string>
+    <string name="number_of_owned_non_recurring_engagements"><b>Ilość posiadanych wydarzeń</b>:</string>
+    <string name="number_of_assigned_non_recurring_engagements"><b>Ilość przypisanych wydarzeń:</b></string>
+    <string name="longest_non_recurring_engagement_title"><b>Najdłuższe wydarzenie miesiąca:</b></string>
+    <string name="shortest_non_recurring_engagement_title"><b>Najkrótsze wydarzenie miesiąca:</b></string>
+    <string name="lecture_room_number">Numer sali</string>
+    <string name="lecture_building_number">Numer budynku</string>
+    <string name="man_week"><b>Dni powszednie</b></string>
+    <string name="weekend"><b>Weekend</b></string>
+    <string name="full_week"><b>Cały tydzień</b></string>
+    <string name="regular_engagement_title">Tytuł zajęcia</string>
+    <string name="start_time_create_regular_engagement">Godzina rozpoczęcia</string>
+    <string name="end_time_create_regular_engagement">Godzina zakończenia</string>
+    <string name="pick_time">WYBIERZ CZAS</string>
+    <string name="additional_note_optional">Dodatkowa notatka (Opcjonalnie)</string>
+    <string name="lecture_room_create_regular_engagement">Numer sali</string>
+    <string name="lecture_buildingcreate_regular_engagement">Numer budynku</string>
+    <string name="add_new_engagement">DODAJ NOWE ZAJĘCIE</string>
+    <string name="type_of_the_engagement">Typ zajęcia</string>
+    <string name="save_edited_engagement">ZAPISZ ZMIANY</string>
+    <string name="cancel_capital">ANULUJ</string>
+    <string name="non_recurring_engagement_title">Tytuł wydarzenia</string>
+    <string name="pick_date">WYBIERZ DATĘ</string>
+    <string name="assigned_members_details_screen"><u>Przypisani użytkownicy</u></string>
+    <string name="here_you_can_customize_application_background">Tutaj możesz personalizować tło aplikacji</string>
+    <string name="none">Brak</string>
+
+    <string-array name="Languages">
+        <item>Angielski</item>
+        <item>Polski</item>
+    </string-array>
+
+    <string-array name="DaysOfWeek">
+        <item>Poniedziałek</item>
+        <item>Wtorek</item>
+        <item>Środa</item>
+        <item>Czwartek</item>
+        <item>Piątek</item>
+        <item>Sobota</item>
+        <item>Niedziela</item>
+    </string-array>
+
+    <string-array name="TypeOfEngagement">
+        <item>Studia</item>
+        <item>Praca</item>
+        <item>Inne</item>
+    </string-array>
+
+    <string-array name="StatsType">
+        <item>Statystyki zajęć</item>
+        <item>Statystyki wydarzeń</item>
+    </string-array>
+</resources>

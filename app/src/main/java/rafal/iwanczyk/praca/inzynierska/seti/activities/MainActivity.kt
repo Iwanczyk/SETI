@@ -99,7 +99,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         //Days radio group listener
         rg_days_of_week.setOnCheckedChangeListener { group, checkedId ->
             mSelectedDay = findViewById<RadioButton>(checkedId).text.toString()
-            changeDaysOfWeekAdapter(checkedId)
+            try {
+                changeDaysOfWeekAdapter(checkedId)
+            }catch (e: Exception){
+                onCreate(savedInstanceState)
+            }
         }
 
         tts = TextToSpeech(this, this)

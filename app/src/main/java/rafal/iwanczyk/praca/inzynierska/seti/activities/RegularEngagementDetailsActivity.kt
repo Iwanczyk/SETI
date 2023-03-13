@@ -500,18 +500,18 @@ class RegularEngagementDetailsActivity : BaseActivity(), TextToSpeech.OnInitList
         tts?.speak("${resources.getString(R.string.end_time)}: ${timeFormatter.format(mRegularEngagement.endTime)}", TextToSpeech.QUEUE_ADD, null, "")
 
         if(mRegularEngagement.note.isNotBlank()){
-            tts?.speak("Additional notes: ${mRegularEngagement.note}", TextToSpeech.QUEUE_ADD, null, "")
+            tts?.speak("${resources.getString(R.string.additional_note)}: ${mRegularEngagement.note}", TextToSpeech.QUEUE_ADD, null, "")
         }else{
-            tts?.speak("Additional notes: None", TextToSpeech.QUEUE_ADD, null, "")
+            tts?.speak("${resources.getString(R.string.additional_note)}: ${resources.getString(R.string.none)}", TextToSpeech.QUEUE_ADD, null, "")
         }
 
-        tts?.speak("Type of the engagement: ${mRegularEngagement.typeOfEngagement}", TextToSpeech.QUEUE_ADD, null, "")
+        tts?.speak("${resources.getString(R.string.type_of_the_engagement)}: ${mRegularEngagement.typeOfEngagement}", TextToSpeech.QUEUE_ADD, null, "")
 
         if(mRegularEngagement.lectureRoom.isNotBlank()){
-            tts?.speak("Lecture room number: ${mRegularEngagement.lectureRoom}", TextToSpeech.QUEUE_ADD, null, "")
+            tts?.speak("${resources.getString(R.string.lecture_room_number)}: ${mRegularEngagement.lectureRoom}", TextToSpeech.QUEUE_ADD, null, "")
         }
         if(mRegularEngagement.buildingNumber.isNotBlank()){
-            tts?.speak("Lecture building number: ${mRegularEngagement.buildingNumber}", TextToSpeech.QUEUE_ADD, null, "")
+            tts?.speak("${resources.getString(R.string.lecture_building_number)}: ${mRegularEngagement.buildingNumber}", TextToSpeech.QUEUE_ADD, null, "")
         }
     }
 
